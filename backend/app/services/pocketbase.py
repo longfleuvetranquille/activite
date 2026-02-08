@@ -16,7 +16,7 @@ class PocketBaseClient:
         self._client = httpx.AsyncClient(base_url=self.base_url, timeout=30)
         try:
             resp = await self._client.post(
-                "/api/admins/auth-with-password",
+                "/api/collections/_superusers/auth-with-password",
                 json={
                     "identity": settings.pocketbase_admin_email,
                     "password": settings.pocketbase_admin_password,
@@ -39,10 +39,12 @@ class PocketBaseClient:
         collection: str,
         page: int = 1,
         per_page: int = 50,
-        sort: str = "-date_start",
+        sort: str = "",
         filter_str: str = "",
     ) -> dict:
-        params = {"page": page, "perPage": per_page, "sort": sort}
+        params: dict = {"page": page, "perPage": per_page}
+        if sort:
+            params["sort"] = sort
         if filter_str:
             params["filter"] = filter_str
         resp = await self._client.get(
