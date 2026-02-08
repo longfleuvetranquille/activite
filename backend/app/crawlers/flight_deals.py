@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import logging
 import random
 from datetime import datetime, timedelta
@@ -25,51 +26,88 @@ ROUTES: list[dict[str, str]] = [
     {"origin": "NCE", "destination": "RAK", "city": "Marrakech"},
 ]
 
-# Google Flights URL template for round-trip search
-GFLIGHTS_URL = (
-    "https://www.google.com/travel/flights/search"
-    "?tfs=CBwQAhooEgoyMDI2LTAyLTIwagwIAhIIL20vMGttMnRyDAgCEggvbS8wMWYwOBooEgoyMDI2LTAyLTIyagwIAhIIL20vMDFmMDhyDAgCEggvbS8wa20ydA"
-    "&hl=fr&gl=fr&curr=EUR"
-)
+# Reasonable price bounds for short-haul round-trip flights from Nice
+MIN_PRICE_EUR = 25
+MAX_PRICE_EUR = 800
 
 
 def _next_weekend() -> tuple[datetime, datetime]:
-    """Return the next Friday and Sunday dates."""
-    today = datetime.now()
+    """Return the next Friday and Sunday dates (midnight, no time component)."""
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     days_until_friday = (4 - today.weekday()) % 7
-    if days_until_friday == 0 and today.hour >= 12:
+    if days_until_friday == 0:
         days_until_friday = 7
     friday = today + timedelta(days=days_until_friday)
     sunday = friday + timedelta(days=2)
     return friday, sunday
 
 
-def _format_date_for_url(dt: datetime) -> str:
-    """Format date as YYYY-MM-DD for Google Flights URL."""
-    return dt.strftime("%Y-%m-%d")
+def _build_tfs(origin: str, dest: str, dep_date: str, ret_date: str) -> str:
+    """Build the tfs parameter for Google Flights search URL.
+
+    Encodes a round-trip flight search as a base64-encoded protobuf,
+    which is what Google Flights expects for direct search URLs.
+    """
+
+    def varint(val: int) -> bytes:
+        buf = b""
+        while val > 127:
+            buf += bytes([val & 0x7F | 0x80])
+            val >>= 7
+        buf += bytes([val & 0x7F])
+        return buf
+
+    def tag(field: int, wire_type: int) -> bytes:
+        return varint((field << 3) | wire_type)
+
+    def string_field(field: int, s: str) -> bytes:
+        encoded = s.encode()
+        return tag(field, 2) + varint(len(encoded)) + encoded
+
+    def message_field(field: int, data: bytes) -> bytes:
+        return tag(field, 2) + varint(len(data)) + data
+
+    def varint_field(field: int, val: int) -> bytes:
+        return tag(field, 0) + varint(val)
+
+    def airport(code: str) -> bytes:
+        return varint_field(1, 1) + string_field(2, code)
+
+    def leg(date: str, orig: str, dst: str) -> bytes:
+        return (
+            string_field(2, date)
+            + message_field(13, airport(orig))
+            + message_field(14, airport(dst))
+        )
+
+    tfs_bytes = (
+        varint_field(1, 28)
+        + varint_field(2, 2)
+        + message_field(3, leg(dep_date, origin, dest))
+        + message_field(3, leg(ret_date, dest, origin))
+    )
+
+    return base64.urlsafe_b64encode(tfs_bytes).rstrip(b"=").decode()
 
 
 class FlightDealsCrawler(BaseCrawler):
     """Crawler for flight deals from Nice (NCE) via Google Flights.
 
-    Scrapes Google Flights for round-trip prices to popular weekend
-    destinations. Stores ALL prices in the flight_prices collection
-    for history tracking, and returns CrawledEvent only for detected
-    deals (prices significantly below the 30-day average).
+    Uses proper Google Flights search URLs (tfs= protobuf parameter) to load
+    actual round-trip search results. Prices are extracted via targeted JS
+    evaluation that only captures prices from flight result rows.
+
+    Returns at most 3 deal events (the best discounts).
     """
 
     source_name = "google_flights"
 
     async def crawl(self) -> list[CrawledEvent]:
-        """Crawl Google Flights for all monitored routes.
-
-        Returns at most 3 deal events (the best discounts).
-        """
+        """Crawl Google Flights for all monitored routes."""
         if not settings.flight_crawl_enabled:
             logger.info("Flight crawl disabled, skipping")
             return []
 
-        # Collect (discount_pct, event) tuples to pick the best deals
         deal_candidates: list[tuple[float, CrawledEvent]] = []
         departure, return_date = _next_weekend()
 
@@ -103,7 +141,6 @@ class FlightDealsCrawler(BaseCrawler):
                             "Failed to crawl route %s", route_code, exc_info=True
                         )
 
-                    # Randomized delay between routes (2-5 seconds)
                     await asyncio.sleep(random.uniform(2.0, 5.0))
 
                 await browser.close()
@@ -125,27 +162,25 @@ class FlightDealsCrawler(BaseCrawler):
 
     async def _crawl_route(
         self,
-        page: "playwright.async_api.Page",
+        page,
         route: dict[str, str],
         departure: datetime,
         return_date: datetime,
     ) -> list[tuple[float, CrawledEvent]]:
         """Crawl a single route and return (discount_pct, event) tuples."""
         route_code = f"{route['origin']}-{route['destination']}"
-        dep_str = _format_date_for_url(departure)
-        ret_str = _format_date_for_url(return_date)
+        dep_str = departure.strftime("%Y-%m-%d")
+        ret_str = return_date.strftime("%Y-%m-%d")
 
-        # Build Google Flights search URL
+        # Build proper Google Flights search URL with tfs protobuf parameter
+        tfs = _build_tfs(route["origin"], route["destination"], dep_str, ret_str)
         url = (
-            f"https://www.google.com/travel/flights?"
-            f"q=Flights+from+{route['origin']}+to+{route['destination']}"
-            f"+on+{dep_str}+return+{ret_str}"
-            f"&curr=EUR&hl=fr&gl=fr"
+            f"https://www.google.com/travel/flights/search"
+            f"?tfs={tfs}&hl=fr&gl=fr&curr=EUR"
         )
 
         await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        # Wait for flight results to render
-        await page.wait_for_timeout(random.randint(3000, 5000))
+        await page.wait_for_timeout(random.randint(5000, 7000))
 
         # Accept cookies dialog if present
         try:
@@ -160,13 +195,13 @@ class FlightDealsCrawler(BaseCrawler):
         except Exception:
             pass
 
-        # Extract flight prices from the results page
+        # Extract flight prices
         prices_found = await self._extract_prices(
             page, route, departure, return_date, url
         )
 
         if not prices_found:
-            logger.warning("No prices found for %s", route_code)
+            logger.warning("No valid prices found for %s", route_code)
             return []
 
         # Store all prices and check for deals
@@ -197,200 +232,108 @@ class FlightDealsCrawler(BaseCrawler):
 
     async def _extract_prices(
         self,
-        page: "playwright.async_api.Page",
+        page,
         route: dict[str, str],
         departure: datetime,
         return_date: datetime,
         source_url: str,
     ) -> list[FlightPrice]:
-        """Extract flight prices from the Google Flights results page."""
-        route_code = f"{route['origin']}-{route['destination']}"
-        prices: list[FlightPrice] = []
+        """Extract round-trip prices from Google Flights search results.
 
-        # Google Flights uses various selectors for price display
-        price_elements = await page.query_selector_all(
-            "[class*='price'] span, "
-            "[data-gs] [aria-label*='EUR'], "
-            "[data-gs] [aria-label*='euros'], "
-            ".YMlIz, .BVAVmf"
+        Uses targeted JS evaluation that only captures prices from actual
+        flight result rows — identified by the presence of time patterns
+        (HH:MM) and sufficient element width. Ignores calendar views, ads,
+        sidebars, and "starting from" labels.
+        """
+        route_code = f"{route['origin']}-{route['destination']}"
+
+        raw_prices = await page.evaluate(
+            r"""
+            () => {
+                const results = [];
+                const seen = new Set();
+                const allElements = document.querySelectorAll('*');
+
+                for (const el of allElements) {
+                    // Only leaf elements — the actual rendered price text
+                    if (el.children.length > 0) continue;
+
+                    const text = el.textContent.trim();
+
+                    // Match "XX €" or "XXX €" (2-4 digits + optional space + €)
+                    const match = text.match(/^(\d{2,4})\s*€$/);
+                    if (!match) continue;
+
+                    const price = parseInt(match[1]);
+
+                    // Walk up the DOM to find the flight result row container.
+                    // A real flight result row contains departure/arrival times
+                    // like "14:30" or "22h55" and is a wide, visible element.
+                    let parent = el;
+                    let isFlightResult = false;
+                    for (let depth = 0; depth < 8; depth++) {
+                        parent = parent.parentElement;
+                        if (!parent) break;
+
+                        const parentText = parent.textContent || '';
+                        const hasTime = /\d{1,2}[h:]\d{2}/.test(parentText);
+                        if (!hasTime) continue;
+
+                        const rect = parent.getBoundingClientRect();
+                        if (rect.width > 300 && rect.height > 40) {
+                            isFlightResult = true;
+                            break;
+                        }
+                    }
+
+                    if (isFlightResult && !seen.has(price)) {
+                        seen.add(price);
+                        results.push(price);
+                    }
+                }
+
+                return results.sort((a, b) => a - b);
+            }
+        """
         )
 
-        # Also try to get flight result list items
-        result_items = await page.query_selector_all(
-            "li[class*='pIav2d'], "
-            "[class*='Rk10dc'], "
-            "div[data-resultid]"
+        logger.info(
+            "Route %s: extracted %d prices: %s",
+            route_code,
+            len(raw_prices),
+            raw_prices,
         )
 
-        if result_items:
-            prices = await self._parse_result_items(
-                result_items, route, departure, return_date, source_url
-            )
-        elif price_elements:
-            prices = await self._parse_price_elements(
-                price_elements, route, departure, return_date, source_url
-            )
-
-        # Fallback: try extracting from aria-labels on the whole page
-        if not prices:
-            prices = await self._parse_aria_prices(
-                page, route, departure, return_date, source_url
-            )
-
-        return prices
-
-    async def _parse_result_items(
-        self,
-        items: list,
-        route: dict[str, str],
-        departure: datetime,
-        return_date: datetime,
-        source_url: str,
-    ) -> list[FlightPrice]:
-        """Parse structured flight result items."""
-        route_code = f"{route['origin']}-{route['destination']}"
+        # Validate and build FlightPrice objects
         prices: list[FlightPrice] = []
-
-        for item in items:
-            try:
-                # Extract price
-                price_el = await item.query_selector(
-                    "[class*='price'], [aria-label*='EUR'], .YMlIz, .BVAVmf"
+        for price_val in raw_prices:
+            if price_val < MIN_PRICE_EUR or price_val > MAX_PRICE_EUR:
+                logger.debug(
+                    "Route %s: rejected price %d€ (outside %d-%d range)",
+                    route_code,
+                    price_val,
+                    MIN_PRICE_EUR,
+                    MAX_PRICE_EUR,
                 )
-                if not price_el:
-                    continue
-                price_text = await price_el.inner_text()
-                price = _parse_price_text(price_text)
-                if price is None or price <= 0:
-                    continue
-
-                # Extract airline
-                airline_el = await item.query_selector(
-                    "[class*='airline'], .sSHqwe, [data-test-id='airline']"
-                )
-                airline = ""
-                if airline_el:
-                    airline = (await airline_el.inner_text()).strip()
-
-                # Extract duration
-                duration_el = await item.query_selector(
-                    "[class*='duration'], .gvkrdb, [aria-label*='h']"
-                )
-                duration_min = 0
-                if duration_el:
-                    duration_text = await duration_el.inner_text()
-                    duration_min = _parse_duration(duration_text)
-
-                # Check if direct flight
-                stops_el = await item.query_selector(
-                    "[class*='stop'], .EfT7Ae, [aria-label*='escale']"
-                )
-                is_direct = True
-                if stops_el:
-                    stops_text = (await stops_el.inner_text()).lower()
-                    is_direct = "direct" in stops_text or "sans" in stops_text
-
-                prices.append(
-                    FlightPrice(
-                        route=route_code,
-                        origin=route["origin"],
-                        destination=route["destination"],
-                        destination_city=route["city"],
-                        departure_date=departure,
-                        return_date=return_date,
-                        price=price,
-                        currency="EUR",
-                        airline=airline,
-                        flight_duration=duration_min,
-                        is_direct=is_direct,
-                        source_url=source_url,
-                        crawled_at=datetime.now(),
-                    )
-                )
-            except Exception:
                 continue
 
-        return prices
-
-    async def _parse_price_elements(
-        self,
-        elements: list,
-        route: dict[str, str],
-        departure: datetime,
-        return_date: datetime,
-        source_url: str,
-    ) -> list[FlightPrice]:
-        """Parse standalone price elements."""
-        route_code = f"{route['origin']}-{route['destination']}"
-        prices: list[FlightPrice] = []
-
-        for el in elements:
-            try:
-                text = await el.inner_text()
-                price = _parse_price_text(text)
-                if price is None or price <= 0:
-                    continue
-
-                prices.append(
-                    FlightPrice(
-                        route=route_code,
-                        origin=route["origin"],
-                        destination=route["destination"],
-                        destination_city=route["city"],
-                        departure_date=departure,
-                        return_date=return_date,
-                        price=price,
-                        currency="EUR",
-                        source_url=source_url,
-                        crawled_at=datetime.now(),
-                    )
+            prices.append(
+                FlightPrice(
+                    route=route_code,
+                    origin=route["origin"],
+                    destination=route["destination"],
+                    destination_city=route["city"],
+                    departure_date=departure,
+                    return_date=return_date,
+                    price=float(price_val),
+                    currency="EUR",
+                    source_url=source_url,
+                    crawled_at=datetime.now(),
                 )
-            except Exception:
-                continue
+            )
 
-        return prices
-
-    async def _parse_aria_prices(
-        self,
-        page: "playwright.async_api.Page",
-        route: dict[str, str],
-        departure: datetime,
-        return_date: datetime,
-        source_url: str,
-    ) -> list[FlightPrice]:
-        """Fallback: extract prices from aria-label attributes."""
-        route_code = f"{route['origin']}-{route['destination']}"
-        prices: list[FlightPrice] = []
-
-        elements = await page.query_selector_all("[aria-label]")
-        for el in elements:
-            try:
-                label = await el.get_attribute("aria-label")
-                if not label:
-                    continue
-                # Look for patterns like "29 euros" or "29 EUR" in aria-labels
-                price = _parse_price_from_label(label)
-                if price is None or price <= 0:
-                    continue
-
-                prices.append(
-                    FlightPrice(
-                        route=route_code,
-                        origin=route["origin"],
-                        destination=route["destination"],
-                        destination_city=route["city"],
-                        departure_date=departure,
-                        return_date=return_date,
-                        price=price,
-                        currency="EUR",
-                        source_url=source_url,
-                        crawled_at=datetime.now(),
-                    )
-                )
-            except Exception:
-                continue
-
-        return prices
+        # Keep at most 5 cheapest prices per route
+        return prices[:5]
 
     def _create_deal_event(
         self,
@@ -426,56 +369,10 @@ class FlightDealsCrawler(BaseCrawler):
             description=description,
             date_start=departure,
             date_end=return_date,
-            location_name=f"A\u00e9roport Nice C\u00f4te d'Azur (NCE)",
+            location_name="A\u00e9roport Nice C\u00f4te d'Azur (NCE)",
             location_city="Nice",
             price_min=fp.price,
             price_max=fp.price,
             currency="EUR",
             source_url=fp.source_url,
         )
-
-
-def _parse_price_text(text: str) -> float | None:
-    """Extract a numeric price from text like '29 €', '€29', '29,50€'."""
-    import re
-
-    if not text:
-        return None
-    # Remove non-numeric chars except comma and dot
-    cleaned = re.sub(r"[^\d,.]", "", text.strip())
-    # Handle European format: 1.234,56 or 29,50
-    cleaned = cleaned.replace(".", "").replace(",", ".")
-    try:
-        return float(cleaned)
-    except ValueError:
-        return None
-
-
-def _parse_price_from_label(label: str) -> float | None:
-    """Extract price from an aria-label like '29 euros' or '45 EUR'."""
-    import re
-
-    match = re.search(r"(\d[\d\s.,]*)\s*(?:euros?|EUR|€)", label, re.IGNORECASE)
-    if not match:
-        return None
-    return _parse_price_text(match.group(1))
-
-
-def _parse_duration(text: str) -> int:
-    """Parse duration text like '2 h 30 min' or '2h30' into minutes."""
-    import re
-
-    hours = 0
-    minutes = 0
-    h_match = re.search(r"(\d+)\s*h", text)
-    if h_match:
-        hours = int(h_match.group(1))
-        # Check for digits right after "h" with no suffix (e.g. "2h30")
-        after_h = text[h_match.end():]
-        compact_match = re.match(r"\s*(\d+)(?:\s*$|\s*[^a-zA-Z]|$)", after_h)
-        if compact_match:
-            minutes = int(compact_match.group(1))
-    m_match = re.search(r"(\d+)\s*(?:min|m(?!o))", text)
-    if m_match:
-        minutes = int(m_match.group(1))
-    return hours * 60 + minutes
