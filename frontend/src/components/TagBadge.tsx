@@ -224,11 +224,11 @@ export default function TagBadge({
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full font-medium ${colorClass} ${
-        small ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-0.5 text-xs"
+        small ? "px-2.5 py-0.5 text-[11px]" : "px-3 py-1 text-xs"
       }`}
       title={`${category}: ${label}`}
     >
-      {emoji && <span className={small ? "text-[10px]" : "text-xs"}>{emoji}</span>}
+      {emoji && <span className={small ? "text-[11px]" : "text-xs"}>{emoji}</span>}
       {label}
     </span>
   );

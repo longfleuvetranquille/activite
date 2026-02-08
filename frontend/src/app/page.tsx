@@ -62,7 +62,7 @@ export default function DashboardPage() {
       <div className="flex flex-col items-center justify-center py-20">
         <div className="card max-w-md text-center">
           <p className="mb-2 text-lg font-semibold text-red-400">Erreur</p>
-          <p className="mb-4 text-sm text-gray-400">{error}</p>
+          <p className="mb-4 text-sm text-gray-300">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -94,7 +94,7 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold text-white sm:text-4xl">
           {getGreeting()} !
         </h1>
-        <p className="text-sm capitalize text-gray-500">{today}</p>
+        <p className="text-sm capitalize text-gray-400">{today}</p>
       </motion.div>
 
       {/* Stats Cards */}
@@ -239,7 +239,7 @@ export default function DashboardPage() {
             <h3 className="mb-2 text-lg font-semibold text-white">
               Aucun evenement
             </h3>
-            <p className="max-w-sm text-sm text-gray-500">
+            <p className="max-w-sm text-sm text-gray-400">
               Le prochain crawl devrait ramener de nouveaux evenements.
               Revenez bientot !
             </p>
@@ -263,13 +263,13 @@ function SectionHeader({
   subtitle: string;
 }) {
   return (
-    <div className="mb-5">
-      <div className="flex items-center gap-2">
+    <div className="mb-6">
+      <div className="flex items-center gap-2.5">
         {icon}
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <span className={`badge ${countColor}`}>{count}</span>
       </div>
-      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+      <p className="mt-1.5 text-sm text-gray-400">{subtitle}</p>
     </div>
   );
 }
@@ -291,12 +291,12 @@ function StatCard({
     <div className="card">
       <div className="mb-3 flex items-center gap-2">
         {icon}
-        <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+        <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
           {label}
         </span>
       </div>
       {isText ? (
-        <p className="text-sm font-medium text-gray-300">{value}</p>
+        <p className="text-sm font-medium text-gray-200">{value}</p>
       ) : (
         <p className="text-2xl font-bold text-white">{value}</p>
       )}

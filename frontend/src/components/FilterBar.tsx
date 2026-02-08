@@ -207,7 +207,7 @@ function FilterSelect({
 }) {
   return (
     <div className="space-y-1">
-      <label className="text-[10px] font-medium uppercase tracking-wider text-gray-500">
+      <label className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
         {label}
       </label>
       <select

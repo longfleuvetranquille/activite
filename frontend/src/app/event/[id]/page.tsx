@@ -168,7 +168,7 @@ export default function EventDetailPage() {
           {event.title}
         </h1>
 
-        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-300">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4 text-azur-400" />
             <span className="capitalize">{formattedDate}</span>
@@ -234,7 +234,7 @@ export default function EventDetailPage() {
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
                 Description
               </h2>
-              <div className="prose prose-invert max-w-none text-sm leading-relaxed text-gray-400">
+              <div className="prose prose-invert max-w-none text-sm leading-relaxed text-gray-300">
                 {event.description.split("\n").map((paragraph, i) => (
                   <p key={i} className="mb-2">
                     {paragraph}
@@ -271,7 +271,7 @@ export default function EventDetailPage() {
                   {event.location_name}
                 </p>
                 {event.location_address && (
-                  <p className="mt-0.5 text-xs text-gray-500">
+                  <p className="mt-0.5 text-xs text-gray-400">
                     {event.location_address}
                   </p>
                 )}
@@ -301,9 +301,9 @@ export default function EventDetailPage() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-white/5 pb-2 last:border-0 last:pb-0">
-      <span className="text-xs text-gray-500">{label}</span>
-      <span className="text-sm font-medium text-gray-300">{value}</span>
+    <div className="flex items-center justify-between border-b border-white/[0.08] pb-2.5 last:border-0 last:pb-0">
+      <span className="text-sm text-gray-400">{label}</span>
+      <span className="text-sm font-medium text-gray-200">{value}</span>
     </div>
   );
 }

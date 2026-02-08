@@ -86,7 +86,7 @@ export default function WeekPage() {
           <h1 className="text-2xl font-bold text-white sm:text-3xl">
             Cette semaine
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             Les meilleurs evenements des 7 prochains jours
           </p>
         </div>
@@ -134,7 +134,7 @@ export default function WeekPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
             >
               {filtered.map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
@@ -146,7 +146,7 @@ export default function WeekPage() {
               <h3 className="mb-1 text-lg font-semibold text-white">
                 Rien cette semaine
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 {events.length > 0
                   ? "Aucun evenement ne correspond a vos filtres."
                   : "Aucun evenement prevu cette semaine."}

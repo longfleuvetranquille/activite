@@ -89,7 +89,7 @@ export default function TodayPage() {
           <h1 className="text-2xl font-bold text-white sm:text-3xl">
             Aujourd&apos;hui
           </h1>
-          <p className="text-sm capitalize text-gray-500">{today}</p>
+          <p className="text-sm capitalize text-gray-400">{today}</p>
         </div>
       </motion.div>
 
@@ -135,7 +135,7 @@ export default function TodayPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
             >
               {filtered.map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
@@ -147,7 +147,7 @@ export default function TodayPage() {
               <h3 className="mb-1 text-lg font-semibold text-white">
                 Rien pour aujourd&apos;hui
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 {events.length > 0
                   ? "Aucun evenement ne correspond a vos filtres."
                   : "Aucun evenement prevu aujourd'hui."}

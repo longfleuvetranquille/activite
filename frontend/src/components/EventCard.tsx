@@ -107,36 +107,36 @@ export default function EventCard({
         </div>
 
         {/* Content */}
-        <div className="space-y-3 p-4 pt-2">
+        <div className="space-y-3 p-4 pt-3">
           {/* Title */}
-          <h3 className="line-clamp-2 text-[15px] font-semibold leading-snug text-white group-hover:text-azur-300">
+          <h3 className="line-clamp-2 text-base font-semibold leading-snug text-white group-hover:text-azur-300">
             {event.title}
           </h3>
 
           {/* Summary */}
           {event.summary && !compact && (
-            <p className="line-clamp-2 text-xs leading-relaxed text-gray-400">
+            <p className="line-clamp-2 text-[13px] leading-relaxed text-gray-400">
               {event.summary}
             </p>
           )}
 
           {/* Info row */}
-          <div className="flex flex-col gap-1.5 text-xs text-gray-500">
+          <div className="flex flex-col gap-2 text-[13px]">
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5 text-azur-400/70" />
-                <span className="capitalize text-gray-300">{formattedDate}</span>
+                <Calendar className="h-3.5 w-3.5 text-azur-400" />
+                <span className="capitalize font-medium text-gray-200">{formattedDate}</span>
               </span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="h-3 w-3 text-gray-600" />
-                <span className="text-gray-500">{formattedTime}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-gray-500" />
+                <span className="text-gray-400">{formattedTime}</span>
               </span>
             </div>
             <div className="flex items-center gap-3">
               {event.location_name ? (
                 <span className="inline-flex items-center gap-1.5 truncate">
-                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-400/70" />
-                  <span className="truncate text-gray-400">
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-400" />
+                  <span className="truncate text-gray-300">
                     {event.location_name}
                     {event.location_city &&
                       event.location_city !== event.location_name &&
@@ -145,12 +145,12 @@ export default function EventCard({
                 </span>
               ) : event.location_city ? (
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-coral-400/70" />
-                  <span className="text-gray-400">{event.location_city}</span>
+                  <MapPin className="h-3.5 w-3.5 text-coral-400" />
+                  <span className="text-gray-300">{event.location_city}</span>
                 </span>
               ) : null}
-              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-medium text-gray-300">
-                <Wallet className="h-3.5 w-3.5 text-emerald-400/70" />
+              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-gray-200">
+                <Wallet className="h-3.5 w-3.5 text-emerald-400" />
                 {priceDisplay}
               </span>
             </div>
@@ -158,7 +158,7 @@ export default function EventCard({
 
           {/* Tags */}
           {visibleTags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
+            <div className="flex flex-wrap gap-1.5 pt-1">
               {visibleTags.map((tag, i) => (
                 <TagBadge
                   key={`${tag.category}-${tag.code}-${i}`}

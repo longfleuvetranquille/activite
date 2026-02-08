@@ -32,7 +32,7 @@ export default function DailyDigest({
           </div>
           <div>
             <p className="text-xl font-bold text-white">{totalEvents}</p>
-            <p className="text-[10px] uppercase tracking-wide text-gray-500">
+            <p className="text-[11px] uppercase tracking-wide text-gray-400">
               evenements
             </p>
           </div>
@@ -46,7 +46,7 @@ export default function DailyDigest({
             </div>
             <div>
               <p className="text-xl font-bold text-white">{featuredCount}</p>
-              <p className="text-[10px] uppercase tracking-wide text-gray-500">
+              <p className="text-[11px] uppercase tracking-wide text-gray-400">
                 a la une
               </p>
             </div>
@@ -61,7 +61,7 @@ export default function DailyDigest({
             </div>
             <div>
               <p className="text-xl font-bold text-white">{dealsCount}</p>
-              <p className="text-[10px] uppercase tracking-wide text-gray-500">
+              <p className="text-[11px] uppercase tracking-wide text-gray-400">
                 bons plans
               </p>
             </div>

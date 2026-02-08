@@ -34,11 +34,11 @@
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/5 bg-[var(--card)] p-5 shadow-lg backdrop-blur-sm transition-all duration-300;
+    @apply rounded-2xl border border-white/[0.08] bg-[var(--card)] p-5 shadow-lg backdrop-blur-sm transition-all duration-300;
   }
 
   .card-hover:hover {
-    @apply -translate-y-1 border-azur-500/20 shadow-xl shadow-azur-500/5;
+    @apply -translate-y-1 border-azur-500/25 shadow-xl shadow-azur-500/10;
   }
 
   .gradient-text {
