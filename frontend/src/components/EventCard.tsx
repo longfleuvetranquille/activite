@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Calendar, Wallet, Clock } from "lucide-react";
-import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -60,12 +59,7 @@ export default function EventCard({
           : "text-gray-400 bg-white/5 ring-white/10";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.3 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-    >
+    <div className="animate-fade-in">
       <Link
         href={`/event/${event.id}`}
         className="card card-hover group block overflow-hidden p-0"
@@ -171,6 +165,6 @@ export default function EventCard({
           )}
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
