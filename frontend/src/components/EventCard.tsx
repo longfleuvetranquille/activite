@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Calendar, Wallet } from "lucide-react";
+import { MapPin, Calendar, Wallet, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -13,9 +13,14 @@ import TagBadge from "./TagBadge";
 interface EventCardProps {
   event: Event;
   index?: number;
+  compact?: boolean;
 }
 
-export default function EventCard({ event, index = 0 }: EventCardProps) {
+export default function EventCard({
+  event,
+  index = 0,
+  compact = false,
+}: EventCardProps) {
   const dateStart = new Date(event.date_start);
   const formattedDate = format(dateStart, "EEE d MMM", { locale: fr });
   const formattedTime = format(dateStart, "HH:mm");
@@ -66,7 +71,9 @@ export default function EventCard({ event, index = 0 }: EventCardProps) {
         className="card card-hover group block overflow-hidden p-0"
       >
         {/* Image */}
-        <div className="relative h-40 w-full overflow-hidden">
+        <div
+          className={`relative w-full overflow-hidden ${compact ? "h-32" : "h-44"}`}
+        >
           {event.image_url ? (
             <Image
               src={event.image_url}
@@ -96,38 +103,62 @@ export default function EventCard({ event, index = 0 }: EventCardProps) {
           )}
 
           {/* Gradient overlay at bottom of image */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[var(--card)] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--card)] to-transparent" />
         </div>
 
         {/* Content */}
-        <div className="space-y-2.5 p-4 pt-2">
+        <div className="space-y-3 p-4 pt-2">
           {/* Title */}
-          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white group-hover:text-azur-300">
+          <h3 className="line-clamp-2 text-[15px] font-semibold leading-snug text-white group-hover:text-azur-300">
             {event.title}
           </h3>
 
-          {/* Date & Location */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-            <span className="inline-flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              <span className="capitalize">{formattedDate}</span>
-              <span className="text-gray-600">{formattedTime}</span>
-            </span>
-            {event.location_city && (
-              <span className="inline-flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
-                {event.location_city}
+          {/* Summary */}
+          {event.summary && !compact && (
+            <p className="line-clamp-2 text-xs leading-relaxed text-gray-400">
+              {event.summary}
+            </p>
+          )}
+
+          {/* Info row */}
+          <div className="flex flex-col gap-1.5 text-xs text-gray-500">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-3.5 w-3.5 text-azur-400/70" />
+                <span className="capitalize text-gray-300">{formattedDate}</span>
               </span>
-            )}
-            <span className="inline-flex items-center gap-1">
-              <Wallet className="h-3 w-3" />
-              {priceDisplay}
-            </span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3 w-3 text-gray-600" />
+                <span className="text-gray-500">{formattedTime}</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              {event.location_name ? (
+                <span className="inline-flex items-center gap-1.5 truncate">
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-400/70" />
+                  <span className="truncate text-gray-400">
+                    {event.location_name}
+                    {event.location_city &&
+                      event.location_city !== event.location_name &&
+                      `, ${event.location_city}`}
+                  </span>
+                </span>
+              ) : event.location_city ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-coral-400/70" />
+                  <span className="text-gray-400">{event.location_city}</span>
+                </span>
+              ) : null}
+              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-medium text-gray-300">
+                <Wallet className="h-3.5 w-3.5 text-emerald-400/70" />
+                {priceDisplay}
+              </span>
+            </div>
           </div>
 
           {/* Tags */}
           {visibleTags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
               {visibleTags.map((tag, i) => (
                 <TagBadge
                   key={`${tag.category}-${tag.code}-${i}`}

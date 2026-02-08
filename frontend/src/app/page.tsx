@@ -9,6 +9,7 @@ import {
   Sparkles,
   TrendingUp,
   Zap,
+  Plane,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { format, formatDistanceToNow } from "date-fns";
@@ -23,13 +24,6 @@ function getGreeting(): string {
   if (hour < 12) return "Bonjour";
   if (hour < 18) return "Bon apres-midi";
   return "Bonsoir";
-}
-
-function getGreetingEmoji(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "sunrise";
-  if (hour < 18) return "sun";
-  return "moon";
 }
 
 export default function DashboardPage() {
@@ -83,8 +77,14 @@ export default function DashboardPage() {
 
   const today = format(new Date(), "EEEE d MMMM yyyy", { locale: fr });
 
+  // Split deals into flight deals and other deals
+  const flightDeals =
+    digest?.deals.filter((e) => e.source_name === "google_flights") ?? [];
+  const otherDeals =
+    digest?.deals.filter((e) => e.source_name !== "google_flights") ?? [];
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -147,14 +147,14 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="mb-4 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-coral-400" />
-            <h2 className="text-xl font-bold text-white">A la une</h2>
-            <span className="badge bg-coral-500/15 text-coral-400">
-              {digest.featured.length}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <SectionHeader
+            icon={<Sparkles className="h-5 w-5 text-coral-400" />}
+            title="A la une"
+            count={digest.featured.length}
+            countColor="bg-coral-500/15 text-coral-400"
+            subtitle="Les evenements les mieux notes"
+          />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {digest.featured.map((event, i) => (
               <EventCard key={event.id} event={event} index={i} />
             ))}
@@ -169,14 +169,14 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="mb-4 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-azur-400" />
-            <h2 className="text-xl font-bold text-white">Top du jour</h2>
-            <span className="badge bg-azur-500/15 text-azur-400">
-              {digest.today_count}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <SectionHeader
+            icon={<TrendingUp className="h-5 w-5 text-azur-400" />}
+            title="Top du jour"
+            count={digest.today_count}
+            countColor="bg-azur-500/15 text-azur-400"
+            subtitle="Evenements a ne pas manquer aujourd'hui"
+          />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {digest.top_today.slice(0, 6).map((event, i) => (
               <EventCard key={event.id} event={event} index={i} />
             ))}
@@ -184,23 +184,45 @@ export default function DashboardPage() {
         </motion.section>
       )}
 
-      {/* Deals */}
-      {digest && digest.deals.length > 0 && (
+      {/* Other Deals */}
+      {otherDeals.length > 0 && (
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="mb-4 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-yellow-400" />
-            <h2 className="text-xl font-bold text-white">Bons plans</h2>
-            <span className="badge bg-yellow-500/15 text-yellow-400">
-              {digest.deals.length}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {digest.deals.map((event, i) => (
+          <SectionHeader
+            icon={<Zap className="h-5 w-5 text-yellow-400" />}
+            title="Bons plans"
+            count={otherDeals.length}
+            countColor="bg-yellow-500/15 text-yellow-400"
+            subtitle="Offres et bons plans detectes"
+          />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {otherDeals.map((event, i) => (
               <EventCard key={event.id} event={event} index={i} />
+            ))}
+          </div>
+        </motion.section>
+      )}
+
+      {/* Flight Deals */}
+      {flightDeals.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <SectionHeader
+            icon={<Plane className="h-5 w-5 text-sky-400" />}
+            title="Vols pas chers"
+            count={flightDeals.length}
+            countColor="bg-sky-500/15 text-sky-400"
+            subtitle="Meilleurs prix au depart de Nice"
+          />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {flightDeals.map((event, i) => (
+              <EventCard key={event.id} event={event} index={i} compact />
             ))}
           </div>
         </motion.section>
@@ -223,6 +245,31 @@ export default function DashboardPage() {
             </p>
           </div>
         )}
+    </div>
+  );
+}
+
+function SectionHeader({
+  icon,
+  title,
+  count,
+  countColor,
+  subtitle,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  count: number;
+  countColor: string;
+  subtitle: string;
+}) {
+  return (
+    <div className="mb-5">
+      <div className="flex items-center gap-2">
+        {icon}
+        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <span className={`badge ${countColor}`}>{count}</span>
+      </div>
+      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
     </div>
   );
 }
@@ -259,7 +306,7 @@ function StatCard({
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="space-y-2">
         <div className="h-10 w-48 animate-pulse rounded-lg bg-white/5" />
         <div className="h-4 w-36 animate-pulse rounded-lg bg-white/5" />
@@ -273,10 +320,13 @@ function DashboardSkeleton() {
         ))}
       </div>
       <div>
-        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-white/5" />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-5 space-y-2">
+          <div className="h-6 w-32 animate-pulse rounded bg-white/5" />
+          <div className="h-4 w-48 animate-pulse rounded bg-white/5" />
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="card h-72 animate-pulse" />
+            <div key={i} className="card h-80 animate-pulse" />
           ))}
         </div>
       </div>

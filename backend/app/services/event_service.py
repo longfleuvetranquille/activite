@@ -11,7 +11,7 @@ def _to_event_read(record: dict) -> EventRead:
         description=record.get("description", ""),
         summary=record.get("summary", ""),
         date_start=record.get("date_start", datetime.now().isoformat()),
-        date_end=record.get("date_end"),
+        date_end=record.get("date_end") or None,
         location_name=record.get("location_name", ""),
         location_city=record.get("location_city", ""),
         location_address=record.get("location_address", ""),

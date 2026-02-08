@@ -61,12 +61,16 @@ class FlightDealsCrawler(BaseCrawler):
     source_name = "google_flights"
 
     async def crawl(self) -> list[CrawledEvent]:
-        """Crawl Google Flights for all monitored routes."""
+        """Crawl Google Flights for all monitored routes.
+
+        Returns at most 3 deal events (the best discounts).
+        """
         if not settings.flight_crawl_enabled:
             logger.info("Flight crawl disabled, skipping")
             return []
 
-        events: list[CrawledEvent] = []
+        # Collect (discount_pct, event) tuples to pick the best deals
+        deal_candidates: list[tuple[float, CrawledEvent]] = []
         departure, return_date = _next_weekend()
 
         try:
@@ -90,10 +94,10 @@ class FlightDealsCrawler(BaseCrawler):
                     logger.info("Crawling flights: %s", route_code)
 
                     try:
-                        deal_events = await self._crawl_route(
+                        route_deals = await self._crawl_route(
                             page, route, departure, return_date
                         )
-                        events.extend(deal_events)
+                        deal_candidates.extend(route_deals)
                     except Exception:
                         logger.warning(
                             "Failed to crawl route %s", route_code, exc_info=True
@@ -107,7 +111,16 @@ class FlightDealsCrawler(BaseCrawler):
         except Exception:
             logger.exception("Flight deals crawler failed")
 
-        logger.info("Flight deals: found %d deal events", len(events))
+        # Keep only the top 3 deals by discount percentage
+        MAX_FLIGHT_DEALS = 3
+        deal_candidates.sort(key=lambda x: x[0], reverse=True)
+        events = [event for _, event in deal_candidates[:MAX_FLIGHT_DEALS]]
+
+        logger.info(
+            "Flight deals: %d candidates, returning top %d",
+            len(deal_candidates),
+            len(events),
+        )
         return events
 
     async def _crawl_route(
@@ -116,8 +129,8 @@ class FlightDealsCrawler(BaseCrawler):
         route: dict[str, str],
         departure: datetime,
         return_date: datetime,
-    ) -> list[CrawledEvent]:
-        """Crawl a single route and return deal events."""
+    ) -> list[tuple[float, CrawledEvent]]:
+        """Crawl a single route and return (discount_pct, event) tuples."""
         route_code = f"{route['origin']}-{route['destination']}"
         dep_str = _format_date_for_url(departure)
         ret_str = _format_date_for_url(return_date)
@@ -157,7 +170,7 @@ class FlightDealsCrawler(BaseCrawler):
             return []
 
         # Store all prices and check for deals
-        deal_events: list[CrawledEvent] = []
+        deal_events: list[tuple[float, CrawledEvent]] = []
         for fp in prices_found:
             await store_flight_price(fp)
 
@@ -172,7 +185,7 @@ class FlightDealsCrawler(BaseCrawler):
                 event = self._create_deal_event(
                     fp, route, avg_price, discount_pct, departure, return_date
                 )
-                deal_events.append(event)
+                deal_events.append((discount_pct, event))
 
         logger.info(
             "Route %s: %d prices stored, %d deals detected",

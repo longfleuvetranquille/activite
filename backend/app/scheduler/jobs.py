@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 def _get_active_crawlers() -> list[BaseCrawler]:
     """Import and return all active crawlers."""
     from app.crawlers.shotgun import ShotgunCrawler
-    from app.crawlers.google import GoogleSearchCrawler
+    from app.crawlers.nicefr import NiceFrCrawler
     from app.crawlers.flight_deals import FlightDealsCrawler
 
     return [
+        NiceFrCrawler(),
         ShotgunCrawler(),
-        GoogleSearchCrawler(),
         FlightDealsCrawler(),
     ]
 
