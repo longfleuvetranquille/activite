@@ -182,14 +182,15 @@ def _parse_event_card(info: dict) -> CrawledEvent | None:
     if not city:
         # Try to guess city from title or venue
         text = f"{title} {venue}".lower()
-        if "nice" in text:
-            city = "Nice"
-        elif "monaco" in text:
-            city = "Monaco"
-        elif "cannes" in text:
-            city = "Cannes"
-        else:
-            city = "Côte d'Azur"
+        for allowed in ALLOWED_CITIES:
+            if allowed in text:
+                city = allowed.title()
+                break
+
+    if not city:
+        # No identifiable Côte d'Azur city — reject the event
+        logger.debug("Rejected event (no CDA city found): %s", title)
+        return None
 
     # Filter out events from cities outside Côte d'Azur
     all_text = f"{title} {venue} {city}".lower()
