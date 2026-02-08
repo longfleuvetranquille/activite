@@ -48,6 +48,14 @@ async def trigger_dedup():
     return {"message": f"Purged {deleted} duplicates"}
 
 
+@router.post("/check-urls")
+async def trigger_url_check():
+    from app.services.url_checker import purge_dead_urls
+
+    expired = await purge_dead_urls()
+    return {"message": f"Expired {expired} events with dead URLs"}
+
+
 @router.get("/status", response_model=CrawlStatusResponse)
 async def crawl_status():
     return CrawlStatusResponse(

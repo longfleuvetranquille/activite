@@ -7,6 +7,7 @@ from app.ai.scorer import score_event
 from app.ai.summarizer import summarize_event
 from app.services.dedup import event_exists, find_similar_event, purge_duplicates
 from app.services.pocketbase import compute_event_hash, pb_client
+from app.services.url_checker import check_source_url
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,11 @@ async def run_crawl_pipeline():
                 if await find_similar_event(
                     raw.title, raw.date_start.isoformat()
                 ):
+                    continue
+
+                # Validate source URL before enriching
+                if not await check_source_url(raw.source_url):
+                    logger.info("Skipping event with dead URL: %s", raw.title)
                     continue
 
                 # Enrich with AI
@@ -136,6 +142,16 @@ async def run_crawl_pipeline():
             logger.info("Post-crawl dedup: removed %d duplicates", purged)
     except Exception:
         logger.exception("Post-crawl dedup failed")
+
+    # Post-crawl URL validation on existing events
+    try:
+        from app.services.url_checker import purge_dead_urls
+
+        expired = await purge_dead_urls()
+        if expired:
+            logger.info("Post-crawl URL check: expired %d events", expired)
+    except Exception:
+        logger.exception("Post-crawl URL check failed")
 
     logger.info(
         "Crawl pipeline complete: %d found, %d new", total_found, total_new
