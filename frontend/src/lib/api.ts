@@ -11,7 +11,16 @@ import type {
   CrawlStatusResponse,
 } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+function getApiBase(): string {
+  if (typeof window !== "undefined") {
+    // Client-side: use same hostname as the page, port 8000
+    return `http://${window.location.hostname}:8000`;
+  }
+  // Server-side: use env var or default
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+}
+
+const API_BASE = getApiBase();
 
 async function fetchAPI<T>(
   endpoint: string,

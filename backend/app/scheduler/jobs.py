@@ -5,7 +5,7 @@ from app.crawlers.base import BaseCrawler, CrawledEvent
 from app.ai.tagger import tag_event
 from app.ai.scorer import score_event
 from app.ai.summarizer import summarize_event
-from app.services.dedup import event_exists
+from app.services.dedup import event_exists, find_similar_event, purge_duplicates
 from app.services.pocketbase import compute_event_hash, pb_client
 
 logger = logging.getLogger(__name__)
@@ -44,9 +44,15 @@ async def run_crawl_pipeline():
             events_found = len(raw_events)
 
             for raw in raw_events:
-                # Dedup
+                # Dedup: exact hash match
                 if await event_exists(
                     raw.title, raw.date_start.isoformat(), raw.location_name
+                ):
+                    continue
+
+                # Dedup: fuzzy title match on same date
+                if await find_similar_event(
+                    raw.title, raw.date_start.isoformat()
                 ):
                     continue
 
@@ -122,6 +128,14 @@ async def run_crawl_pipeline():
 
         total_found += events_found
         total_new += events_new
+
+    # Post-crawl dedup pass to catch any remaining duplicates
+    try:
+        purged = await purge_duplicates()
+        if purged:
+            logger.info("Post-crawl dedup: removed %d duplicates", purged)
+    except Exception:
+        logger.exception("Post-crawl dedup failed")
 
     logger.info(
         "Crawl pipeline complete: %d found, %d new", total_found, total_new

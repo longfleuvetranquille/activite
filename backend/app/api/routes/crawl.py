@@ -40,6 +40,14 @@ async def trigger_crawl():
     return CrawlTriggerResponse(message="Crawl completed", job_id=job_id)
 
 
+@router.post("/dedup")
+async def trigger_dedup():
+    from app.services.dedup import purge_duplicates
+
+    deleted = await purge_duplicates()
+    return {"message": f"Purged {deleted} duplicates"}
+
+
 @router.get("/status", response_model=CrawlStatusResponse)
 async def crawl_status():
     return CrawlStatusResponse(
