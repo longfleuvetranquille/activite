@@ -1,0 +1,43 @@
+# Nice Outside — Caddy reverse proxy
+#
+# Pour un accès local uniquement, utiliser :
+#   nice-outside.local {
+# Pour un accès externe avec HTTPS automatique (Let's Encrypt) :
+#   nice-outside.example.com {
+
+nice-outside.local {
+	# Frontend (Next.js)
+	handle {
+		reverse_proxy frontend:3000
+	}
+
+	# Backend API
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+
+	# PocketBase admin (protégé par auth PocketBase)
+	handle /pb/* {
+		uri strip_prefix /pb
+		reverse_proxy pocketbase:8090
+	}
+
+	# Security headers
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# Gzip compression
+	encode gzip
+
+	# Logs
+	log {
+		output file /data/access.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}

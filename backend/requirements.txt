@@ -1,0 +1,18 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+httpx==0.27.2
+python-dotenv==1.0.1
+apscheduler==3.10.4
+anthropic==0.42.0
+scrapy==2.12.0
+playwright==1.49.1
+python-telegram-bot==21.9
+python-dateutil==2.9.0
+
+# Dev / test
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+ruff==0.8.6
