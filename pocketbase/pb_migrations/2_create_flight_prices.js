@@ -11,23 +11,22 @@ migrate((app) => {
     createRule: null,
     updateRule: null,
     deleteRule: null,
+    fields: [
+      { name: "route", type: "text", required: true },
+      { name: "origin", type: "text", required: true },
+      { name: "destination", type: "text", required: true },
+      { name: "destination_city", type: "text" },
+      { name: "departure_date", type: "date" },
+      { name: "return_date", type: "date" },
+      { name: "price", type: "number", min: 0, required: true },
+      { name: "currency", type: "text" },
+      { name: "airline", type: "text" },
+      { name: "flight_duration", type: "number", min: 0 },
+      { name: "is_direct", type: "bool" },
+      { name: "source_url", type: "text" },
+      { name: "crawled_at", type: "date", required: true },
+    ],
   })
-
-  flightPrices.fields = [
-    new TextField({ name: "route", required: true }),
-    new TextField({ name: "origin", required: true }),
-    new TextField({ name: "destination", required: true }),
-    new TextField({ name: "destination_city" }),
-    new DateField({ name: "departure_date" }),
-    new DateField({ name: "return_date" }),
-    new NumberField({ name: "price", min: 0, required: true }),
-    new TextField({ name: "currency" }),
-    new TextField({ name: "airline" }),
-    new NumberField({ name: "flight_duration", min: 0 }),
-    new BoolField({ name: "is_direct" }),
-    new TextField({ name: "source_url" }),
-    new DateField({ name: "crawled_at", required: true }),
-  ]
 
   app.save(flightPrices)
 }, (app) => {
