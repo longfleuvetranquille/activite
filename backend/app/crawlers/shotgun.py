@@ -10,6 +10,30 @@ logger = logging.getLogger(__name__)
 NICE_LAT = 43.7102
 NICE_LNG = 7.2620
 
+# Cities we accept (Côte d'Azur / PACA Est)
+ALLOWED_CITIES = {
+    "nice", "monaco", "cannes", "antibes", "hyères", "hyeres",
+    "roquebrune", "menton", "grasse", "fréjus", "frejus",
+    "saint-tropez", "villefranche", "cagnes", "vence", "mougins",
+    "mandelieu", "juan-les-pins", "juan les pins", "vallauris",
+    "beausoleil", "cap-d'ail", "èze", "eze", "beaulieu",
+    "saint-laurent-du-var", "saint-raphaël", "saint-raphael",
+    "côte d'azur", "cote d'azur", "riviera",
+}
+
+# Cities we explicitly reject
+REJECTED_CITIES = {
+    "toulouse", "marseille", "lyon", "paris", "bordeaux", "montpellier",
+    "nantes", "lille", "strasbourg", "rennes", "grenoble", "toulon",
+    "clermont", "dijon", "angers", "nîmes", "nimes", "perpignan",
+    "avignon", "aix-en-provence", "aix en provence",
+}
+
+# Keywords in titles that indicate events outside Côte d'Azur
+REJECTED_KEYWORDS = {
+    "nuits sonores", "brunch electronik bordeaux", "dystopia 2026 • rennes",
+}
+
 
 class ShotgunCrawler(BaseCrawler):
     """Crawler for Shotgun (shotgun.live) events in the Côte d'Azur area.
@@ -166,6 +190,17 @@ def _parse_event_card(info: dict) -> CrawledEvent | None:
             city = "Cannes"
         else:
             city = "Côte d'Azur"
+
+    # Filter out events from cities outside Côte d'Azur
+    all_text = f"{title} {venue} {city}".lower()
+    for rejected in REJECTED_CITIES:
+        if rejected in all_text:
+            logger.debug("Rejected event from %s: %s", rejected, title)
+            return None
+    for keyword in REJECTED_KEYWORDS:
+        if keyword in all_text:
+            logger.debug("Rejected event by keyword %s: %s", keyword, title)
+            return None
 
     return CrawledEvent(
         title=title,

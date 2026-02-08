@@ -93,11 +93,13 @@ export default function EventDetailPage() {
     : null;
 
   const priceDisplay =
-    event.price_min === 0 && event.price_max === 0
-      ? "Gratuit"
-      : event.price_min === event.price_max
-        ? `${event.price_min} ${event.currency}`
-        : `${event.price_min} - ${event.price_max} ${event.currency}`;
+    event.price_min < 0
+      ? "Non communique"
+      : event.price_min === 0 && event.price_max === 0
+        ? "Gratuit"
+        : event.price_min === event.price_max
+          ? `${event.price_min} ${event.currency}`
+          : `${event.price_min} - ${event.price_max} ${event.currency}`;
 
   const allTags = [
     ...event.tags_type.map((t) => ({ code: t, category: "type" })),
@@ -138,8 +140,10 @@ export default function EventDetailPage() {
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-600/30 via-coral-500/20 to-navy-600/30">
-            <Star className="h-16 w-16 text-white/20" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-600/35 via-coral-500/20 to-navy-600/30">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/[0.07]">
+              <Star className="h-10 w-10 text-white/40" />
+            </div>
           </div>
         )}
         {/* Interest Score Badge */}

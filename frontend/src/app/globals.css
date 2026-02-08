@@ -12,10 +12,10 @@
   }
 
   .dark {
-    --background: #0a0a14;
+    --background: #111318;
     --foreground: #f1f5f9;
-    --card: #12121f;
-    --card-border: #1e1e32;
+    --card: #1a1d2b;
+    --card-border: #2a2d3e;
     --muted: #94a3b8;
   }
 
@@ -34,7 +34,7 @@
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/[0.08] bg-[var(--card)] p-5 shadow-lg backdrop-blur-sm transition-all duration-300;
+    @apply rounded-2xl border border-white/[0.1] bg-[var(--card)] p-5 shadow-lg backdrop-blur-sm transition-all duration-300;
   }
 
   .card-hover:hover {
@@ -89,7 +89,7 @@
 
 /* Leaflet map dark mode overrides */
 .dark .leaflet-container {
-  background: #0a0a14;
+  background: #111318;
 }
 
 .dark .leaflet-tile-pane {
@@ -97,17 +97,17 @@
 }
 
 .dark .leaflet-control-zoom a {
-  background-color: #12121f;
+  background-color: #1a1d2b;
   color: #f1f5f9;
-  border-color: #1e1e32;
+  border-color: #2a2d3e;
 }
 
 .dark .leaflet-popup-content-wrapper {
-  background-color: #12121f;
+  background-color: #1a1d2b;
   color: #f1f5f9;
   border-radius: 12px;
 }
 
 .dark .leaflet-popup-tip {
-  background-color: #12121f;
+  background-color: #1a1d2b;
 }

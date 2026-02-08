@@ -116,9 +116,9 @@ def _parse_event(item: dict) -> CrawledEvent | None:
     if len(description) > 500:
         description = description[:497] + "..."
 
-    # Pricing
-    price_min = 0.0
-    if acf.get("free"):
+    # Pricing: -1 means "unknown" (displayed as "N/C" on frontend)
+    price_min = -1.0
+    if acf.get("free") is True:
         price_min = 0.0
     elif acf.get("pricing"):
         price_match = re.search(r"(\d+(?:[.,]\d+)?)\s*€", str(acf["pricing"]))
@@ -150,7 +150,7 @@ def _parse_event(item: dict) -> CrawledEvent | None:
         source_url=link,
         image_url=image_url,
         price_min=price_min,
-        price_max=price_min,
+        price_max=price_min if price_min >= 0 else -1.0,
         currency="EUR",
     )
 

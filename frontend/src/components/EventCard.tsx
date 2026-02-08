@@ -2,12 +2,47 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Calendar, Wallet, Clock } from "lucide-react";
+import {
+  MapPin,
+  Calendar,
+  Wallet,
+  Clock,
+  Music,
+  Plane,
+  Trophy,
+  Utensils,
+  Gamepad2,
+  Theater,
+  Mic2,
+  Waves,
+  Mountain,
+  Clapperboard,
+  GraduationCap,
+  Sparkles,
+} from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
 import TagBadge from "./TagBadge";
+
+// Map event types to icons and gradient colors for placeholders
+const TYPE_VISUALS: Record<string, { icon: typeof Music; gradient: string }> = {
+  party: { icon: Music, gradient: "from-purple-600/40 to-pink-500/30" },
+  bar_rooftop: { icon: Sparkles, gradient: "from-amber-600/40 to-orange-500/30" },
+  dj_set: { icon: Music, gradient: "from-violet-600/40 to-fuchsia-500/30" },
+  concert: { icon: Mic2, gradient: "from-rose-600/40 to-red-500/30" },
+  show: { icon: Theater, gradient: "from-indigo-600/40 to-purple-500/30" },
+  conference: { icon: GraduationCap, gradient: "from-sky-600/40 to-blue-500/30" },
+  sport_match: { icon: Trophy, gradient: "from-emerald-600/40 to-green-500/30" },
+  motorsport: { icon: Trophy, gradient: "from-red-600/40 to-orange-500/30" },
+  watersport: { icon: Waves, gradient: "from-cyan-600/40 to-teal-500/30" },
+  outdoor: { icon: Mountain, gradient: "from-green-600/40 to-emerald-500/30" },
+  gaming: { icon: Gamepad2, gradient: "from-violet-600/40 to-indigo-500/30" },
+  cinema: { icon: Clapperboard, gradient: "from-slate-600/40 to-gray-500/30" },
+  food: { icon: Utensils, gradient: "from-orange-600/40 to-amber-500/30" },
+  travel: { icon: Plane, gradient: "from-sky-600/40 to-cyan-500/30" },
+};
 
 interface EventCardProps {
   event: Event;
@@ -25,11 +60,13 @@ export default function EventCard({
   const formattedTime = format(dateStart, "HH:mm");
 
   const priceDisplay =
-    event.price_min === 0 && event.price_max === 0
-      ? "Gratuit"
-      : event.price_min === event.price_max
-        ? `${event.price_min}\u00A0\u20AC`
-        : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
+    event.price_min < 0
+      ? "N/C"
+      : event.price_min === 0 && event.price_max === 0
+        ? "Gratuit"
+        : event.price_min === event.price_max
+          ? `${event.price_min}\u00A0\u20AC`
+          : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
 
   // Collect up to 4 tags to show
   const visibleTags: { code: string; category: string }[] = [];
@@ -77,9 +114,7 @@ export default function EventCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-600/20 via-coral-500/15 to-navy-600/20">
-              <Calendar className="h-10 w-10 text-white/15" />
-            </div>
+            <PlaceholderImage tags_type={event.tags_type} />
           )}
 
           {/* Score badge */}
@@ -165,6 +200,25 @@ export default function EventCard({
           )}
         </div>
       </Link>
+    </div>
+  );
+}
+
+function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
+  const firstType = tags_type[0];
+  const visual = (firstType && TYPE_VISUALS[firstType]) || {
+    icon: Calendar,
+    gradient: "from-azur-600/35 to-navy-600/25",
+  };
+  const Icon = visual.icon;
+
+  return (
+    <div
+      className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${visual.gradient}`}
+    >
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/[0.07]">
+        <Icon className="h-8 w-8 text-white/40" />
+      </div>
     </div>
   );
 }

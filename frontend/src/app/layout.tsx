@@ -78,12 +78,12 @@ export default function RootLayout({
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
-          <aside className="fixed left-0 top-0 z-40 hidden h-full w-64 flex-col border-r border-white/5 bg-[#0c0c18] lg:flex">
+          <aside className="fixed left-0 top-0 z-40 hidden h-full w-64 flex-col border-r border-white/5 bg-[#151824] lg:flex">
             <SidebarContent pathname={pathname} onNavigate={() => {}} />
           </aside>
 
           {/* Mobile Header */}
-          <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#0c0c18]/90 px-4 backdrop-blur-xl lg:hidden">
+          <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#151824]/90 px-4 backdrop-blur-xl lg:hidden">
             <Link href="/" className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500">
                 <Sun className="h-5 w-5 text-white" />
@@ -121,7 +121,7 @@ export default function RootLayout({
                   animate={{ x: 0 }}
                   exit={{ x: -280 }}
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-[#0c0c18] lg:hidden"
+                  className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-[#151824] lg:hidden"
                 >
                   <SidebarContent
                     pathname={pathname}
