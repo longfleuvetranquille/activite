@@ -85,7 +85,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
       <div className="flex gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Rechercher un evenement..."
@@ -96,7 +96,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
           {filters.search && (
             <button
               onClick={() => updateFilter("search", "")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -107,7 +107,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`btn-secondary relative shrink-0 ${
-            showFilters ? "border-azur-500/30 bg-azur-500/10" : ""
+            showFilters ? "border-azur-400 bg-azur-50 text-azur-700" : ""
           }`}
         >
           <SlidersHorizontal className="h-4 w-4" />
@@ -123,7 +123,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
         {activeFilterCount > 0 && (
           <button
             onClick={clearFilters}
-            className="btn-secondary shrink-0 text-red-400 hover:text-red-300"
+            className="btn-secondary shrink-0 text-red-600 hover:text-red-500"
           >
             <X className="h-4 w-4" />
             <span className="hidden sm:inline">Effacer</span>
@@ -207,7 +207,7 @@ function FilterSelect({
 }) {
   return (
     <div className="space-y-1">
-      <label className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
+      <label className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
         {label}
       </label>
       <select
@@ -216,7 +216,7 @@ function FilterSelect({
         className="input-field appearance-none cursor-pointer pr-8 text-xs"
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} className="bg-[#12121f]">
+          <option key={opt.value} value={opt.value} className="bg-white">
             {opt.label}
           </option>
         ))}
@@ -233,11 +233,11 @@ function FilterChip({
   onRemove: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-500/10 px-3 py-1 text-xs font-medium text-azur-300">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100 px-3 py-1 text-xs font-medium text-azur-700">
       {label}
       <button
         onClick={onRemove}
-        className="rounded-full p-0.5 transition-colors hover:bg-azur-500/20"
+        className="rounded-full p-0.5 transition-colors hover:bg-azur-200"
       >
         <X className="h-3 w-3" />
       </button>

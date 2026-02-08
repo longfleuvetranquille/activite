@@ -18,21 +18,21 @@ export default function DailyDigest({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-azur-600/20 via-coral-500/15 to-navy-600/20 p-5 ring-1 ring-white/5"
+      className="relative overflow-hidden rounded-xl bg-gradient-to-r from-azur-50 via-coral-50 to-navy-50 p-4 ring-1 ring-slate-200"
     >
       {/* Background decoration */}
-      <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-coral-500/10 blur-3xl" />
-      <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-azur-500/10 blur-3xl" />
+      <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-coral-200/30 blur-3xl" />
+      <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-azur-200/30 blur-3xl" />
 
       <div className="relative flex flex-wrap items-center gap-x-8 gap-y-3">
         {/* Total */}
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-azur-500/20">
-            <CalendarDays className="h-4 w-4 text-azur-400" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-azur-100">
+            <CalendarDays className="h-4 w-4 text-azur-600" />
           </div>
           <div>
-            <p className="text-xl font-bold text-white">{totalEvents}</p>
-            <p className="text-[11px] uppercase tracking-wide text-gray-400">
+            <p className="text-xl font-bold text-slate-900">{totalEvents}</p>
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">
               evenements
             </p>
           </div>
@@ -41,12 +41,12 @@ export default function DailyDigest({
         {/* Featured */}
         {featuredCount > 0 && (
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-coral-500/20">
-              <Sparkles className="h-4 w-4 text-coral-400" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-coral-100">
+              <Sparkles className="h-4 w-4 text-coral-600" />
             </div>
             <div>
-              <p className="text-xl font-bold text-white">{featuredCount}</p>
-              <p className="text-[11px] uppercase tracking-wide text-gray-400">
+              <p className="text-xl font-bold text-slate-900">{featuredCount}</p>
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">
                 a la une
               </p>
             </div>
@@ -56,12 +56,12 @@ export default function DailyDigest({
         {/* Deals */}
         {dealsCount > 0 && (
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-500/20">
-              <Zap className="h-4 w-4 text-yellow-400" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-100">
+              <Zap className="h-4 w-4 text-yellow-600" />
             </div>
             <div>
-              <p className="text-xl font-bold text-white">{dealsCount}</p>
-              <p className="text-[11px] uppercase tracking-wide text-gray-400">
+              <p className="text-xl font-bold text-slate-900">{dealsCount}</p>
+              <p className="text-[11px] uppercase tracking-wide text-slate-500">
                 bons plans
               </p>
             </div>

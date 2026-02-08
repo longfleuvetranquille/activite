@@ -58,7 +58,7 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr">
       <head>
         <title>Nice Outside</title>
         <meta
@@ -78,23 +78,23 @@ export default function RootLayout({
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
-          <aside className="fixed left-0 top-0 z-40 hidden h-full w-64 flex-col border-r border-white/5 bg-[#151824] lg:flex">
+          <aside className="glass-nav fixed left-0 top-0 z-40 hidden h-full w-64 flex-col lg:flex">
             <SidebarContent pathname={pathname} onNavigate={() => {}} />
           </aside>
 
           {/* Mobile Header */}
-          <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#151824]/90 px-4 backdrop-blur-xl lg:hidden">
+          <header className="glass-header fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between px-4 lg:hidden">
             <Link href="/" className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500">
                 <Sun className="h-5 w-5 text-white" />
               </div>
-              <span className="text-lg font-bold text-white">
+              <span className="text-lg font-bold text-slate-900">
                 Nice Outside
               </span>
             </Link>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-all hover:bg-azur-50 hover:text-azur-600 shadow-inner"
               aria-label="Toggle navigation"
             >
               {sidebarOpen ? (
@@ -113,7 +113,7 @@ export default function RootLayout({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
+                  className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm lg:hidden"
                   onClick={() => setSidebarOpen(false)}
                 />
                 <motion.aside
@@ -121,7 +121,7 @@ export default function RootLayout({
                   animate={{ x: 0 }}
                   exit={{ x: -280 }}
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-[#151824] lg:hidden"
+                  className="glass-nav fixed left-0 top-0 z-50 flex h-full w-72 flex-col shadow-lg lg:hidden"
                 >
                   <SidebarContent
                     pathname={pathname}
@@ -134,7 +134,7 @@ export default function RootLayout({
 
           {/* Main Content */}
           <main className="flex-1 pt-16 lg:pl-64 lg:pt-0">
-            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+            <div className="mx-auto max-w-[1600px] px-4 py-5 sm:px-6 lg:px-6 lg:py-6">
               {children}
             </div>
           </main>
@@ -154,13 +154,13 @@ function SidebarContent({
   return (
     <>
       {/* Logo */}
-      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-5">
+      <div className="flex h-16 items-center gap-3 border-b border-white/40 px-5">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 shadow-lg shadow-azur-500/20">
           <Sun className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-white">Nice Outside</h1>
-          <p className="text-[10px] uppercase tracking-widest text-gray-500">
+          <h1 className="text-lg font-bold text-slate-900">Nice Outside</h1>
+          <p className="text-[10px] uppercase tracking-widest text-slate-400">
             Cote d&apos;Azur
           </p>
         </div>
@@ -181,20 +181,20 @@ function SidebarContent({
               onClick={onNavigate}
               className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                 isActive
-                  ? "bg-azur-600/15 text-azur-400"
-                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+                  ? "bg-azur-50 text-azur-700"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               <Icon
                 className={`h-[18px] w-[18px] transition-colors ${
                   isActive
-                    ? "text-azur-400"
-                    : "text-gray-500 group-hover:text-gray-300"
+                    ? "text-azur-600"
+                    : "text-slate-400 group-hover:text-slate-600"
                 }`}
               />
               {item.label}
               {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-azur-400" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-azur-600" />
               )}
             </Link>
           );
@@ -202,8 +202,8 @@ function SidebarContent({
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-white/5 px-5 py-4">
-        <p className="text-xs text-gray-600">
+      <div className="border-t border-white/40 px-5 py-4">
+        <p className="text-xs text-slate-400">
           v0.1.0 &middot; Nice, France
         </p>
       </div>

@@ -75,6 +75,54 @@ class NiceFrCrawler(BaseCrawler):
         return events
 
 
+# Keywords in title/description that indicate events not matching target audience
+# (young active 25yo interested in nightlife, sports, rooftops, travel)
+_SKIP_KEYWORDS = [
+    "cinémathèque",
+    "cinematheque",
+    "ciné-club",
+    "cine-club",
+    "projection débat",
+    "projection-débat",
+    "film muet",
+    "rétrospective",
+    "retrospective",
+    "conférence du patrimoine",
+    "cercle généalogique",
+    "genealogique",
+    "bridge",
+    "tricot",
+    "aquarelle",
+    "chorale seniors",
+    "atelier mémoire",
+    "thé dansant",
+    "the dansant",
+    "loto",
+    "exposition",
+    "réunion d'information",
+    "reunion d'information",
+    "permanence mutuelle",
+    "veglione seniors",
+    "lectures partagées",
+    "histoires pour des p'tits",
+    "atelier créatif masque",
+    "contes et comptines",
+    "pitchoun",
+]
+
+# ACF place IDs for venues not matching target audience
+# 1941 = Cinémathèque de Nice
+_SKIP_PLACE_IDS = {1941}
+
+
+def _should_skip(title: str, description: str, place_id: int | None = None) -> bool:
+    """Return True if the event matches skip keywords or venue (not target audience)."""
+    if place_id and place_id in _SKIP_PLACE_IDS:
+        return True
+    text = f"{title} {description}".lower()
+    return any(kw in text for kw in _SKIP_KEYWORDS)
+
+
 def _parse_event(item: dict) -> CrawledEvent | None:
     """Parse a single event from the nice.fr WP REST API."""
     title_raw = item.get("title", {}).get("rendered", "")
@@ -115,6 +163,15 @@ def _parse_event(item: dict) -> CrawledEvent | None:
     # Limit length
     if len(description) > 500:
         description = description[:497] + "..."
+
+    # Skip events that don't match target audience
+    place_id = acf.get("place")
+    if isinstance(place_id, str) and place_id.isdigit():
+        place_id = int(place_id)
+    elif not isinstance(place_id, int):
+        place_id = None
+    if _should_skip(title, description, place_id):
+        return None
 
     # Pricing: -1 means "unknown" (displayed as "N/C" on frontend)
     price_min = -1.0

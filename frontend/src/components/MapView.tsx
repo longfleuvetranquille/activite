@@ -21,8 +21,8 @@ export default function MapView({ events }: MapViewProps) {
 
   if (!mapReady) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-[var(--card)]">
-        <p className="text-xs text-gray-500">Chargement de la carte...</p>
+      <div className="flex h-full w-full items-center justify-center bg-slate-50">
+        <p className="text-xs text-slate-500">Chargement de la carte...</p>
       </div>
     );
   }
@@ -76,8 +76,8 @@ function MapContent({ events }: MapViewProps) {
 
   if (!LeafletComponents || !icon) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-[var(--card)]">
-        <p className="text-xs text-gray-500">Chargement de la carte...</p>
+      <div className="flex h-full w-full items-center justify-center bg-slate-50">
+        <p className="text-xs text-slate-500">Chargement de la carte...</p>
       </div>
     );
   }
@@ -114,28 +114,28 @@ function MapContent({ events }: MapViewProps) {
         >
           <Tooltip direction="top" offset={[0, -35]}>
             <div className="text-center">
-              <p className="font-semibold">{event.title}</p>
+              <p className="font-semibold text-slate-900">{event.title}</p>
               {event.location_name && (
-                <p className="text-xs text-gray-500">{event.location_name}</p>
+                <p className="text-xs text-slate-500">{event.location_name}</p>
               )}
             </div>
           </Tooltip>
           <Popup>
             <div className="max-w-[200px]">
-              <p className="mb-1 font-semibold">{event.title}</p>
+              <p className="mb-1 font-semibold text-slate-900">{event.title}</p>
               {event.location_name && (
-                <p className="mb-1 text-xs text-gray-600">
+                <p className="mb-1 text-xs text-slate-600">
                   {event.location_name}
                 </p>
               )}
               {event.location_address && (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-slate-500">
                   {event.location_address}
                 </p>
               )}
               <a
                 href={`/event/${event.id}`}
-                className="mt-2 inline-block text-xs font-medium text-blue-600 hover:underline"
+                className="mt-2 inline-block text-xs font-medium text-azur-600 hover:underline"
               >
                 Voir les details
               </a>

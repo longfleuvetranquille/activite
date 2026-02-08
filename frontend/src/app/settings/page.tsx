@@ -108,7 +108,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-10 w-48 animate-pulse rounded-lg bg-white/5" />
+        <div className="h-10 w-48 animate-pulse rounded-lg bg-slate-200" />
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="card h-40 animate-pulse" />
         ))}
@@ -124,36 +124,36 @@ export default function SettingsPage() {
     >
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-500/15">
-          <Settings className="h-5 w-5 text-navy-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-100">
+          <Settings className="h-5 w-5 text-navy-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white sm:text-3xl">
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
             Parametres
           </h1>
-          <p className="text-sm text-gray-500">Personnalise ton experience</p>
+          <p className="text-sm text-slate-500">Personnalise ton experience</p>
         </div>
       </div>
 
       {error && (
-        <div className="card border-red-500/20 bg-red-500/5">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="card border-red-200 bg-red-50">
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
       {/* Favorite Tags */}
       <section className="card space-y-4">
         <div className="flex items-center gap-2">
-          <Heart className="h-5 w-5 text-coral-400" />
-          <h2 className="text-lg font-semibold text-white">Tags favoris</h2>
+          <Heart className="h-5 w-5 text-coral-500" />
+          <h2 className="text-lg font-semibold text-slate-900">Tags favoris</h2>
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-slate-500">
           Selectionne les tags qui t&apos;interessent pour booster le scoring
           des evenements correspondants.
         </p>
         {Object.entries(allTags).map(([category, tags]) => (
           <div key={category} className="space-y-2">
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
               {category}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -165,8 +165,8 @@ export default function SettingsPage() {
                     onClick={() => toggleTag("favorite_tags", code)}
                     className={`badge cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-coral-500/20 text-coral-300 ring-1 ring-coral-500/30"
-                        : "bg-white/5 text-gray-400 hover:bg-white/10"
+                        ? "bg-coral-100 text-coral-700 ring-1 ring-coral-300"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
                     {label}
@@ -181,15 +181,15 @@ export default function SettingsPage() {
       {/* Blocked Tags */}
       <section className="card space-y-4">
         <div className="flex items-center gap-2">
-          <ShieldBan className="h-5 w-5 text-red-400" />
-          <h2 className="text-lg font-semibold text-white">Tags bloques</h2>
+          <ShieldBan className="h-5 w-5 text-red-500" />
+          <h2 className="text-lg font-semibold text-slate-900">Tags bloques</h2>
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-slate-500">
           Les evenements avec ces tags seront exclus de tes resultats.
         </p>
         {Object.entries(allTags).map(([category, tags]) => (
           <div key={category} className="space-y-2">
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
               {category}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -201,8 +201,8 @@ export default function SettingsPage() {
                     onClick={() => toggleTag("blocked_tags", code)}
                     className={`badge cursor-pointer transition-all ${
                       isBlocked
-                        ? "bg-red-500/20 text-red-300 ring-1 ring-red-500/30"
-                        : "bg-white/5 text-gray-400 hover:bg-white/10"
+                        ? "bg-red-100 text-red-700 ring-1 ring-red-300"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
                     {label}
@@ -217,8 +217,8 @@ export default function SettingsPage() {
       {/* Favorite Locations */}
       <section className="card space-y-4">
         <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-azur-400" />
-          <h2 className="text-lg font-semibold text-white">
+          <MapPin className="h-5 w-5 text-azur-500" />
+          <h2 className="text-lg font-semibold text-slate-900">
             Villes favorites
           </h2>
         </div>
@@ -231,8 +231,8 @@ export default function SettingsPage() {
                 onClick={() => toggleLocation(loc)}
                 className={`badge cursor-pointer transition-all ${
                   isSelected
-                    ? "bg-azur-500/20 text-azur-300 ring-1 ring-azur-500/30"
-                    : "bg-white/5 text-gray-400 hover:bg-white/10"
+                    ? "bg-azur-100 text-azur-700 ring-1 ring-azur-300"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 {loc}
@@ -247,10 +247,10 @@ export default function SettingsPage() {
         {/* Max Budget */}
         <section className="card space-y-4">
           <div className="flex items-center gap-2">
-            <Wallet className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-lg font-semibold text-white">Budget max</h2>
+            <Wallet className="h-5 w-5 text-emerald-500" />
+            <h2 className="text-lg font-semibold text-slate-900">Budget max</h2>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-slate-500">
             Budget maximum par evenement (en EUR). 0 = pas de limite.
           </p>
           <div className="relative">
@@ -265,7 +265,7 @@ export default function SettingsPage() {
               className="input-field pr-12"
               placeholder="0"
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400">
               EUR
             </span>
           </div>
@@ -274,10 +274,10 @@ export default function SettingsPage() {
         {/* Telegram */}
         <section className="card space-y-4">
           <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-blue-400" />
-            <h2 className="text-lg font-semibold text-white">Telegram</h2>
+            <MessageCircle className="h-5 w-5 text-blue-500" />
+            <h2 className="text-lg font-semibold text-slate-900">Telegram</h2>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-slate-500">
             Chat ID pour recevoir les notifications quotidiennes.
           </p>
           <input
@@ -297,18 +297,18 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {prefs.notif_enabled ? (
-              <Bell className="h-5 w-5 text-azur-400" />
+              <Bell className="h-5 w-5 text-azur-500" />
             ) : (
-              <BellOff className="h-5 w-5 text-gray-500" />
+              <BellOff className="h-5 w-5 text-slate-400" />
             )}
-            <h2 className="text-lg font-semibold text-white">Notifications</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Notifications</h2>
           </div>
           <button
             onClick={() =>
               setPrefs({ ...prefs, notif_enabled: !prefs.notif_enabled })
             }
             className={`relative h-7 w-12 rounded-full transition-colors ${
-              prefs.notif_enabled ? "bg-azur-600" : "bg-gray-700"
+              prefs.notif_enabled ? "bg-azur-600" : "bg-slate-300"
             }`}
           >
             <div
@@ -322,8 +322,8 @@ export default function SettingsPage() {
         {prefs.notif_enabled && (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-400">
+              <Clock className="h-4 w-4 text-slate-400" />
+              <span className="text-sm text-slate-500">
                 Heure de notification
               </span>
             </div>
@@ -367,7 +367,7 @@ export default function SettingsPage() {
           <motion.span
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-sm text-emerald-400"
+            className="text-sm text-emerald-600"
           >
             Preferences mises a jour
           </motion.span>

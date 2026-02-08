@@ -50,11 +50,11 @@ export default function EventDetailPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-24 animate-pulse rounded-lg bg-white/5" />
-        <div className="h-64 w-full animate-pulse rounded-2xl bg-white/5" />
-        <div className="h-10 w-3/4 animate-pulse rounded-lg bg-white/5" />
-        <div className="h-6 w-1/2 animate-pulse rounded-lg bg-white/5" />
-        <div className="h-40 w-full animate-pulse rounded-2xl bg-white/5" />
+        <div className="h-8 w-24 animate-pulse rounded-lg bg-slate-200" />
+        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200" />
+        <div className="h-10 w-3/4 animate-pulse rounded-lg bg-slate-200" />
+        <div className="h-6 w-1/2 animate-pulse rounded-lg bg-slate-200" />
+        <div className="h-40 w-full animate-pulse rounded-2xl bg-slate-200" />
       </div>
     );
   }
@@ -63,10 +63,10 @@ export default function EventDetailPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <div className="card max-w-md text-center">
-          <p className="mb-2 text-lg font-semibold text-red-400">
+          <p className="mb-2 text-lg font-semibold text-red-600">
             Evenement introuvable
           </p>
-          <p className="mb-4 text-sm text-gray-400">{error}</p>
+          <p className="mb-4 text-sm text-slate-500">{error}</p>
           <div className="flex gap-3 justify-center">
             <button onClick={() => router.back()} className="btn-secondary">
               <ArrowLeft className="h-4 w-4" />
@@ -123,7 +123,7 @@ export default function EventDetailPage() {
       {/* Back button */}
       <button
         onClick={() => router.back()}
-        className="group inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
+        className="group inline-flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-slate-900"
       >
         <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
         Retour
@@ -140,19 +140,19 @@ export default function EventDetailPage() {
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-600/35 via-coral-500/20 to-navy-600/30">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/[0.07]">
-              <Star className="h-10 w-10 text-white/40" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-100 via-coral-50 to-navy-100">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/60">
+              <Star className="h-10 w-10 text-slate-400" />
             </div>
           </div>
         )}
         {/* Interest Score Badge */}
-        <div className="absolute right-4 top-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/60 backdrop-blur-md">
+        <div className="absolute right-4 top-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/90 shadow-md">
           <div className="text-center">
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-slate-900">
               {event.interest_score}
             </p>
-            <p className="text-[9px] font-medium uppercase tracking-wide text-gray-400">
+            <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">
               score
             </p>
           </div>
@@ -168,17 +168,17 @@ export default function EventDetailPage() {
 
       {/* Title & Main Info */}
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl lg:text-4xl">
           {event.title}
         </h1>
 
-        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-300">
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
           <div className="flex items-center gap-1.5">
-            <Calendar className="h-4 w-4 text-azur-400" />
+            <Calendar className="h-4 w-4 text-azur-500" />
             <span className="capitalize">{formattedDate}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Clock className="h-4 w-4 text-azur-400" />
+            <Clock className="h-4 w-4 text-azur-500" />
             <span>
               {formattedTime}
               {formattedDateEnd && ` - ${formattedDateEnd}`}
@@ -186,7 +186,7 @@ export default function EventDetailPage() {
           </div>
           {(event.location_name || event.location_city) && (
             <div className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-coral-400" />
+              <MapPin className="h-4 w-4 text-coral-500" />
               <span>
                 {event.location_name}
                 {event.location_name && event.location_city && ", "}
@@ -195,7 +195,7 @@ export default function EventDetailPage() {
             </div>
           )}
           <div className="flex items-center gap-1.5">
-            <Wallet className="h-4 w-4 text-emerald-400" />
+            <Wallet className="h-4 w-4 text-emerald-500" />
             <span>{priceDisplay}</span>
           </div>
         </div>
@@ -205,8 +205,8 @@ export default function EventDetailPage() {
       {allTags.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Tag className="h-4 w-4 text-gray-500" />
-            <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            <Tag className="h-4 w-4 text-slate-400" />
+            <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
               Tags
             </span>
           </div>
@@ -225,20 +225,20 @@ export default function EventDetailPage() {
           {/* Summary */}
           {event.summary && (
             <div className="card">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-azur-400">
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-azur-600">
                 Resume
               </h2>
-              <p className="leading-relaxed text-gray-300">{event.summary}</p>
+              <p className="leading-relaxed text-slate-600">{event.summary}</p>
             </div>
           )}
 
           {/* Full Description */}
           {event.description && (
             <div className="card">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
                 Description
               </h2>
-              <div className="prose prose-invert max-w-none text-sm leading-relaxed text-gray-300">
+              <div className="prose max-w-none text-sm leading-relaxed text-slate-700">
                 {event.description.split("\n").map((paragraph, i) => (
                   <p key={i} className="mb-2">
                     {paragraph}
@@ -271,11 +271,11 @@ export default function EventDetailPage() {
                 <MapView events={[event]} />
               </div>
               <div className="p-4">
-                <p className="text-sm font-medium text-white">
+                <p className="text-sm font-medium text-slate-900">
                   {event.location_name}
                 </p>
                 {event.location_address && (
-                  <p className="mt-0.5 text-xs text-gray-400">
+                  <p className="mt-0.5 text-xs text-slate-500">
                     {event.location_address}
                   </p>
                 )}
@@ -285,7 +285,7 @@ export default function EventDetailPage() {
 
           {/* Quick Info */}
           <div className="card space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
               Informations
             </h3>
             <InfoRow label="Prix" value={priceDisplay} />
@@ -305,9 +305,9 @@ export default function EventDetailPage() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-white/[0.08] pb-2.5 last:border-0 last:pb-0">
-      <span className="text-sm text-gray-400">{label}</span>
-      <span className="text-sm font-medium text-gray-200">{value}</span>
+    <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 last:border-0 last:pb-0">
+      <span className="text-sm text-slate-500">{label}</span>
+      <span className="text-sm font-medium text-slate-900">{value}</span>
     </div>
   );
 }

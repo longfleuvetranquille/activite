@@ -79,14 +79,14 @@ export default function WeekPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-azur-500/15">
-          <CalendarRange className="h-5 w-5 text-azur-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-azur-100">
+          <CalendarRange className="h-5 w-5 text-azur-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white sm:text-3xl">
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
             Cette semaine
           </h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-slate-500">
             Les meilleurs evenements des 7 prochains jours
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function WeekPage() {
       {/* Error */}
       {error && (
         <div className="card text-center">
-          <p className="mb-2 text-red-400">{error}</p>
+          <p className="mb-2 text-red-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -134,7 +134,7 @@ export default function WeekPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {filtered.map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
@@ -142,11 +142,11 @@ export default function WeekPage() {
             </motion.div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <CalendarRange className="mb-4 h-12 w-12 text-gray-600" />
-              <h3 className="mb-1 text-lg font-semibold text-white">
+              <CalendarRange className="mb-4 h-12 w-12 text-slate-300" />
+              <h3 className="mb-1 text-lg font-semibold text-slate-900">
                 Rien cette semaine
               </h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-slate-500">
                 {events.length > 0
                   ? "Aucun evenement ne correspond a vos filtres."
                   : "Aucun evenement prevu cette semaine."}

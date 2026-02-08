@@ -28,20 +28,20 @@ import TagBadge from "./TagBadge";
 
 // Map event types to icons and gradient colors for placeholders
 const TYPE_VISUALS: Record<string, { icon: typeof Music; gradient: string }> = {
-  party: { icon: Music, gradient: "from-purple-600/40 to-pink-500/30" },
-  bar_rooftop: { icon: Sparkles, gradient: "from-amber-600/40 to-orange-500/30" },
-  dj_set: { icon: Music, gradient: "from-violet-600/40 to-fuchsia-500/30" },
-  concert: { icon: Mic2, gradient: "from-rose-600/40 to-red-500/30" },
-  show: { icon: Theater, gradient: "from-indigo-600/40 to-purple-500/30" },
-  conference: { icon: GraduationCap, gradient: "from-sky-600/40 to-blue-500/30" },
-  sport_match: { icon: Trophy, gradient: "from-emerald-600/40 to-green-500/30" },
-  motorsport: { icon: Trophy, gradient: "from-red-600/40 to-orange-500/30" },
-  watersport: { icon: Waves, gradient: "from-cyan-600/40 to-teal-500/30" },
-  outdoor: { icon: Mountain, gradient: "from-green-600/40 to-emerald-500/30" },
-  gaming: { icon: Gamepad2, gradient: "from-violet-600/40 to-indigo-500/30" },
-  cinema: { icon: Clapperboard, gradient: "from-slate-600/40 to-gray-500/30" },
-  food: { icon: Utensils, gradient: "from-orange-600/40 to-amber-500/30" },
-  travel: { icon: Plane, gradient: "from-sky-600/40 to-cyan-500/30" },
+  party: { icon: Music, gradient: "from-purple-200 to-pink-200" },
+  bar_rooftop: { icon: Sparkles, gradient: "from-amber-200 to-orange-200" },
+  dj_set: { icon: Music, gradient: "from-violet-200 to-fuchsia-200" },
+  concert: { icon: Mic2, gradient: "from-rose-200 to-red-200" },
+  show: { icon: Theater, gradient: "from-indigo-200 to-purple-200" },
+  conference: { icon: GraduationCap, gradient: "from-sky-200 to-blue-200" },
+  sport_match: { icon: Trophy, gradient: "from-emerald-200 to-green-200" },
+  motorsport: { icon: Trophy, gradient: "from-red-200 to-orange-200" },
+  watersport: { icon: Waves, gradient: "from-cyan-200 to-teal-200" },
+  outdoor: { icon: Mountain, gradient: "from-green-200 to-emerald-200" },
+  gaming: { icon: Gamepad2, gradient: "from-violet-200 to-indigo-200" },
+  cinema: { icon: Clapperboard, gradient: "from-slate-200 to-gray-200" },
+  food: { icon: Utensils, gradient: "from-orange-200 to-amber-200" },
+  travel: { icon: Plane, gradient: "from-sky-200 to-cyan-200" },
 };
 
 interface EventCardProps {
@@ -88,12 +88,12 @@ export default function EventCard({
   // Interest score color
   const scoreColor =
     event.interest_score >= 80
-      ? "text-emerald-400 bg-emerald-500/15 ring-emerald-500/30"
+      ? "text-emerald-700 bg-emerald-100 ring-emerald-300"
       : event.interest_score >= 60
-        ? "text-azur-400 bg-azur-500/15 ring-azur-500/30"
+        ? "text-azur-700 bg-azur-100 ring-azur-300"
         : event.interest_score >= 40
-          ? "text-yellow-400 bg-yellow-500/15 ring-yellow-500/30"
-          : "text-gray-400 bg-white/5 ring-white/10";
+          ? "text-yellow-700 bg-yellow-100 ring-yellow-300"
+          : "text-slate-600 bg-slate-100 ring-slate-300";
 
   return (
     <div className="animate-fade-in">
@@ -103,7 +103,7 @@ export default function EventCard({
       >
         {/* Image */}
         <div
-          className={`relative w-full overflow-hidden ${compact ? "h-32" : "h-44"}`}
+          className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-36"}`}
         >
           {event.image_url ? (
             <Image
@@ -132,19 +132,19 @@ export default function EventCard({
           )}
 
           {/* Gradient overlay at bottom of image */}
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--card)] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
         </div>
 
         {/* Content */}
-        <div className="space-y-3 p-4 pt-3">
+        <div className="space-y-2.5 p-3.5 pt-2.5">
           {/* Title */}
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug text-white group-hover:text-azur-300">
+          <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
             {event.title}
           </h3>
 
           {/* Summary */}
           {event.summary && !compact && (
-            <p className="line-clamp-2 text-[13px] leading-relaxed text-gray-400">
+            <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-500">
               {event.summary}
             </p>
           )}
@@ -153,19 +153,19 @@ export default function EventCard({
           <div className="flex flex-col gap-2 text-[13px]">
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5 text-azur-400" />
-                <span className="capitalize font-medium text-gray-200">{formattedDate}</span>
+                <Calendar className="h-3.5 w-3.5 text-azur-500" />
+                <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-gray-500" />
-                <span className="text-gray-400">{formattedTime}</span>
+                <Clock className="h-3.5 w-3.5 text-slate-400" />
+                <span className="text-slate-500">{formattedTime}</span>
               </span>
             </div>
             <div className="flex items-center gap-3">
               {event.location_name ? (
                 <span className="inline-flex items-center gap-1.5 truncate">
-                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-400" />
-                  <span className="truncate text-gray-300">
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-500" />
+                  <span className="truncate text-slate-600">
                     {event.location_name}
                     {event.location_city &&
                       event.location_city !== event.location_name &&
@@ -174,12 +174,12 @@ export default function EventCard({
                 </span>
               ) : event.location_city ? (
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-coral-400" />
-                  <span className="text-gray-300">{event.location_city}</span>
+                  <MapPin className="h-3.5 w-3.5 text-coral-500" />
+                  <span className="text-slate-600">{event.location_city}</span>
                 </span>
               ) : null}
-              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-gray-200">
-                <Wallet className="h-3.5 w-3.5 text-emerald-400" />
+              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-slate-700">
+                <Wallet className="h-3.5 w-3.5 text-emerald-500" />
                 {priceDisplay}
               </span>
             </div>
@@ -208,7 +208,7 @@ function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
   const firstType = tags_type[0];
   const visual = (firstType && TYPE_VISUALS[firstType]) || {
     icon: Calendar,
-    gradient: "from-azur-600/35 to-navy-600/25",
+    gradient: "from-azur-200 to-navy-200",
   };
   const Icon = visual.icon;
 
@@ -216,8 +216,8 @@ function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
     <div
       className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${visual.gradient}`}
     >
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/[0.07]">
-        <Icon className="h-8 w-8 text-white/40" />
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/40">
+        <Icon className="h-8 w-8 text-slate-600" />
       </div>
     </div>
   );

@@ -11,9 +11,17 @@ logger = logging.getLogger(__name__)
 SCORER_PROMPT = """Tu es un assistant qui évalue l'intérêt d'un événement pour un jeune actif de 25 ans vivant à Nice.
 
 Profil de l'utilisateur :
-- Centres d'intérêt : GP Monaco, Formule E, matchs de foot, poker privé, conférences, jet-ski, wakeboard, karting, rooftops, bars à cocktails, voyages pas chers
-- Aime : les soirées, les sports mécaniques et nautiques, les événements exclusifs, les bons plans
+- Centres d'intérêt : GP Monaco, Formule E, matchs de foot, poker privé, conférences tech, jet-ski, wakeboard, karting, rooftops, bars à cocktails, voyages pas chers, soirées électro
+- Aime : les soirées, les sports mécaniques et nautiques, les événements exclusifs, les bons plans, les festivals, la street food
 - Budget : préfère les bons rapports qualité/prix
+- N'aime PAS : cinémathèque, rétrospectives de films anciens, expositions classiques, conférences patrimoine, activités seniors (bridge, loto, thé dansant, chorale), ateliers pour retraités
+
+Règles de scoring :
+- 80-100 : événement parfaitement adapté (soirée, sport, bon plan voyage, événement exclusif)
+- 60-79 : intéressant (concert, festival, food, conférence tech)
+- 40-59 : moyennement intéressant (expo contemporaine, marché, activité familiale)
+- 20-39 : peu intéressant (cinéma art et essai, conférence académique, théâtre classique)
+- 0-19 : pas du tout adapté (cinémathèque, activité seniors, rétrospective, bridge, loto)
 
 Événement :
 - Titre : {title}

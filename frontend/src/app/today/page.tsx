@@ -82,14 +82,14 @@ export default function TodayPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-coral-500/15">
-          <CalendarDays className="h-5 w-5 text-coral-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-coral-100">
+          <CalendarDays className="h-5 w-5 text-coral-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white sm:text-3xl">
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
             Aujourd&apos;hui
           </h1>
-          <p className="text-sm capitalize text-gray-400">{today}</p>
+          <p className="text-sm capitalize text-slate-500">{today}</p>
         </div>
       </motion.div>
 
@@ -117,7 +117,7 @@ export default function TodayPage() {
       {/* Error */}
       {error && (
         <div className="card text-center">
-          <p className="mb-2 text-red-400">{error}</p>
+          <p className="mb-2 text-red-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -135,7 +135,7 @@ export default function TodayPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {filtered.map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
@@ -143,11 +143,11 @@ export default function TodayPage() {
             </motion.div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <CalendarDays className="mb-4 h-12 w-12 text-gray-600" />
-              <h3 className="mb-1 text-lg font-semibold text-white">
+              <CalendarDays className="mb-4 h-12 w-12 text-slate-300" />
+              <h3 className="mb-1 text-lg font-semibold text-slate-900">
                 Rien pour aujourd&apos;hui
               </h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-slate-500">
                 {events.length > 0
                   ? "Aucun evenement ne correspond a vos filtres."
                   : "Aucun evenement prevu aujourd'hui."}

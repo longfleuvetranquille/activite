@@ -191,18 +191,18 @@ const TAG_EMOJIS: Record<string, Record<string, string>> = {
   },
 };
 
-// Category-specific background colors for badges
+// Category-specific background colors for badges (light theme)
 const CATEGORY_COLORS: Record<string, string> = {
-  type: "bg-azur-500/15 text-azur-300",
-  vibe: "bg-purple-500/15 text-purple-300",
-  energy: "bg-orange-500/15 text-orange-300",
-  budget: "bg-emerald-500/15 text-emerald-300",
-  time: "bg-sky-500/15 text-sky-300",
-  exclusivity: "bg-red-500/15 text-red-300",
-  location: "bg-teal-500/15 text-teal-300",
-  audience: "bg-indigo-500/15 text-indigo-300",
-  deals: "bg-yellow-500/15 text-yellow-300",
-  meta: "bg-pink-500/15 text-pink-300",
+  type: "bg-azur-100 text-azur-700",
+  vibe: "bg-purple-100 text-purple-700",
+  energy: "bg-orange-100 text-orange-700",
+  budget: "bg-emerald-100 text-emerald-700",
+  time: "bg-sky-100 text-sky-700",
+  exclusivity: "bg-red-100 text-red-700",
+  location: "bg-teal-100 text-teal-700",
+  audience: "bg-indigo-100 text-indigo-700",
+  deals: "bg-yellow-100 text-yellow-700",
+  meta: "bg-pink-100 text-pink-700",
 };
 
 interface TagBadgeProps {
@@ -219,7 +219,7 @@ export default function TagBadge({
   const label =
     TAG_LABELS[category]?.[code] || code.replace(/_/g, " ");
   const emoji = TAG_EMOJIS[category]?.[code] || "";
-  const colorClass = CATEGORY_COLORS[category] || "bg-white/5 text-gray-300";
+  const colorClass = CATEGORY_COLORS[category] || "bg-slate-100 text-slate-700";
 
   return (
     <span
