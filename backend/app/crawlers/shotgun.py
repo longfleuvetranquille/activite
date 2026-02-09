@@ -219,7 +219,7 @@ def _parse_event_card(
 
     venue = ""
     city = ""
-    date_start = datetime.now()
+    date_start: datetime | None = None
     price_min = 0.0
 
     for line in lines:
@@ -293,6 +293,10 @@ def _parse_event_card(
                 logger.debug("Rejected event by keyword %s: %s", keyword, title)
                 return None
 
+    if not date_start:
+        logger.debug("Rejected event (no date found): %s", title)
+        return None
+
     return CrawledEvent(
         title=title,
         date_start=date_start,
@@ -306,7 +310,7 @@ def _parse_event_card(
     )
 
 
-def _parse_date_fr(text: str) -> datetime:
+def _parse_date_fr(text: str) -> datetime | None:
     """Parse French date text like 'sam. 7 févr.' or 'ven. 14 mars | 20:00'."""
     from dateutil import parser as dateutil_parser
 
@@ -332,4 +336,4 @@ def _parse_date_fr(text: str) -> datetime:
     try:
         return dateutil_parser.parse(normalized, dayfirst=True)
     except (ValueError, TypeError):
-        return datetime.now()
+        return None
