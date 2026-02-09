@@ -21,7 +21,7 @@ async def is_url_alive(url: str) -> bool:
             resp = await client.head(
                 url, headers={"User-Agent": "NiceOutside/1.0"}
             )
-            if resp.status_code < 400:
+            if resp.status_code < 400 or resp.status_code == 429:
                 return True
 
             # Some servers reject HEAD, fallback to GET
