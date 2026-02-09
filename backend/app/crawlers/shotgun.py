@@ -34,6 +34,15 @@ REJECTED_KEYWORDS = {
     "nuits sonores", "brunch electronik bordeaux", "dystopia 2026 • rennes",
 }
 
+# Specific venue pages to scrape (bypass city filter)
+VENUE_URLS = [
+    {
+        "url": "https://shotgun.live/fr/venues/coachellito",
+        "location_name": "Coachellito",
+        "location_city": "Nice",
+    },
+]
+
 
 class ShotgunCrawler(BaseCrawler):
     """Crawler for Shotgun (shotgun.live) events in the Côte d'Azur area.
@@ -119,6 +128,69 @@ class ShotgunCrawler(BaseCrawler):
                     except Exception:
                         logger.debug("Failed to parse Shotgun event: %s", info["title"], exc_info=True)
 
+                # Crawl specific venue pages
+                for venue_info in VENUE_URLS:
+                    try:
+                        logger.info("Crawling Shotgun venue: %s", venue_info["url"])
+                        await page.goto(
+                            venue_info["url"],
+                            wait_until="networkidle",
+                            timeout=30000,
+                        )
+                        await page.wait_for_timeout(3000)
+
+                        venue_link_els = await page.query_selector_all(
+                            'a[href*="/fr/events/"], a[href*="/fr/festivals/"]'
+                        )
+
+                        venue_event_links: list[dict] = []
+                        for el in venue_link_els:
+                            href = await el.get_attribute("href") or ""
+                            if not href or href in seen_hrefs:
+                                continue
+                            seen_hrefs.add(href)
+
+                            full_url = (
+                                f"https://shotgun.live{href}"
+                                if href.startswith("/")
+                                else href
+                            )
+
+                            text = (await el.inner_text()).strip()
+                            lines = [l.strip() for l in text.split("\n") if l.strip() and l.strip() != "|"]
+
+                            img = await el.query_selector("img")
+                            img_alt = await img.get_attribute("alt") if img else ""
+                            img_src = await img.get_attribute("src") if img else ""
+
+                            title = img_alt or (lines[0] if lines else "")
+                            if not title:
+                                continue
+
+                            venue_event_links.append({
+                                "title": title,
+                                "url": full_url,
+                                "lines": lines,
+                                "image_url": img_src or "",
+                            })
+
+                        logger.info("Shotgun venue %s: found %d events", venue_info["location_name"], len(venue_event_links))
+
+                        for info in venue_event_links:
+                            try:
+                                event = _parse_event_card(
+                                    info,
+                                    force_venue=venue_info["location_name"],
+                                    force_city=venue_info["location_city"],
+                                )
+                                if event:
+                                    events.append(event)
+                            except Exception:
+                                logger.debug("Failed to parse venue event: %s", info["title"], exc_info=True)
+
+                    except Exception:
+                        logger.exception("Failed to crawl venue: %s", venue_info["url"])
+
                 await browser.close()
 
         except Exception:
@@ -128,8 +200,18 @@ class ShotgunCrawler(BaseCrawler):
         return events
 
 
-def _parse_event_card(info: dict) -> CrawledEvent | None:
-    """Parse an event from the homepage card info."""
+def _parse_event_card(
+    info: dict,
+    force_venue: str = "",
+    force_city: str = "",
+) -> CrawledEvent | None:
+    """Parse an event from the homepage card info.
+
+    Args:
+        info: Dict with title, url, lines, image_url.
+        force_venue: If set, override venue name (for venue-specific pages).
+        force_city: If set, override city and skip city filtering.
+    """
     title = info["title"]
     lines = info["lines"]
     url = info["url"]
@@ -179,6 +261,12 @@ def _parse_event_card(info: dict) -> CrawledEvent | None:
                     break
             venue = line
 
+    # Apply force overrides for venue-specific pages
+    if force_venue:
+        venue = force_venue
+    if force_city:
+        city = force_city
+
     if not city:
         # Try to guess city from title or venue
         text = f"{title} {venue}".lower()
@@ -192,16 +280,18 @@ def _parse_event_card(info: dict) -> CrawledEvent | None:
         logger.debug("Rejected event (no CDA city found): %s", title)
         return None
 
-    # Filter out events from cities outside Côte d'Azur
-    all_text = f"{title} {venue} {city}".lower()
-    for rejected in REJECTED_CITIES:
-        if rejected in all_text:
-            logger.debug("Rejected event from %s: %s", rejected, title)
-            return None
-    for keyword in REJECTED_KEYWORDS:
-        if keyword in all_text:
-            logger.debug("Rejected event by keyword %s: %s", keyword, title)
-            return None
+    # Skip city filtering for venue-specific pages (already known location)
+    if not force_city:
+        # Filter out events from cities outside Côte d'Azur
+        all_text = f"{title} {venue} {city}".lower()
+        for rejected in REJECTED_CITIES:
+            if rejected in all_text:
+                logger.debug("Rejected event from %s: %s", rejected, title)
+                return None
+        for keyword in REJECTED_KEYWORDS:
+            if keyword in all_text:
+                logger.debug("Rejected event by keyword %s: %s", keyword, title)
+                return None
 
     return CrawledEvent(
         title=title,

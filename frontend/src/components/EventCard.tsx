@@ -68,8 +68,8 @@ export default function EventCard({
           ? `${event.price_min}\u00A0\u20AC`
           : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
 
-  // Collect up to 4 tags to show
-  const visibleTags: { code: string; category: string }[] = [];
+  // Collect tags to show (2 on mobile, 4 on desktop)
+  const allTags: { code: string; category: string }[] = [];
   const tagSources: [string[], string][] = [
     [event.tags_type, "type"],
     [event.tags_vibe, "vibe"],
@@ -79,8 +79,8 @@ export default function EventCard({
   ];
   for (const [tags, category] of tagSources) {
     for (const code of tags) {
-      if (visibleTags.length < 4) {
-        visibleTags.push({ code, category });
+      if (allTags.length < 4) {
+        allTags.push({ code, category });
       }
     }
   }
@@ -101,103 +101,167 @@ export default function EventCard({
         href={`/event/${event.id}`}
         className="card card-hover group block overflow-hidden p-0"
       >
-        {/* Image */}
-        <div
-          className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-36"}`}
-        >
-          {event.image_url ? (
-            <Image
-              src={event.image_url}
-              alt={event.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          ) : (
-            <PlaceholderImage tags_type={event.tags_type} />
-          )}
-
-          {/* Score badge */}
-          <div
-            className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl ring-1 backdrop-blur-sm ${scoreColor}`}
-          >
-            <span className="text-xs font-bold">{event.interest_score}</span>
+        {/* Mobile: horizontal layout */}
+        <div className="flex sm:hidden">
+          {/* Mobile image */}
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden">
+            {event.image_url ? (
+              <Image
+                src={event.image_url}
+                alt={event.title}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            ) : (
+              <PlaceholderImage tags_type={event.tags_type} />
+            )}
+            {/* Score badge */}
+            <div
+              className={`absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-lg ring-1 backdrop-blur-sm ${scoreColor}`}
+            >
+              <span className="text-[10px] font-bold">{event.interest_score}</span>
+            </div>
           </div>
 
-          {/* Featured overlay */}
-          {event.is_featured && (
-            <div className="absolute left-3 top-3 rounded-full bg-coral-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
-              Featured
-            </div>
-          )}
-
-          {/* Gradient overlay at bottom of image */}
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
-        </div>
-
-        {/* Content */}
-        <div className="space-y-2.5 p-3.5 pt-2.5">
-          {/* Title */}
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
-            {event.title}
-          </h3>
-
-          {/* Summary */}
-          {event.summary && !compact && (
-            <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-500">
-              {event.summary}
-            </p>
-          )}
-
-          {/* Info row */}
-          <div className="flex flex-col gap-2 text-[13px]">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5 text-azur-500" />
+          {/* Mobile content */}
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
+            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
+              {event.title}
+            </h3>
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="h-3 w-3 text-azur-500" />
                 <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-slate-400" />
-                <span className="text-slate-500">{formattedTime}</span>
-              </span>
+              <span>{formattedTime}</span>
+              <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
             </div>
-            <div className="flex items-center gap-3">
-              {event.location_name ? (
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-500" />
-                  <span className="truncate text-slate-600">
-                    {event.location_name}
-                    {event.location_city &&
-                      event.location_city !== event.location_name &&
-                      `, ${event.location_city}`}
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              {(event.location_name || event.location_city) && (
+                <span className="inline-flex items-center gap-1 truncate">
+                  <MapPin className="h-3 w-3 shrink-0 text-coral-500" />
+                  <span className="truncate">
+                    {event.location_name || event.location_city}
                   </span>
                 </span>
-              ) : event.location_city ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-coral-500" />
-                  <span className="text-slate-600">{event.location_city}</span>
-                </span>
-              ) : null}
-              <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-slate-700">
-                <Wallet className="h-3.5 w-3.5 text-emerald-500" />
-                {priceDisplay}
-              </span>
+              )}
             </div>
+            {allTags.length > 0 && (
+              <div className="flex gap-1">
+                {allTags.slice(0, 2).map((tag, i) => (
+                  <TagBadge
+                    key={`${tag.category}-${tag.code}-${i}`}
+                    code={tag.code}
+                    category={tag.category}
+                    small
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop: vertical layout */}
+        <div className="hidden sm:block">
+          {/* Image */}
+          <div
+            className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-36"}`}
+          >
+            {event.image_url ? (
+              <Image
+                src={event.image_url}
+                alt={event.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 1024px) 50vw, 33vw"
+              />
+            ) : (
+              <PlaceholderImage tags_type={event.tags_type} />
+            )}
+
+            {/* Score badge */}
+            <div
+              className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl ring-1 backdrop-blur-sm ${scoreColor}`}
+            >
+              <span className="text-xs font-bold">{event.interest_score}</span>
+            </div>
+
+            {/* Featured overlay */}
+            {event.is_featured && (
+              <div className="absolute left-3 top-3 rounded-full bg-coral-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+                Featured
+              </div>
+            )}
+
+            {/* Gradient overlay at bottom of image */}
+            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
           </div>
 
-          {/* Tags */}
-          {visibleTags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {visibleTags.map((tag, i) => (
-                <TagBadge
-                  key={`${tag.category}-${tag.code}-${i}`}
-                  code={tag.code}
-                  category={tag.category}
-                  small
-                />
-              ))}
+          {/* Content */}
+          <div className="space-y-2.5 p-3.5 pt-2.5">
+            {/* Title */}
+            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
+              {event.title}
+            </h3>
+
+            {/* Summary */}
+            {event.summary && !compact && (
+              <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-500">
+                {event.summary}
+              </p>
+            )}
+
+            {/* Info row */}
+            <div className="flex flex-col gap-2 text-[13px]">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5 text-azur-500" />
+                  <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-slate-400" />
+                  <span className="text-slate-500">{formattedTime}</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                {event.location_name ? (
+                  <span className="inline-flex items-center gap-1.5 truncate">
+                    <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-500" />
+                    <span className="truncate text-slate-600">
+                      {event.location_name}
+                      {event.location_city &&
+                        event.location_city !== event.location_name &&
+                        `, ${event.location_city}`}
+                    </span>
+                  </span>
+                ) : event.location_city ? (
+                  <span className="inline-flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-coral-500" />
+                    <span className="text-slate-600">{event.location_city}</span>
+                  </span>
+                ) : null}
+                <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-slate-700">
+                  <Wallet className="h-3.5 w-3.5 text-emerald-500" />
+                  {priceDisplay}
+                </span>
+              </div>
             </div>
-          )}
+
+            {/* Tags */}
+            {allTags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {allTags.map((tag, i) => (
+                  <TagBadge
+                    key={`${tag.category}-${tag.code}-${i}`}
+                    code={tag.code}
+                    category={tag.category}
+                    small
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </Link>
     </div>

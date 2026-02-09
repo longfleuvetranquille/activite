@@ -46,7 +46,7 @@ export interface DashboardDigest {
   today_count: number;
   week_count: number;
   featured: Event[];
-  top_today: Event[];
+  top_upcoming: Event[];
   deals: Event[];
 }
 

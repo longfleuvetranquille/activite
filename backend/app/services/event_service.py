@@ -116,10 +116,32 @@ async def get_month_events() -> list[EventRead]:
 
 
 async def get_featured_events() -> list[EventRead]:
-    filter_str = 'is_featured = true && status = "published"'
+    today = datetime.now().strftime("%Y-%m-%d")
+    end = (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
+    filter_str = (
+        f'date_start >= "{today}" && date_start < "{end}" '
+        f'&& interest_score >= 70 && status = "published"'
+    )
     result = await pb_client.list_records(
         "events",
         per_page=20,
+        sort="-interest_score",
+        filter_str=filter_str,
+    )
+    return [_to_event_read(r) for r in result.get("items", [])]
+
+
+async def get_best_events(limit: int = 20) -> list[EventRead]:
+    """Get the best upcoming events over the next 3 months, sorted by score."""
+    today = datetime.now().strftime("%Y-%m-%d")
+    end = (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d")
+    filter_str = (
+        f'date_start >= "{today}" && date_start < "{end}" '
+        f'&& status = "published"'
+    )
+    result = await pb_client.list_records(
+        "events",
+        per_page=limit,
         sort="-interest_score",
         filter_str=filter_str,
     )

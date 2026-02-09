@@ -17,11 +17,15 @@ def _get_active_crawlers() -> list[BaseCrawler]:
     from app.crawlers.shotgun import ShotgunCrawler
     from app.crawlers.nicefr import NiceFrCrawler
     from app.crawlers.flight_deals import FlightDealsCrawler
+    from app.crawlers.ogcn import OGCNCrawler
+    from app.crawlers.nikaia import NikaiaCrawler
 
     return [
         NiceFrCrawler(),
         ShotgunCrawler(),
         FlightDealsCrawler(),
+        OGCNCrawler(),
+        NikaiaCrawler(),
     ]
 
 

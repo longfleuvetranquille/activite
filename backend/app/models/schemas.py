@@ -95,7 +95,7 @@ class DashboardDigest(BaseModel):
     today_count: int
     week_count: int
     featured: list[EventRead]
-    top_today: list[EventRead]
+    top_upcoming: list[EventRead]
     deals: list[EventRead]
 
 

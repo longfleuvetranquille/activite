@@ -162,8 +162,8 @@ export default function DashboardPage() {
         </motion.section>
       )}
 
-      {/* Top Today */}
-      {digest && digest.top_today.length > 0 && (
+      {/* Top Upcoming */}
+      {digest && digest.top_upcoming.length > 0 && (
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,13 +171,13 @@ export default function DashboardPage() {
         >
           <SectionHeader
             icon={<TrendingUp className="h-5 w-5 text-azur-500" />}
-            title="Top du jour"
-            count={digest.today_count}
+            title="Top a venir"
+            count={digest.top_upcoming.length}
             countColor="bg-azur-100 text-azur-700"
-            subtitle="Evenements a ne pas manquer aujourd'hui"
+            subtitle="Les meilleurs evenements des 3 prochains mois"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {digest.top_today.slice(0, 6).map((event, i) => (
+            {digest.top_upcoming.map((event, i) => (
               <EventCard key={event.id} event={event} index={i} />
             ))}
           </div>
@@ -231,7 +231,7 @@ export default function DashboardPage() {
       {/* Empty state */}
       {digest &&
         digest.featured.length === 0 &&
-        digest.top_today.length === 0 && (
+        digest.top_upcoming.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
               <CalendarDays className="h-8 w-8 text-slate-400" />

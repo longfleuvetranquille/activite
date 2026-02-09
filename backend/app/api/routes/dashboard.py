@@ -14,17 +14,19 @@ async def get_digest():
     today = await event_service.get_today_events()
     week = await event_service.get_week_events()
     featured = await event_service.get_featured_events()
+    best = await event_service.get_best_events(limit=15)
 
-    # Filter deals: events with deal tags
+    # Filter deals: events with deal tags (from 3-month window)
+    all_upcoming = await event_service.get_best_events(limit=100)
     deals = [
-        e for e in week if e.tags_deals or "deal_detected" in e.tags_meta
+        e for e in all_upcoming if e.tags_deals or "deal_detected" in e.tags_meta
     ]
 
     return DashboardDigest(
         today_count=len(today),
         week_count=len(week),
         featured=featured[:5],
-        top_today=today[:10],
+        top_upcoming=best[:15],
         deals=deals[:5],
     )
 
