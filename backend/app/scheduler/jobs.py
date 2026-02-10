@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime
 
 from app.crawlers.base import BaseCrawler, CrawledEvent
@@ -10,6 +11,26 @@ from app.services.pocketbase import compute_event_hash, pb_client
 from app.services.url_checker import check_source_url
 
 logger = logging.getLogger(__name__)
+
+# Keyword blocklist — events matching any of these (case-insensitive, in title
+# or description) are silently dropped before AI enrichment.
+_BLOCKED_PATTERNS: list[re.Pattern] = [
+    re.compile(p, re.IGNORECASE)
+    for p in [
+        r"\btechno\b",
+        r"\brave\b",
+        r"\bhard\s*bounce\b",
+        r"\bhard\s*trance\b",
+        r"\bhard\s*style\b",
+        r"\bgabber\b",
+    ]
+]
+
+
+def _is_blocked(event: CrawledEvent) -> bool:
+    """Return True if the event matches any blocked keyword pattern."""
+    text = f"{event.title} {event.description}"
+    return any(p.search(text) for p in _BLOCKED_PATTERNS)
 
 
 def _get_active_crawlers() -> list[BaseCrawler]:
@@ -63,6 +84,11 @@ async def run_crawl_pipeline():
                 if await find_similar_event(
                     raw.title, raw.date_start.isoformat()
                 ):
+                    continue
+
+                # Blocklist: skip events matching blocked keywords
+                if _is_blocked(raw):
+                    logger.info("Blocked event: %s", raw.title)
                     continue
 
                 # Validate source URL before enriching
