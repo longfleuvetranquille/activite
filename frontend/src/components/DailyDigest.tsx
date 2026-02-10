@@ -57,15 +57,15 @@ export default function DailyDigest({
       className="relative overflow-hidden rounded-2xl bg-white/50 p-6 shadow-elevated backdrop-blur-xl ring-1 ring-white/60"
     >
       {/* Floating gradient blobs */}
-      <div className="absolute -right-12 -top-12 h-48 w-48 animate-float rounded-full bg-coral-300/30 blur-3xl" />
-      <div className="absolute -bottom-12 -left-12 h-48 w-48 animate-float rounded-full bg-azur-300/30 blur-3xl" style={{ animationDelay: "-3s" }} />
-      <div className="absolute right-1/3 top-1/2 h-28 w-28 animate-float rounded-full bg-navy-300/20 blur-3xl" style={{ animationDelay: "-1.5s" }} />
+      <div className="absolute -right-12 -top-12 h-48 w-48 animate-float rounded-full bg-champagne-300/30 blur-3xl" />
+      <div className="absolute -bottom-12 -left-12 h-48 w-48 animate-float rounded-full bg-olive-300/30 blur-3xl" style={{ animationDelay: "-3s" }} />
+      <div className="absolute right-1/3 top-1/2 h-28 w-28 animate-float rounded-full bg-riviera-300/20 blur-3xl" style={{ animationDelay: "-1.5s" }} />
 
       <div className="relative flex flex-wrap items-center gap-x-8 gap-y-3">
         {/* Total */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-azur-100/80 ring-1 ring-azur-200/50">
-            <CalendarDays className="h-4.5 w-4.5 text-azur-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-champagne-100/80 ring-1 ring-champagne-200/50">
+            <CalendarDays className="h-4.5 w-4.5 text-champagne-600" />
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-slate-900">{animatedTotal}</p>
@@ -78,8 +78,8 @@ export default function DailyDigest({
         {/* Featured */}
         {featuredCount > 0 && (
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-coral-100/80 ring-1 ring-coral-200/50">
-              <Sparkles className="h-4.5 w-4.5 text-coral-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-olive-100/80 ring-1 ring-olive-200/50">
+              <Sparkles className="h-4.5 w-4.5 text-olive-600" />
             </div>
             <div>
               <p className="text-2xl font-bold tabular-nums text-slate-900">{animatedFeatured}</p>

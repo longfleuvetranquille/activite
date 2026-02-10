@@ -23,8 +23,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Nice Outside API",
-    description="Découvre les meilleures activités à Nice et sur la Côte d'Azur",
+    title="Palmier API",
+    description="Découvre les meilleures activités à Cannes et sur la Côte d'Azur",
     version="0.1.0",
     lifespan=lifespan,
 )

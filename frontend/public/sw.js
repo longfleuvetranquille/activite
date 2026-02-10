@@ -1,4 +1,4 @@
-const CACHE_NAME = "nice-outside-v1";
+const CACHE_NAME = "palmier-v1";
 
 // Install: cache shell assets
 self.addEventListener("install", () => {

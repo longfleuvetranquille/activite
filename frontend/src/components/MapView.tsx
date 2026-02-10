@@ -7,8 +7,8 @@ interface MapViewProps {
   events: Event[];
 }
 
-// Default center on Nice, France
-const NICE_CENTER: [number, number] = [43.7102, 7.262];
+// Default center on Cannes, France
+const CANNES_CENTER: [number, number] = [43.5528, 7.0174];
 const DEFAULT_ZOOM = 13;
 
 export default function MapView({ events }: MapViewProps) {
@@ -90,7 +90,7 @@ function MapContent({ events }: MapViewProps) {
   const center: [number, number] =
     eventsWithCoords.length > 0
       ? [eventsWithCoords[0].latitude!, eventsWithCoords[0].longitude!]
-      : NICE_CENTER;
+      : CANNES_CENTER;
 
   const zoom = eventsWithCoords.length === 1 ? 15 : DEFAULT_ZOOM;
 
@@ -135,7 +135,7 @@ function MapContent({ events }: MapViewProps) {
               )}
               <a
                 href={`/event/${event.id}`}
-                className="mt-2 inline-block text-xs font-medium text-azur-600 hover:underline"
+                className="mt-2 inline-block text-xs font-medium text-champagne-600 hover:underline"
               >
                 Voir les details
               </a>

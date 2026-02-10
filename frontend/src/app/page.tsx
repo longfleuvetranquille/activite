@@ -193,22 +193,22 @@ export default function DashboardPage() {
           className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4"
         >
           <StatCard
-            icon={<CalendarDays className="h-5 w-5 text-coral-500" />}
+            icon={<CalendarDays className="h-5 w-5 text-champagne-500" />}
             label="Aujourd'hui"
             value={stats.events_today}
-            color="coral"
+            color="champagne"
           />
           <StatCard
-            icon={<CalendarRange className="h-5 w-5 text-azur-500" />}
+            icon={<CalendarRange className="h-5 w-5 text-olive-500" />}
             label="Cette semaine"
             value={stats.events_this_week}
-            color="azur"
+            color="olive"
           />
           <StatCard
-            icon={<Database className="h-5 w-5 text-navy-500" />}
+            icon={<Database className="h-5 w-5 text-riviera-500" />}
             label="Total"
             value={stats.total_events}
-            color="navy"
+            color="riviera"
           />
           <StatCard
             icon={<RefreshCw className="h-5 w-5 text-emerald-500" />}
@@ -235,10 +235,10 @@ export default function DashboardPage() {
           transition={{ delay: 0.2 }}
         >
           <SectionHeader
-            icon={<Sparkles className="h-5 w-5 text-coral-500" />}
+            icon={<Sparkles className="h-5 w-5 text-champagne-500" />}
             title="A la une"
             count={digest.featured.length}
-            countColor="bg-coral-100/80 text-coral-700 ring-1 ring-coral-200/50"
+            countColor="bg-champagne-100/80 text-champagne-700 ring-1 ring-champagne-200/50"
             subtitle="Les evenements les mieux notes"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -262,10 +262,10 @@ export default function DashboardPage() {
           transition={{ delay: 0.3 }}
         >
           <SectionHeader
-            icon={<TrendingUp className="h-5 w-5 text-azur-500" />}
+            icon={<TrendingUp className="h-5 w-5 text-olive-500" />}
             title="Top a venir"
             count={digest.top_upcoming.length}
-            countColor="bg-azur-100/80 text-azur-700 ring-1 ring-azur-200/50"
+            countColor="bg-olive-100/80 text-olive-700 ring-1 ring-olive-200/50"
             subtitle="Les meilleurs evenements des 3 prochains mois"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -310,7 +310,7 @@ export default function DashboardPage() {
             title="Vols pas chers"
             count={flightDeals.length}
             countColor="bg-sky-100/80 text-sky-700 ring-1 ring-sky-200/50"
-            subtitle="Meilleurs prix au depart de Nice"
+            subtitle="Meilleurs prix au depart de la Cote d'Azur"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {flightDeals.map((event, i) => (
@@ -356,7 +356,7 @@ function SectionHeader({
 }) {
   return (
     <div className="mb-5">
-      <div className="mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-azur-500 via-coral-400 to-transparent" />
+      <div className="mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-champagne-500 via-olive-400 to-transparent" />
       <div className="flex items-center gap-2.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm">
           {icon}
@@ -372,16 +372,16 @@ function SectionHeader({
 }
 
 const STAT_GRADIENTS: Record<string, string> = {
-  coral: "from-coral-400 to-coral-500",
-  azur: "from-azur-400 to-azur-500",
-  navy: "from-navy-400 to-navy-500",
+  champagne: "from-champagne-400 to-champagne-500",
+  olive: "from-olive-400 to-olive-500",
+  riviera: "from-riviera-400 to-riviera-500",
   emerald: "from-emerald-400 to-emerald-500",
 };
 
 const STAT_HOVERS: Record<string, string> = {
-  coral: "hover:shadow-glow-coral",
-  azur: "hover:shadow-glow-azur",
-  navy: "hover:shadow-glow-sm",
+  champagne: "hover:shadow-glow-champagne",
+  olive: "hover:shadow-glow-olive",
+  riviera: "hover:shadow-glow-sm",
   emerald: "hover:shadow-glow-sm",
 };
 

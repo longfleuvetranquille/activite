@@ -82,8 +82,8 @@ export default function MonthPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-100/80 ring-1 ring-navy-200/50">
-          <CalendarClock className="h-5 w-5 text-navy-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-riviera-100/80 ring-1 ring-riviera-200/50">
+          <CalendarClock className="h-5 w-5 text-riviera-600" />
         </div>
         <div>
           <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl">

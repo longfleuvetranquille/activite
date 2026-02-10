@@ -125,7 +125,7 @@ export default function EventDetailPage() {
               priority
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-100 via-coral-50 to-navy-100">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-champagne-100 via-olive-50 to-riviera-100">
               <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/60 backdrop-blur-sm ring-1 ring-white/80">
                 <Star className="h-10 w-10 text-slate-400" />
               </div>
@@ -133,7 +133,7 @@ export default function EventDetailPage() {
           )}
 
           {/* Gradient overlay at bottom */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#F8F6F1] via-[#FAFAF8]/60 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/60 to-transparent" />
 
           {/* Back button overlay */}
           <button
@@ -162,7 +162,7 @@ export default function EventDetailPage() {
 
           {/* Featured badge */}
           {event.is_featured && (
-            <div className="absolute left-4 top-4 ml-12 inline-flex items-center gap-1.5 rounded-full bg-coral-500/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm shadow-sm sm:left-6 sm:ml-12">
+            <div className="absolute left-4 top-4 ml-12 inline-flex items-center gap-1.5 rounded-full bg-champagne-500/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm shadow-sm sm:left-6 sm:ml-12">
               <Star className="h-3 w-3" />
               A la une
             </div>
@@ -177,17 +177,17 @@ export default function EventDetailPage() {
         </h1>
 
         <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100/80 px-3 py-1.5 text-sm font-medium text-azur-700 ring-1 ring-azur-200/50">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-riviera-100/80 px-3 py-1.5 text-sm font-medium text-riviera-700 ring-1 ring-riviera-200/50">
             <Calendar className="h-3.5 w-3.5" />
             <span className="capitalize">{formattedDate}</span>
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100/80 px-3 py-1.5 text-sm font-medium text-azur-700 ring-1 ring-azur-200/50">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-riviera-100/80 px-3 py-1.5 text-sm font-medium text-riviera-700 ring-1 ring-riviera-200/50">
             <Clock className="h-3.5 w-3.5" />
             {formattedTime}
             {formattedDateEnd && ` - ${formattedDateEnd}`}
           </span>
           {(event.location_name || event.location_city) && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-coral-100/80 px-3 py-1.5 text-sm font-medium text-coral-700 ring-1 ring-coral-200/50">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-olive-100/80 px-3 py-1.5 text-sm font-medium text-olive-700 ring-1 ring-olive-200/50">
               <MapPin className="h-3.5 w-3.5" />
               {event.location_name}
               {event.location_name && event.location_city && ", "}
@@ -225,7 +225,7 @@ export default function EventDetailPage() {
           {/* Summary */}
           {event.summary && (
             <div className="card">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-azur-600">
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-champagne-600">
                 Resume
               </h2>
               <p className="leading-relaxed text-slate-600">{event.summary}</p>

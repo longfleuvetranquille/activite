@@ -91,7 +91,7 @@ export default function EventCard({
     event.interest_score >= 80
       ? "text-emerald-700 bg-emerald-100/90 ring-emerald-300/50"
       : event.interest_score >= 60
-        ? "text-azur-700 bg-azur-100/90 ring-azur-300/50"
+        ? "text-champagne-700 bg-champagne-100/90 ring-champagne-300/50"
         : event.interest_score >= 40
           ? "text-yellow-700 bg-yellow-100/90 ring-yellow-300/50"
           : "text-slate-600 bg-slate-100/90 ring-slate-300/50";
@@ -106,7 +106,7 @@ export default function EventCard({
         href={`/event/${event.id}`}
         className={`group block overflow-hidden rounded-2xl border bg-white/60 p-0 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-elevated-lg ${
           event.is_featured
-            ? "border-coral-200/60 bg-gradient-to-br from-white/70 via-coral-50/30 to-white/60 shadow-card-featured"
+            ? "border-champagne-200/60 bg-gradient-to-br from-white/70 via-champagne-50/30 to-white/60 shadow-card-featured"
             : "border-white/60"
         }`}
       >
@@ -135,12 +135,12 @@ export default function EventCard({
 
           {/* Mobile content */}
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
-            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-azur-600 transition-colors">
+            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-riviera-600 transition-colors">
               {event.title}
             </h3>
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <span className="inline-flex items-center gap-1">
-                <Calendar className="h-3 w-3 text-azur-500" />
+                <Calendar className="h-3 w-3 text-champagne-500" />
                 <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
               </span>
               <span>{formattedTime}</span>
@@ -149,7 +149,7 @@ export default function EventCard({
             <div className="flex items-center gap-2 text-xs text-slate-500">
               {(event.location_name || event.location_city) && (
                 <span className="inline-flex items-center gap-1 truncate">
-                  <MapPin className="h-3 w-3 shrink-0 text-coral-500" />
+                  <MapPin className="h-3 w-3 shrink-0 text-olive-500" />
                   <span className="truncate">
                     {event.location_name || event.location_city}
                   </span>
@@ -202,7 +202,7 @@ export default function EventCard({
 
             {/* Featured overlay */}
             {event.is_featured && (
-              <div className="absolute left-3 top-3 rounded-full bg-coral-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm shadow-sm">
+              <div className="absolute left-3 top-3 rounded-full bg-champagne-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm shadow-sm">
                 Featured
               </div>
             )}
@@ -230,7 +230,7 @@ export default function EventCard({
           {/* Content */}
           <div className="space-y-2.5 p-3.5 pt-3">
             {/* Title */}
-            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:text-azur-600">
+            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
               {event.title}
             </h3>
 
@@ -245,7 +245,7 @@ export default function EventCard({
             <div className="flex flex-col gap-2 text-[13px]">
               <div className="flex items-center gap-3">
                 <span className="inline-flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 text-azur-500" />
+                  <Calendar className="h-3.5 w-3.5 text-champagne-500" />
                   <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
@@ -256,7 +256,7 @@ export default function EventCard({
               <div className="flex items-center gap-3">
                 {event.location_name ? (
                   <span className="inline-flex items-center gap-1.5 truncate">
-                    <MapPin className="h-3.5 w-3.5 shrink-0 text-coral-500" />
+                    <MapPin className="h-3.5 w-3.5 shrink-0 text-olive-500" />
                     <span className="truncate text-slate-600">
                       {event.location_name}
                       {event.location_city &&
@@ -266,7 +266,7 @@ export default function EventCard({
                   </span>
                 ) : event.location_city ? (
                   <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5 text-coral-500" />
+                    <MapPin className="h-3.5 w-3.5 text-olive-500" />
                     <span className="text-slate-600">{event.location_city}</span>
                   </span>
                 ) : null}
@@ -303,9 +303,9 @@ function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
   const firstType = tags_type[0];
   const visual = (firstType && TYPE_VISUALS[firstType]) || {
     icon: Calendar,
-    gradient: "from-azur-300 to-navy-300",
-    iconColor: "text-azur-700",
-    blobColor: "bg-navy-400/30",
+    gradient: "from-champagne-300 to-riviera-300",
+    iconColor: "text-champagne-700",
+    blobColor: "bg-riviera-400/30",
   };
   const Icon = visual.icon;
 

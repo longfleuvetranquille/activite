@@ -10,48 +10,51 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        azur: {
-          50: "#eef7ff",
-          100: "#d9edff",
-          200: "#bce0ff",
-          300: "#8eccff",
-          400: "#59b0ff",
-          500: "#338dff",
-          600: "#1b6df5",
-          700: "#1457e1",
-          800: "#1746b6",
-          900: "#193d8f",
-          950: "#142757",
+        champagne: {
+          50: "#fdf9f0",
+          100: "#f9f0dc",
+          200: "#f2deb5",
+          300: "#e8c784",
+          400: "#d9a84e",
+          500: "#C49A4C",
+          600: "#a87d34",
+          700: "#8c632c",
+          800: "#744f29",
+          900: "#614225",
+          950: "#362112",
         },
-        coral: {
-          50: "#fff5f0",
-          100: "#ffe8dd",
-          200: "#ffd0b9",
-          300: "#ffae86",
-          400: "#ff8347",
-          500: "#ff6b2c",
-          600: "#f04a0e",
-          700: "#c7370a",
-          800: "#9e2e10",
-          900: "#802a12",
-          950: "#451207",
+        olive: {
+          50: "#f6f7ec",
+          100: "#ebefd5",
+          200: "#d7dfaf",
+          300: "#bcc97f",
+          400: "#a1b15a",
+          500: "#819647",
+          600: "#657736",
+          700: "#4d5b2c",
+          800: "#3f4a27",
+          900: "#363f25",
+          950: "#1b2211",
+        },
+        riviera: {
+          50: "#effefa",
+          100: "#c8fff2",
+          200: "#91fee6",
+          300: "#52f5d6",
+          400: "#1ee0c1",
+          500: "#329E96",
+          600: "#04a08a",
+          700: "#098070",
+          800: "#0d655b",
+          900: "#10534c",
+          950: "#023330",
         },
         navy: {
-          50: "#f0f3ff",
-          100: "#e0e6ff",
-          200: "#c7d0fe",
-          300: "#a4b0fc",
-          400: "#7f87f8",
-          500: "#6360f1",
-          600: "#5340e5",
-          700: "#4732ca",
-          800: "#3a2ba3",
-          900: "#332981",
           950: "#0f0d2e",
         },
       },
       fontFamily: {
-        sans: ["var(--font-body)", "Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["var(--font-body)", "Outfit", "system-ui", "-apple-system", "sans-serif"],
         serif: ["var(--font-serif)", "Instrument Serif", "Georgia", "Times New Roman", "serif"],
       },
       borderRadius: {
@@ -63,12 +66,12 @@ const config: Config = {
         "card-hover":
           "0 20px 40px -12px rgba(0,0,0,0.08), 0 4px 12px -2px rgba(0,0,0,0.04)",
         "card-featured":
-          "0 20px 40px -12px rgba(255,107,44,0.15), 0 4px 12px -2px rgba(255,107,44,0.08)",
-        "glow-azur":
-          "0 0 20px rgba(27,109,245,0.15), 0 0 60px rgba(27,109,245,0.05)",
-        "glow-coral":
-          "0 0 20px rgba(255,107,44,0.15), 0 0 60px rgba(255,107,44,0.05)",
-        "glow-sm": "0 0 12px rgba(27,109,245,0.1)",
+          "0 20px 40px -12px rgba(196,154,76,0.15), 0 4px 12px -2px rgba(196,154,76,0.08)",
+        "glow-champagne":
+          "0 0 20px rgba(196,154,76,0.15), 0 0 60px rgba(196,154,76,0.05)",
+        "glow-olive":
+          "0 0 20px rgba(129,150,71,0.15), 0 0 60px rgba(129,150,71,0.05)",
+        "glow-sm": "0 0 12px rgba(196,154,76,0.1)",
         elevated:
           "0 8px 30px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)",
         "elevated-lg":
@@ -77,11 +80,11 @@ const config: Config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-brand":
-          "linear-gradient(135deg, #1b6df5 0%, #ff6b2c 50%, #5340e5 100%)",
+          "linear-gradient(135deg, #C49A4C 0%, #819647 50%, #329E96 100%)",
         "gradient-card":
-          "linear-gradient(160deg, rgba(27,109,245,0.15) 0%, rgba(255,107,44,0.1) 100%)",
+          "linear-gradient(160deg, rgba(196,154,76,0.15) 0%, rgba(129,150,71,0.1) 100%)",
         "gradient-mesh":
-          "radial-gradient(at 20% 20%, rgba(27,109,245,0.06) 0%, transparent 50%), radial-gradient(at 80% 80%, rgba(255,107,44,0.04) 0%, transparent 50%), radial-gradient(at 50% 0%, rgba(99,96,241,0.04) 0%, transparent 50%)",
+          "radial-gradient(at 20% 20%, rgba(196,154,76,0.06) 0%, transparent 50%), radial-gradient(at 80% 80%, rgba(129,150,71,0.04) 0%, transparent 50%), radial-gradient(at 50% 0%, rgba(50,158,150,0.04) 0%, transparent 50%)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",

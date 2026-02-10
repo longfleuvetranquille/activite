@@ -1,11 +1,11 @@
 {
-  "name": "Nice Outside",
-  "short_name": "Nice Outside",
-  "description": "Les meilleures activites a Nice et sur la Cote d'Azur",
+  "name": "Palmier",
+  "short_name": "Palmier",
+  "description": "Les meilleures activites a Cannes et sur la Cote d'Azur",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#0ea5e9",
+  "background_color": "#FAF8F3",
+  "theme_color": "#C49A4C",
   "orientation": "portrait-primary",
   "icons": [
     {

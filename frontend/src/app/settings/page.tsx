@@ -95,14 +95,14 @@ export default function SettingsPage() {
   };
 
   const LOCATIONS = [
+    "Cannes",
     "Nice",
     "Monaco",
-    "Cannes",
     "Antibes",
-    "Menton",
-    "Grasse",
+    "Mougins",
     "Saint-Tropez",
-    "Villefranche-sur-Mer",
+    "Cap-Ferrat",
+    "Grasse",
   ];
 
   if (loading) {
@@ -124,8 +124,8 @@ export default function SettingsPage() {
     >
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-100">
-          <Settings className="h-5 w-5 text-navy-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-champagne-100">
+          <Settings className="h-5 w-5 text-champagne-600" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
@@ -144,7 +144,7 @@ export default function SettingsPage() {
       {/* Favorite Tags */}
       <section className="card space-y-4">
         <div className="flex items-center gap-2">
-          <Heart className="h-5 w-5 text-coral-500" />
+          <Heart className="h-5 w-5 text-champagne-500" />
           <h2 className="text-lg font-semibold text-slate-900">Tags favoris</h2>
         </div>
         <p className="text-sm text-slate-500">
@@ -165,7 +165,7 @@ export default function SettingsPage() {
                     onClick={() => toggleTag("favorite_tags", code)}
                     className={`badge cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-coral-100 text-coral-700 ring-1 ring-coral-300"
+                        ? "bg-champagne-100 text-champagne-700 ring-1 ring-champagne-300"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
@@ -217,7 +217,7 @@ export default function SettingsPage() {
       {/* Favorite Locations */}
       <section className="card space-y-4">
         <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-azur-500" />
+          <MapPin className="h-5 w-5 text-olive-500" />
           <h2 className="text-lg font-semibold text-slate-900">
             Villes favorites
           </h2>
@@ -231,7 +231,7 @@ export default function SettingsPage() {
                 onClick={() => toggleLocation(loc)}
                 className={`badge cursor-pointer transition-all ${
                   isSelected
-                    ? "bg-azur-100 text-azur-700 ring-1 ring-azur-300"
+                    ? "bg-olive-100 text-olive-700 ring-1 ring-olive-300"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
@@ -297,7 +297,7 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {prefs.notif_enabled ? (
-              <Bell className="h-5 w-5 text-azur-500" />
+              <Bell className="h-5 w-5 text-riviera-500" />
             ) : (
               <BellOff className="h-5 w-5 text-slate-400" />
             )}
@@ -308,7 +308,7 @@ export default function SettingsPage() {
               setPrefs({ ...prefs, notif_enabled: !prefs.notif_enabled })
             }
             className={`relative h-7 w-12 rounded-full transition-colors ${
-              prefs.notif_enabled ? "bg-azur-600" : "bg-slate-300"
+              prefs.notif_enabled ? "bg-champagne-600" : "bg-slate-300"
             }`}
           >
             <div

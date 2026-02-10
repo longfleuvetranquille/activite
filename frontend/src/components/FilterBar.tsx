@@ -18,11 +18,12 @@ interface FilterBarProps {
 
 const CITIES = [
   { value: "", label: "Toutes" },
+  { value: "Cannes", label: "Cannes" },
   { value: "Nice", label: "Nice" },
   { value: "Monaco", label: "Monaco" },
-  { value: "Cannes", label: "Cannes" },
   { value: "Antibes", label: "Antibes" },
-  { value: "Menton", label: "Menton" },
+  { value: "Saint-Tropez", label: "Saint-Tropez" },
+  { value: "Mougins", label: "Mougins" },
 ];
 
 const TYPES = [
@@ -86,7 +87,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
       <div className="flex gap-3">
         {/* Search Input */}
         <div className="group relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-azur-500" />
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-champagne-500" />
           <input
             type="text"
             placeholder="Rechercher un evenement..."
@@ -108,13 +109,13 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`btn-secondary relative shrink-0 ${
-            showFilters ? "ring-2 ring-azur-200 bg-azur-50/80 text-azur-700" : ""
+            showFilters ? "ring-2 ring-champagne-200 bg-champagne-50/80 text-champagne-700" : ""
           }`}
         >
           <SlidersHorizontal className="h-4 w-4" />
           <span className="hidden sm:inline">Filtres</span>
           {activeFilterCount > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-azur-500 text-[10px] font-bold text-white shadow-sm shadow-azur-500/30">
+            <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-champagne-500 text-[10px] font-bold text-white shadow-sm shadow-champagne-500/30">
               {activeFilterCount}
             </span>
           )}
@@ -200,7 +201,7 @@ function FilterChipRow({
               onClick={() => onChange(opt.value)}
               className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                 isActive
-                  ? "bg-gradient-to-r from-azur-600 to-azur-500 text-white shadow-md shadow-azur-500/25"
+                  ? "bg-gradient-to-r from-champagne-600 to-champagne-500 text-white shadow-md shadow-champagne-500/25"
                   : "bg-white/60 text-slate-600 ring-1 ring-white/80 backdrop-blur-sm hover:bg-white hover:text-slate-900 hover:shadow-sm"
               }`}
             >

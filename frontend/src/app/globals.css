@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: #F8F6F1;
+    --background: #FAF8F3;
     --foreground: #0f172a;
     --card: #ffffff;
     --card-border: #e2e8f0;
@@ -47,7 +47,7 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-azur-400 via-coral-500 to-navy-400 bg-[length:200%_auto] bg-clip-text text-transparent animate-gradient-shift;
+    @apply bg-gradient-to-r from-champagne-400 via-olive-500 to-riviera-400 bg-[length:200%_auto] bg-clip-text text-transparent animate-gradient-shift;
   }
 
   .badge {
@@ -55,11 +55,11 @@
   }
 
   .input-field {
-    @apply w-full rounded-2xl border border-black/[0.08] bg-white/90 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm backdrop-blur-sm transition-all focus:border-azur-400 focus:outline-none focus:ring-2 focus:ring-azur-500/20 focus:shadow-glow-sm;
+    @apply w-full rounded-2xl border border-black/[0.08] bg-white/90 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm backdrop-blur-sm transition-all focus:border-champagne-400 focus:outline-none focus:ring-2 focus:ring-champagne-500/20 focus:shadow-glow-sm;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-azur-600 to-azur-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-azur-500/25 transition-all hover:shadow-xl hover:shadow-azur-500/30 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0;
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-champagne-600 to-champagne-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-champagne-500/25 transition-all hover:shadow-xl hover:shadow-champagne-500/30 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0;
   }
 
   .btn-secondary {
@@ -74,7 +74,7 @@
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgba(51, 141, 255, 0.3) transparent;
+    scrollbar-color: rgba(196, 154, 76, 0.3) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -87,18 +87,18 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(51, 141, 255, 0.3);
+    background: rgba(196, 154, 76, 0.3);
     border-radius: 3px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: rgba(51, 141, 255, 0.5);
+    background: rgba(196, 154, 76, 0.5);
   }
 
   .bg-mesh {
-    background-image: radial-gradient(at 20% 20%, rgba(27, 109, 245, 0.04) 0%, transparent 50%),
-      radial-gradient(at 80% 80%, rgba(255, 140, 66, 0.04) 0%, transparent 50%),
-      radial-gradient(at 50% 0%, rgba(120, 100, 220, 0.03) 0%, transparent 50%);
+    background-image: radial-gradient(at 20% 20%, rgba(196, 154, 76, 0.04) 0%, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(129, 150, 71, 0.04) 0%, transparent 50%),
+      radial-gradient(at 50% 0%, rgba(50, 158, 150, 0.03) 0%, transparent 50%);
     background-attachment: fixed;
   }
 
@@ -133,13 +133,13 @@
 
 /* Sidebar dark theme */
 .sidebar-dark {
-  background: linear-gradient(180deg, #0f0d2e 0%, #142757 50%, #0f0d2e 100%);
+  background: linear-gradient(180deg, #0f0d2e 0%, #1a1f15 50%, #0f0d2e 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Leaflet map overrides */
 .leaflet-container {
-  background: #F8F6F1;
+  background: #FAF8F3;
 }
 
 .leaflet-control-zoom a {

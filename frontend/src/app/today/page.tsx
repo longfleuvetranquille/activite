@@ -82,8 +82,8 @@ export default function TodayPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-coral-100/80 ring-1 ring-coral-200/50">
-          <CalendarDays className="h-5 w-5 text-coral-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-champagne-100/80 ring-1 ring-champagne-200/50">
+          <CalendarDays className="h-5 w-5 text-champagne-600" />
         </div>
         <div>
           <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl">

@@ -193,16 +193,16 @@ const TAG_EMOJIS: Record<string, Record<string, string>> = {
 
 // Category-specific background colors for badges (translucent)
 const CATEGORY_COLORS: Record<string, string> = {
-  type: "bg-azur-100/80 text-azur-700 ring-1 ring-azur-200/50",
-  vibe: "bg-purple-100/80 text-purple-700 ring-1 ring-purple-200/50",
-  energy: "bg-orange-100/80 text-orange-700 ring-1 ring-orange-200/50",
-  budget: "bg-emerald-100/80 text-emerald-700 ring-1 ring-emerald-200/50",
-  time: "bg-sky-100/80 text-sky-700 ring-1 ring-sky-200/50",
+  type: "bg-champagne-100/80 text-champagne-700 ring-1 ring-champagne-200/50",
+  vibe: "bg-violet-100/80 text-violet-700 ring-1 ring-violet-200/50",
+  energy: "bg-olive-100/80 text-olive-700 ring-1 ring-olive-200/50",
+  budget: "bg-riviera-100/80 text-riviera-700 ring-1 ring-riviera-200/50",
+  time: "bg-rose-100/80 text-rose-700 ring-1 ring-rose-200/50",
   exclusivity: "bg-red-100/80 text-red-700 ring-1 ring-red-200/50",
-  location: "bg-teal-100/80 text-teal-700 ring-1 ring-teal-200/50",
-  audience: "bg-indigo-100/80 text-indigo-700 ring-1 ring-indigo-200/50",
-  deals: "bg-yellow-100/80 text-yellow-700 ring-1 ring-yellow-200/50",
-  meta: "bg-pink-100/80 text-pink-700 ring-1 ring-pink-200/50",
+  location: "bg-stone-100/80 text-stone-700 ring-1 ring-stone-200/50",
+  audience: "bg-champagne-100/80 text-champagne-700 ring-1 ring-champagne-200/50",
+  deals: "bg-olive-100/80 text-olive-700 ring-1 ring-olive-200/50",
+  meta: "bg-riviera-100/80 text-riviera-700 ring-1 ring-riviera-200/50",
 };
 
 interface TagBadgeProps {

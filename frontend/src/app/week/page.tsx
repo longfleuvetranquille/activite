@@ -79,8 +79,8 @@ export default function WeekPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-azur-100/80 ring-1 ring-azur-200/50">
-          <CalendarRange className="h-5 w-5 text-azur-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-olive-100/80 ring-1 ring-olive-200/50">
+          <CalendarRange className="h-5 w-5 text-olive-600" />
         </div>
         <div>
           <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl">

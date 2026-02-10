@@ -1,11 +1,11 @@
 "use client";
 
-import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
+import { Outfit, Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  Sun,
+  TreePalm,
   CalendarDays,
   CalendarRange,
   CalendarHeart,
@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-body",
@@ -34,7 +34,7 @@ const NAV_ITEMS = [
   {
     href: "/",
     label: "Dashboard",
-    icon: Sun,
+    icon: TreePalm,
   },
   {
     href: "/today",
@@ -80,16 +80,16 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
-        <title>Nice Outside</title>
+        <title>Palmier</title>
         <meta
           name="description"
-          content="Decouvre les meilleures activites a Nice et sur la Cote d'Azur"
+          content="Decouvre les meilleures activites a Cannes et sur la Cote d'Azur"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0ea5e9" />
+        <meta name="theme-color" content="#C49A4C" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Nice Outside" />
+        <meta name="apple-mobile-web-app-title" content="Palmier" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
@@ -101,7 +101,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${plusJakarta.variable} ${instrumentSerif.variable} font-sans antialiased scrollbar-thin`}
+        className={`${outfit.variable} ${instrumentSerif.variable} font-sans antialiased scrollbar-thin`}
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
@@ -112,17 +112,17 @@ export default function RootLayout({
           {/* Mobile Header */}
           <header className="glass-header fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between px-4 lg:hidden">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500">
-                <Sun className="h-5 w-5 text-white" />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 opacity-40 blur-lg" />
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500">
+                <TreePalm className="h-5 w-5 text-white" />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500 opacity-40 blur-lg" />
               </div>
               <span className="text-lg font-bold text-slate-900">
-                Nice Outside
+                Palmier
               </span>
             </Link>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-2xl border border-black/[0.06] bg-white/80 text-slate-500 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-azur-600 hover:shadow-md"
+              className="flex h-10 w-10 items-center justify-center rounded-2xl border border-black/[0.06] bg-white/80 text-slate-500 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-champagne-600 hover:shadow-md"
               aria-label="Toggle navigation"
             >
               {sidebarOpen ? (
@@ -186,14 +186,14 @@ function SidebarContent({
     <>
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b border-white/[0.06] px-5">
-        <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 shadow-lg shadow-azur-500/30">
-          <Sun className="h-5 w-5 text-white" />
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 opacity-50 blur-xl animate-glow-pulse" />
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500 shadow-lg shadow-champagne-500/30">
+          <TreePalm className="h-5 w-5 text-white" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500 opacity-50 blur-xl animate-glow-pulse" />
         </div>
         <div>
-          <h1 className="font-serif text-lg text-white">Nice Outside</h1>
+          <h1 className="font-serif text-lg text-white">Palmier</h1>
           <p className="text-[10px] uppercase tracking-widest text-white/40">
-            Cote d&apos;Azur
+            La Croisette
           </p>
         </div>
       </div>
@@ -224,7 +224,7 @@ function SidebarContent({
                 {isActive && (
                   <motion.div
                     layoutId="nav-active"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-azur-600/20 via-coral-500/10 to-transparent"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-champagne-600/20 via-olive-500/10 to-transparent"
                     transition={{
                       type: "spring",
                       stiffness: 350,
@@ -235,7 +235,7 @@ function SidebarContent({
                 <div
                   className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300 ${
                     isActive
-                      ? "bg-azur-500/20 text-azur-400"
+                      ? "bg-champagne-500/20 text-champagne-400"
                       : "text-white/40 group-hover:bg-white/5 group-hover:text-white/70"
                   }`}
                 >
@@ -243,7 +243,7 @@ function SidebarContent({
                 </div>
                 <span className="relative z-10">{item.label}</span>
                 {isActive && (
-                  <div className="absolute right-3 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-coral-500 shadow-sm shadow-coral-500/50" />
+                  <div className="absolute right-3 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-champagne-500 shadow-sm shadow-champagne-500/50" />
                 )}
               </Link>
             );
@@ -264,7 +264,7 @@ function SidebarContent({
             </p>
           </div>
           <p className="mt-1 text-[10px] text-white/25">
-            v0.1.0 &middot; Nice, France
+            v0.1.0 &middot; Cannes, France
           </p>
         </div>
       </div>

@@ -78,14 +78,14 @@ def format_event_line(event: dict, index: int) -> str:
 def format_daily_digest(
     today_events: list[dict],
     deals: list[dict],
-    dashboard_url: str = "https://nice-outside.local",
+    dashboard_url: str = "https://palmier.local",
 ) -> str:
     """Format the full daily digest Telegram message."""
     now = datetime.now()
     date_str = now.strftime("%A %d %B %Y").capitalize()
 
     lines = [
-        f"🌞 *Nice Outside* — {date_str}",
+        f"\uD83C\uDF34 *Palmier* — {date_str}",
         "",
     ]
 
