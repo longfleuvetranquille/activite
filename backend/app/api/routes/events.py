@@ -45,6 +45,11 @@ async def week_events():
     return await event_service.get_week_events()
 
 
+@router.get("/weekend", response_model=list[EventRead])
+async def weekend_events():
+    return await event_service.get_weekend_events()
+
+
 @router.get("/month", response_model=list[EventRead])
 async def month_events():
     return await event_service.get_month_events()

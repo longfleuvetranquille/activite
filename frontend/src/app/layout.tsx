@@ -8,6 +8,7 @@ import {
   Sun,
   CalendarDays,
   CalendarRange,
+  CalendarHeart,
   CalendarClock,
   Settings,
   Menu,
@@ -36,6 +37,11 @@ const NAV_ITEMS = [
     href: "/week",
     label: "Cette semaine",
     icon: CalendarRange,
+  },
+  {
+    href: "/weekend",
+    label: "Ce week-end",
+    icon: CalendarHeart,
   },
   {
     href: "/month",

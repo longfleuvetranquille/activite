@@ -99,6 +99,30 @@ async def get_week_events() -> list[EventRead]:
     return [_to_event_read(r) for r in result.get("items", [])]
 
 
+async def get_weekend_events() -> list[EventRead]:
+    now = datetime.now()
+    weekday = now.weekday()  # 0=Mon ... 6=Sun
+    if weekday < 5:  # Mon-Fri: next Saturday
+        saturday = now + timedelta(days=(5 - weekday))
+    elif weekday == 5:  # Saturday: today
+        saturday = now
+    else:  # Sunday: today (show remaining Sunday)
+        saturday = now - timedelta(days=1)
+    sat_str = saturday.strftime("%Y-%m-%d")
+    monday = (saturday + timedelta(days=2)).strftime("%Y-%m-%d")
+    filter_str = (
+        f'date_start >= "{sat_str}" && date_start < "{monday}" '
+        f'&& status = "published"'
+    )
+    result = await pb_client.list_records(
+        "events",
+        per_page=100,
+        sort="-interest_score",
+        filter_str=filter_str,
+    )
+    return [_to_event_read(r) for r in result.get("items", [])]
+
+
 async def get_month_events() -> list[EventRead]:
     today = datetime.now().strftime("%Y-%m-%d")
     month_end = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")

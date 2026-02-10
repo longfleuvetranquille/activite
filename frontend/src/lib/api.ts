@@ -73,6 +73,10 @@ export async function getWeekEvents(): Promise<Event[]> {
   return fetchAPI<Event[]>("/api/events/week");
 }
 
+export async function getWeekendEvents(): Promise<Event[]> {
+  return fetchAPI<Event[]>("/api/events/weekend");
+}
+
 export async function getMonthEvents(): Promise<Event[]> {
   return fetchAPI<Event[]>("/api/events/month");
 }
