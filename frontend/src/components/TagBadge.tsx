@@ -191,18 +191,18 @@ const TAG_EMOJIS: Record<string, Record<string, string>> = {
   },
 };
 
-// Category-specific background colors for badges (light theme)
+// Category-specific background colors for badges (translucent)
 const CATEGORY_COLORS: Record<string, string> = {
-  type: "bg-azur-100 text-azur-700",
-  vibe: "bg-purple-100 text-purple-700",
-  energy: "bg-orange-100 text-orange-700",
-  budget: "bg-emerald-100 text-emerald-700",
-  time: "bg-sky-100 text-sky-700",
-  exclusivity: "bg-red-100 text-red-700",
-  location: "bg-teal-100 text-teal-700",
-  audience: "bg-indigo-100 text-indigo-700",
-  deals: "bg-yellow-100 text-yellow-700",
-  meta: "bg-pink-100 text-pink-700",
+  type: "bg-azur-100/80 text-azur-700 ring-1 ring-azur-200/50",
+  vibe: "bg-purple-100/80 text-purple-700 ring-1 ring-purple-200/50",
+  energy: "bg-orange-100/80 text-orange-700 ring-1 ring-orange-200/50",
+  budget: "bg-emerald-100/80 text-emerald-700 ring-1 ring-emerald-200/50",
+  time: "bg-sky-100/80 text-sky-700 ring-1 ring-sky-200/50",
+  exclusivity: "bg-red-100/80 text-red-700 ring-1 ring-red-200/50",
+  location: "bg-teal-100/80 text-teal-700 ring-1 ring-teal-200/50",
+  audience: "bg-indigo-100/80 text-indigo-700 ring-1 ring-indigo-200/50",
+  deals: "bg-yellow-100/80 text-yellow-700 ring-1 ring-yellow-200/50",
+  meta: "bg-pink-100/80 text-pink-700 ring-1 ring-pink-200/50",
 };
 
 interface TagBadgeProps {
@@ -223,12 +223,12 @@ export default function TagBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full font-medium ${colorClass} ${
-        small ? "px-2.5 py-0.5 text-[11px]" : "px-3 py-1 text-xs"
+      className={`inline-flex items-center gap-1 rounded-full font-medium backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${colorClass} ${
+        small ? "px-2 py-0.5 text-[10px]" : "px-3 py-1 text-xs"
       }`}
       title={`${category}: ${label}`}
     >
-      {emoji && <span className={small ? "text-[11px]" : "text-xs"}>{emoji}</span>}
+      {emoji && <span className={small ? "text-[10px]" : "text-xs"}>{emoji}</span>}
       {label}
     </span>
   );

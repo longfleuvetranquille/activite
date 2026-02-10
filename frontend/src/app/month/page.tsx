@@ -82,11 +82,11 @@ export default function MonthPage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-100">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-100/80 ring-1 ring-navy-200/50">
           <CalendarClock className="h-5 w-5 text-navy-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+          <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl">
             Ce mois
           </h1>
           <p className="text-sm capitalize text-slate-500">{monthName}</p>
@@ -109,7 +109,7 @@ export default function MonthPage() {
       {loading && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="card h-72 animate-pulse" />
+            <div key={i} className="h-72 rounded-2xl bg-slate-200/40 shimmer" />
           ))}
         </div>
       )}

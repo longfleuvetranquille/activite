@@ -22,26 +22,27 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { motion } from "framer-motion";
 
 import type { Event } from "@/types";
 import TagBadge from "./TagBadge";
 
 // Map event types to icons and gradient colors for placeholders
-const TYPE_VISUALS: Record<string, { icon: typeof Music; gradient: string }> = {
-  party: { icon: Music, gradient: "from-purple-200 to-pink-200" },
-  bar_rooftop: { icon: Sparkles, gradient: "from-amber-200 to-orange-200" },
-  dj_set: { icon: Music, gradient: "from-violet-200 to-fuchsia-200" },
-  concert: { icon: Mic2, gradient: "from-rose-200 to-red-200" },
-  show: { icon: Theater, gradient: "from-indigo-200 to-purple-200" },
-  conference: { icon: GraduationCap, gradient: "from-sky-200 to-blue-200" },
-  sport_match: { icon: Trophy, gradient: "from-emerald-200 to-green-200" },
-  motorsport: { icon: Trophy, gradient: "from-red-200 to-orange-200" },
-  watersport: { icon: Waves, gradient: "from-cyan-200 to-teal-200" },
-  outdoor: { icon: Mountain, gradient: "from-green-200 to-emerald-200" },
-  gaming: { icon: Gamepad2, gradient: "from-violet-200 to-indigo-200" },
-  cinema: { icon: Clapperboard, gradient: "from-slate-200 to-gray-200" },
-  food: { icon: Utensils, gradient: "from-orange-200 to-amber-200" },
-  travel: { icon: Plane, gradient: "from-sky-200 to-cyan-200" },
+const TYPE_VISUALS: Record<string, { icon: typeof Music; gradient: string; iconColor: string; blobColor: string }> = {
+  party: { icon: Music, gradient: "from-purple-300 to-pink-300", iconColor: "text-purple-700", blobColor: "bg-pink-400/30" },
+  bar_rooftop: { icon: Sparkles, gradient: "from-amber-300 to-orange-300", iconColor: "text-amber-700", blobColor: "bg-orange-400/30" },
+  dj_set: { icon: Music, gradient: "from-violet-300 to-fuchsia-300", iconColor: "text-violet-700", blobColor: "bg-fuchsia-400/30" },
+  concert: { icon: Mic2, gradient: "from-rose-300 to-red-300", iconColor: "text-rose-700", blobColor: "bg-red-400/30" },
+  show: { icon: Theater, gradient: "from-indigo-300 to-purple-300", iconColor: "text-indigo-700", blobColor: "bg-purple-400/30" },
+  conference: { icon: GraduationCap, gradient: "from-sky-300 to-blue-300", iconColor: "text-sky-700", blobColor: "bg-blue-400/30" },
+  sport_match: { icon: Trophy, gradient: "from-emerald-300 to-green-300", iconColor: "text-emerald-700", blobColor: "bg-green-400/30" },
+  motorsport: { icon: Trophy, gradient: "from-red-300 to-orange-300", iconColor: "text-red-700", blobColor: "bg-orange-400/30" },
+  watersport: { icon: Waves, gradient: "from-cyan-300 to-teal-300", iconColor: "text-cyan-700", blobColor: "bg-teal-400/30" },
+  outdoor: { icon: Mountain, gradient: "from-green-300 to-emerald-300", iconColor: "text-green-700", blobColor: "bg-emerald-400/30" },
+  gaming: { icon: Gamepad2, gradient: "from-violet-300 to-indigo-300", iconColor: "text-violet-700", blobColor: "bg-indigo-400/30" },
+  cinema: { icon: Clapperboard, gradient: "from-slate-300 to-gray-400", iconColor: "text-slate-700", blobColor: "bg-gray-400/30" },
+  food: { icon: Utensils, gradient: "from-orange-300 to-amber-300", iconColor: "text-orange-700", blobColor: "bg-amber-400/30" },
+  travel: { icon: Plane, gradient: "from-sky-300 to-cyan-300", iconColor: "text-sky-700", blobColor: "bg-cyan-400/30" },
 };
 
 interface EventCardProps {
@@ -88,18 +89,26 @@ export default function EventCard({
   // Interest score color
   const scoreColor =
     event.interest_score >= 80
-      ? "text-emerald-700 bg-emerald-100 ring-emerald-300"
+      ? "text-emerald-700 bg-emerald-100/90 ring-emerald-300/50"
       : event.interest_score >= 60
-        ? "text-azur-700 bg-azur-100 ring-azur-300"
+        ? "text-azur-700 bg-azur-100/90 ring-azur-300/50"
         : event.interest_score >= 40
-          ? "text-yellow-700 bg-yellow-100 ring-yellow-300"
-          : "text-slate-600 bg-slate-100 ring-slate-300";
+          ? "text-yellow-700 bg-yellow-100/90 ring-yellow-300/50"
+          : "text-slate-600 bg-slate-100/90 ring-slate-300/50";
 
   return (
-    <div className="animate-fade-in">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
+    >
       <Link
         href={`/event/${event.id}`}
-        className="card card-hover group block overflow-hidden p-0"
+        className={`group block overflow-hidden rounded-2xl border bg-white/60 p-0 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-elevated-lg ${
+          event.is_featured
+            ? "border-coral-200/60 bg-gradient-to-br from-white/70 via-coral-50/30 to-white/60 shadow-card-featured"
+            : "border-white/60"
+        }`}
       >
         {/* Mobile: horizontal layout */}
         <div className="flex sm:hidden">
@@ -118,7 +127,7 @@ export default function EventCard({
             )}
             {/* Score badge */}
             <div
-              className={`absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-lg ring-1 backdrop-blur-sm ${scoreColor}`}
+              className={`absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-lg ring-1 backdrop-blur-md ${scoreColor}`}
             >
               <span className="text-[10px] font-bold">{event.interest_score}</span>
             </div>
@@ -126,7 +135,7 @@ export default function EventCard({
 
           {/* Mobile content */}
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
-            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
+            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-azur-600 transition-colors">
               {event.title}
             </h3>
             <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -166,42 +175,62 @@ export default function EventCard({
         <div className="hidden sm:block">
           {/* Image */}
           <div
-            className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-36"}`}
+            className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-40"}`}
           >
             {event.image_url ? (
               <Image
                 src={event.image_url}
                 alt={event.title}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-transform duration-1000 group-hover:scale-[1.06]"
+                style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
                 sizes="(max-width: 1024px) 50vw, 33vw"
               />
             ) : (
               <PlaceholderImage tags_type={event.tags_type} />
             )}
 
+            {/* Dark gradient overlay — intensifies on hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
             {/* Score badge */}
             <div
-              className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl ring-1 backdrop-blur-sm ${scoreColor}`}
+              className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl ring-1 backdrop-blur-md transition-transform duration-300 group-hover:scale-110 ${scoreColor}`}
             >
               <span className="text-xs font-bold">{event.interest_score}</span>
             </div>
 
             {/* Featured overlay */}
             {event.is_featured && (
-              <div className="absolute left-3 top-3 rounded-full bg-coral-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+              <div className="absolute left-3 top-3 rounded-full bg-coral-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm shadow-sm">
                 Featured
               </div>
             )}
 
-            {/* Gradient overlay at bottom of image */}
-            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
+            {/* Info bar that slides up on hover */}
+            <div className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0">
+              <div className="flex items-center justify-between bg-black/50 px-3.5 py-2 text-xs text-white backdrop-blur-md">
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="h-3 w-3" />
+                  {formattedTime}
+                </span>
+                {(event.location_name || event.location_city) && (
+                  <span className="inline-flex items-center gap-1.5 truncate">
+                    <MapPin className="h-3 w-3" />
+                    <span className="truncate">
+                      {event.location_name || event.location_city}
+                    </span>
+                  </span>
+                )}
+                <span className="font-semibold">{priceDisplay}</span>
+              </div>
+            </div>
           </div>
 
           {/* Content */}
-          <div className="space-y-2.5 p-3.5 pt-2.5">
+          <div className="space-y-2.5 p-3.5 pt-3">
             {/* Title */}
-            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 group-hover:text-azur-600">
+            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:text-azur-600">
               {event.title}
             </h3>
 
@@ -264,24 +293,41 @@ export default function EventCard({
           </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 }
+
+const DOT_PATTERN = "url(\"data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E\")";
 
 function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
   const firstType = tags_type[0];
   const visual = (firstType && TYPE_VISUALS[firstType]) || {
     icon: Calendar,
-    gradient: "from-azur-200 to-navy-200",
+    gradient: "from-azur-300 to-navy-300",
+    iconColor: "text-azur-700",
+    blobColor: "bg-navy-400/30",
   };
   const Icon = visual.icon;
 
   return (
     <div
-      className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${visual.gradient}`}
+      className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br ${visual.gradient}`}
     >
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/40">
-        <Icon className="h-8 w-8 text-slate-600" />
+      {/* Dot pattern overlay */}
+      <div
+        className="absolute inset-0"
+        style={{ backgroundImage: DOT_PATTERN, backgroundSize: "20px 20px" }}
+      />
+      {/* Decorative blob */}
+      <div
+        className={`absolute -right-6 -top-6 h-24 w-24 rounded-full ${visual.blobColor} blur-2xl`}
+      />
+      <div
+        className={`absolute -bottom-4 -left-4 h-20 w-20 rounded-full ${visual.blobColor} blur-2xl`}
+      />
+      {/* Icon container */}
+      <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-white/40 backdrop-blur-sm ring-1 ring-white/60 shadow-lg">
+        <Icon className={`h-12 w-12 ${visual.iconColor}`} />
       </div>
     </div>
   );

@@ -48,15 +48,7 @@ export default function EventDetailPage() {
   }, [eventId]);
 
   if (loading) {
-    return (
-      <div className="space-y-6">
-        <div className="h-8 w-24 animate-pulse rounded-lg bg-slate-200" />
-        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200" />
-        <div className="h-10 w-3/4 animate-pulse rounded-lg bg-slate-200" />
-        <div className="h-6 w-1/2 animate-pulse rounded-lg bg-slate-200" />
-        <div className="h-40 w-full animate-pulse rounded-2xl bg-slate-200" />
-      </div>
-    );
+    return <DetailSkeleton />;
   }
 
   if (error || !event) {
@@ -120,84 +112,92 @@ export default function EventDetailPage() {
       animate={{ opacity: 1 }}
       className="space-y-6"
     >
-      {/* Back button */}
-      <button
-        onClick={() => router.back()}
-        className="group inline-flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-slate-900"
-      >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-        Retour
-      </button>
-
-      {/* Hero Image */}
-      <div className="relative h-48 w-full overflow-hidden rounded-2xl sm:h-64 lg:h-80">
-        {event.image_url ? (
-          <Image
-            src={event.image_url}
-            alt={event.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1280px) 100vw, 1280px"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-100 via-coral-50 to-navy-100">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/60">
-              <Star className="h-10 w-10 text-slate-400" />
+      {/* Hero Image — full-bleed */}
+      <div className="relative -mx-4 -mt-5 sm:-mx-6 lg:-mx-6 lg:-mt-6">
+        <div className="relative h-56 w-full overflow-hidden sm:h-72 lg:h-96">
+          {event.image_url ? (
+            <Image
+              src={event.image_url}
+              alt={event.title}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-azur-100 via-coral-50 to-navy-100">
+              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/60 backdrop-blur-sm ring-1 ring-white/80">
+                <Star className="h-10 w-10 text-slate-400" />
+              </div>
             </div>
-          </div>
-        )}
-        {/* Interest Score Badge */}
-        <div className="absolute right-4 top-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/90 shadow-md">
-          <div className="text-center">
-            <p className="text-lg font-bold text-slate-900">
-              {event.interest_score}
-            </p>
-            <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">
-              score
-            </p>
-          </div>
+          )}
+
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#F8F6F1] via-[#FAFAF8]/60 to-transparent" />
+
+          {/* Back button overlay */}
+          <button
+            onClick={() => router.back()}
+            className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/30 text-white backdrop-blur-md transition-all hover:bg-black/50 sm:left-6 lg:left-6"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+
+          {/* Score badge — animated */}
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+            className="absolute right-4 top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/90 shadow-elevated backdrop-blur-md sm:right-6 lg:right-6"
+          >
+            <div className="text-center">
+              <p className="text-xl font-bold text-slate-900">
+                {event.interest_score}
+              </p>
+              <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">
+                score
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Featured badge */}
+          {event.is_featured && (
+            <div className="absolute left-4 top-4 ml-12 inline-flex items-center gap-1.5 rounded-full bg-coral-500/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm shadow-sm sm:left-6 sm:ml-12">
+              <Star className="h-3 w-3" />
+              A la une
+            </div>
+          )}
         </div>
-        {/* Featured badge */}
-        {event.is_featured && (
-          <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-coral-500/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-            <Star className="h-3 w-3" />
-            A la une
-          </div>
-        )}
       </div>
 
-      {/* Title & Main Info */}
+      {/* Title & Info Pills */}
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl lg:text-4xl">
+        <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl lg:text-4xl">
           {event.title}
         </h1>
 
-        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
-          <div className="flex items-center gap-1.5">
-            <Calendar className="h-4 w-4 text-azur-500" />
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100/80 px-3 py-1.5 text-sm font-medium text-azur-700 ring-1 ring-azur-200/50">
+            <Calendar className="h-3.5 w-3.5" />
             <span className="capitalize">{formattedDate}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Clock className="h-4 w-4 text-azur-500" />
-            <span>
-              {formattedTime}
-              {formattedDateEnd && ` - ${formattedDateEnd}`}
-            </span>
-          </div>
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100/80 px-3 py-1.5 text-sm font-medium text-azur-700 ring-1 ring-azur-200/50">
+            <Clock className="h-3.5 w-3.5" />
+            {formattedTime}
+            {formattedDateEnd && ` - ${formattedDateEnd}`}
+          </span>
           {(event.location_name || event.location_city) && (
-            <div className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-coral-500" />
-              <span>
-                {event.location_name}
-                {event.location_name && event.location_city && ", "}
-                {event.location_city}
-              </span>
-            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-coral-100/80 px-3 py-1.5 text-sm font-medium text-coral-700 ring-1 ring-coral-200/50">
+              <MapPin className="h-3.5 w-3.5" />
+              {event.location_name}
+              {event.location_name && event.location_city && ", "}
+              {event.location_city}
+            </span>
           )}
-          <div className="flex items-center gap-1.5">
-            <Wallet className="h-4 w-4 text-emerald-500" />
-            <span>{priceDisplay}</span>
-          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1.5 text-sm font-medium text-emerald-700 ring-1 ring-emerald-200/50">
+            <Wallet className="h-3.5 w-3.5" />
+            {priceDisplay}
+          </span>
         </div>
       </div>
 
@@ -206,7 +206,7 @@ export default function EventDetailPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <Tag className="h-4 w-4 text-slate-400" />
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
               Tags
             </span>
           </div>
@@ -284,18 +284,22 @@ export default function EventDetailPage() {
           )}
 
           {/* Quick Info */}
-          <div className="card space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-              Informations
-            </h3>
-            <InfoRow label="Prix" value={priceDisplay} />
-            <InfoRow label="Ville" value={event.location_city || "N/A"} />
-            <InfoRow label="Source" value={event.source_name || "N/A"} />
-            <InfoRow
-              label="Score"
-              value={`${event.interest_score}/100`}
-            />
-            <InfoRow label="Statut" value={event.status} />
+          <div className="card space-y-0 p-0 overflow-hidden">
+            <div className="bg-gradient-to-r from-slate-50 to-transparent px-4 py-3">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+                Informations
+              </h3>
+            </div>
+            <div className="divide-y divide-black/[0.04] px-4">
+              <InfoRow label="Prix" value={priceDisplay} />
+              <InfoRow label="Ville" value={event.location_city || "N/A"} />
+              <InfoRow label="Source" value={event.source_name || "N/A"} />
+              <InfoRow
+                label="Score"
+                value={`${event.interest_score}/100`}
+              />
+              <InfoRow label="Statut" value={event.status} />
+            </div>
           </div>
         </div>
       </div>
@@ -305,9 +309,40 @@ export default function EventDetailPage() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 last:border-0 last:pb-0">
+    <div className="flex items-center justify-between py-3 last:pb-4">
       <span className="text-sm text-slate-500">{label}</span>
       <span className="text-sm font-medium text-slate-900">{value}</span>
+    </div>
+  );
+}
+
+function DetailSkeleton() {
+  return (
+    <div className="space-y-6">
+      {/* Hero image skeleton */}
+      <div className="relative -mx-4 -mt-5 sm:-mx-6 lg:-mx-6 lg:-mt-6">
+        <div className="h-56 w-full rounded-b-2xl bg-slate-200/50 shimmer sm:h-72 lg:h-96" />
+      </div>
+      {/* Title */}
+      <div className="space-y-3">
+        <div className="h-10 w-3/4 rounded-2xl bg-slate-200/60 shimmer" />
+        <div className="flex gap-2">
+          <div className="h-8 w-40 rounded-full bg-slate-200/60 shimmer" />
+          <div className="h-8 w-24 rounded-full bg-slate-200/60 shimmer" />
+          <div className="h-8 w-32 rounded-full bg-slate-200/60 shimmer" />
+        </div>
+      </div>
+      {/* Content */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
+          <div className="h-40 w-full rounded-2xl bg-slate-200/40 shimmer" />
+          <div className="h-60 w-full rounded-2xl bg-slate-200/40 shimmer" />
+        </div>
+        <div className="space-y-4">
+          <div className="h-72 w-full rounded-2xl bg-slate-200/40 shimmer" />
+          <div className="h-48 w-full rounded-2xl bg-slate-200/40 shimmer" />
+        </div>
+      </div>
     </div>
   );
 }

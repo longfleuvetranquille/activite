@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CalendarDays,
   CalendarRange,
@@ -25,6 +25,41 @@ function getGreeting(): string {
   if (hour < 12) return "Bonjour";
   if (hour < 18) return "Bon apres-midi";
   return "Bonsoir";
+}
+
+function useAnimatedNumber(target: number, duration = 800): number {
+  const [value, setValue] = useState(0);
+  const startTime = useRef<number | null>(null);
+  const rafId = useRef<number>(0);
+
+  useEffect(() => {
+    if (target === 0) {
+      setValue(0);
+      return;
+    }
+    startTime.current = null;
+
+    function step(timestamp: number) {
+      if (startTime.current === null) startTime.current = timestamp;
+      const elapsed = timestamp - startTime.current;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(eased * target));
+      if (progress < 1) {
+        rafId.current = requestAnimationFrame(step);
+      }
+    }
+
+    rafId.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId.current);
+  }, [target, duration]);
+
+  return value;
+}
+
+function AnimatedNumber({ value }: { value: number }) {
+  const animated = useAnimatedNumber(value);
+  return <>{animated}</>;
 }
 
 export default function DashboardPage() {
@@ -122,18 +157,18 @@ export default function DashboardPage() {
     digest?.deals.filter((e) => e.source_name !== "google_flights") ?? [];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Hero Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex items-start justify-between"
       >
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
             {getGreeting()} !
           </h1>
-          <p className="text-sm capitalize text-slate-500">{today}</p>
+          <p className="text-sm capitalize text-slate-500 sm:text-base">{today}</p>
         </div>
         <button
           onClick={handleCrawl}
@@ -145,7 +180,7 @@ export default function DashboardPage() {
           ) : (
             <RefreshCw className="h-4 w-4" />
           )}
-          {crawling ? "Crawl en cours..." : "Lancer un crawl"}
+          <span className="hidden sm:inline">{crawling ? "Crawl en cours..." : "Lancer un crawl"}</span>
         </button>
       </motion.div>
 
@@ -192,7 +227,7 @@ export default function DashboardPage() {
         </motion.div>
       )}
 
-      {/* Featured Events */}
+      {/* Featured Events — Bento Grid */}
       {digest && digest.featured.length > 0 && (
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -203,12 +238,17 @@ export default function DashboardPage() {
             icon={<Sparkles className="h-5 w-5 text-coral-500" />}
             title="A la une"
             count={digest.featured.length}
-            countColor="bg-coral-100 text-coral-700"
+            countColor="bg-coral-100/80 text-coral-700 ring-1 ring-coral-200/50"
             subtitle="Les evenements les mieux notes"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {digest.featured.map((event, i) => (
-              <EventCard key={event.id} event={event} index={i} />
+              <div
+                key={event.id}
+                className={i === 0 ? "sm:col-span-2 lg:col-span-2" : ""}
+              >
+                <EventCard event={event} index={i} />
+              </div>
             ))}
           </div>
         </motion.section>
@@ -225,7 +265,7 @@ export default function DashboardPage() {
             icon={<TrendingUp className="h-5 w-5 text-azur-500" />}
             title="Top a venir"
             count={digest.top_upcoming.length}
-            countColor="bg-azur-100 text-azur-700"
+            countColor="bg-azur-100/80 text-azur-700 ring-1 ring-azur-200/50"
             subtitle="Les meilleurs evenements des 3 prochains mois"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -247,7 +287,7 @@ export default function DashboardPage() {
             icon={<Zap className="h-5 w-5 text-yellow-500" />}
             title="Bons plans"
             count={otherDeals.length}
-            countColor="bg-yellow-100 text-yellow-700"
+            countColor="bg-yellow-100/80 text-yellow-700 ring-1 ring-yellow-200/50"
             subtitle="Offres et bons plans detectes"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -269,7 +309,7 @@ export default function DashboardPage() {
             icon={<Plane className="h-5 w-5 text-sky-500" />}
             title="Vols pas chers"
             count={flightDeals.length}
-            countColor="bg-sky-100 text-sky-700"
+            countColor="bg-sky-100/80 text-sky-700 ring-1 ring-sky-200/50"
             subtitle="Meilleurs prix au depart de Nice"
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -285,7 +325,7 @@ export default function DashboardPage() {
         digest.featured.length === 0 &&
         digest.top_upcoming.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100/80 ring-1 ring-slate-200/50">
               <CalendarDays className="h-8 w-8 text-slate-400" />
             </div>
             <h3 className="mb-2 text-lg font-semibold text-slate-900">
@@ -315,16 +355,35 @@ function SectionHeader({
   subtitle: string;
 }) {
   return (
-    <div className="mb-4">
+    <div className="mb-5">
+      <div className="mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-azur-500 via-coral-400 to-transparent" />
       <div className="flex items-center gap-2.5">
-        {icon}
-        <h2 className="text-xl font-bold text-slate-900">{title}</h2>
-        <span className={`badge ${countColor}`}>{count}</span>
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm">
+          {icon}
+        </div>
+        <h2 className="font-serif text-xl text-slate-900 sm:text-2xl">{title}</h2>
+        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${countColor}`}>
+          {count}
+        </span>
       </div>
-      <p className="mt-1.5 text-sm text-slate-500">{subtitle}</p>
+      <p className="mt-1.5 pl-[42px] text-sm text-slate-500">{subtitle}</p>
     </div>
   );
 }
+
+const STAT_GRADIENTS: Record<string, string> = {
+  coral: "from-coral-400 to-coral-500",
+  azur: "from-azur-400 to-azur-500",
+  navy: "from-navy-400 to-navy-500",
+  emerald: "from-emerald-400 to-emerald-500",
+};
+
+const STAT_HOVERS: Record<string, string> = {
+  coral: "hover:shadow-glow-coral",
+  azur: "hover:shadow-glow-azur",
+  navy: "hover:shadow-glow-sm",
+  emerald: "hover:shadow-glow-sm",
+};
 
 function StatCard({
   icon,
@@ -339,8 +398,12 @@ function StatCard({
   color: string;
   isText?: boolean;
 }) {
+  const gradient = STAT_GRADIENTS[color] || "from-slate-400 to-slate-500";
+  const hoverClass = STAT_HOVERS[color] || "hover:shadow-glow-sm";
+
   return (
-    <div className="card">
+    <div className={`card overflow-hidden transition-shadow ${hoverClass}`}>
+      <div className={`-mx-4 -mt-4 mb-3 h-0.5 bg-gradient-to-r ${gradient}`} />
       <div className="mb-3 flex items-center gap-2">
         {icon}
         <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -350,7 +413,9 @@ function StatCard({
       {isText ? (
         <p className="text-sm font-medium text-slate-700">{value}</p>
       ) : (
-        <p className="text-2xl font-bold text-slate-900">{value}</p>
+        <p className="text-2xl font-bold tabular-nums text-slate-900">
+          <AnimatedNumber value={value as number} />
+        </p>
       )}
     </div>
   );
@@ -358,27 +423,34 @@ function StatCard({
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header skeleton */}
       <div className="space-y-2">
-        <div className="h-10 w-48 animate-pulse rounded-lg bg-slate-200" />
-        <div className="h-4 w-36 animate-pulse rounded-lg bg-slate-200" />
+        <div className="h-12 w-64 rounded-2xl bg-slate-200/60 shimmer" />
+        <div className="h-5 w-44 rounded-xl bg-slate-200/60 shimmer" />
       </div>
+      {/* Stats skeleton */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="card">
-            <div className="mb-3 h-4 w-20 animate-pulse rounded bg-slate-200" />
-            <div className="h-8 w-12 animate-pulse rounded bg-slate-200" />
+            <div className="mb-3 h-4 w-24 rounded-lg bg-slate-200/60 shimmer" />
+            <div className="h-8 w-14 rounded-lg bg-slate-200/60 shimmer" />
           </div>
         ))}
       </div>
+      {/* Section skeleton */}
       <div>
         <div className="mb-5 space-y-2">
-          <div className="h-6 w-32 animate-pulse rounded bg-slate-200" />
-          <div className="h-4 w-48 animate-pulse rounded bg-slate-200" />
+          <div className="h-7 w-40 rounded-lg bg-slate-200/60 shimmer" />
+          <div className="h-4 w-56 rounded-lg bg-slate-200/60 shimmer" />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="card h-80 animate-pulse" />
+          {/* Bento: first card takes 2 cols */}
+          <div className="sm:col-span-2 lg:col-span-2">
+            <div className="h-80 rounded-2xl bg-slate-200/40 shimmer" />
+          </div>
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="h-80 rounded-2xl bg-slate-200/40 shimmer" />
           ))}
         </div>
       </div>

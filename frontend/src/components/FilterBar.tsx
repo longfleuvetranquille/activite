@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Filters {
   city?: string;
@@ -16,7 +17,7 @@ interface FilterBarProps {
 }
 
 const CITIES = [
-  { value: "", label: "Toutes les villes" },
+  { value: "", label: "Toutes" },
   { value: "Nice", label: "Nice" },
   { value: "Monaco", label: "Monaco" },
   { value: "Cannes", label: "Cannes" },
@@ -25,8 +26,8 @@ const CITIES = [
 ];
 
 const TYPES = [
-  { value: "", label: "Tous les types" },
-  { value: "party", label: "Soiree / Clubbing" },
+  { value: "", label: "Tous" },
+  { value: "party", label: "Soiree" },
   { value: "bar_rooftop", label: "Bar & Rooftop" },
   { value: "dj_set", label: "DJ set" },
   { value: "concert", label: "Concert" },
@@ -39,24 +40,24 @@ const TYPES = [
 ];
 
 const VIBES = [
-  { value: "", label: "Toutes les vibes" },
+  { value: "", label: "Toutes" },
   { value: "festive", label: "Festif" },
   { value: "chill", label: "Chill" },
   { value: "premium", label: "Premium" },
   { value: "dancing", label: "Dansant" },
   { value: "afterwork", label: "Afterwork" },
   { value: "sunset", label: "Sunset" },
-  { value: "date", label: "Date-friendly" },
+  { value: "date", label: "Date" },
   { value: "friends", label: "Entre amis" },
   { value: "late_night", label: "Late night" },
 ];
 
 const BUDGETS = [
-  { value: "", label: "Tous les budgets" },
+  { value: "", label: "Tous" },
   { value: "free", label: "Gratuit" },
   { value: "budget", label: "Petit budget" },
   { value: "premium", label: "Premium" },
-  { value: "value", label: "Bon rapport qualite/prix" },
+  { value: "value", label: "Bon rapport Q/P" },
 ];
 
 export default function FilterBar({ onFilter }: FilterBarProps) {
@@ -84,8 +85,8 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
       {/* Search Row */}
       <div className="flex gap-3">
         {/* Search Input */}
-        <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <div className="group relative flex-1">
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-azur-500" />
           <input
             type="text"
             placeholder="Rechercher un evenement..."
@@ -96,7 +97,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
           {filters.search && (
             <button
               onClick={() => updateFilter("search", "")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -107,13 +108,13 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`btn-secondary relative shrink-0 ${
-            showFilters ? "border-azur-400 bg-azur-50 text-azur-700" : ""
+            showFilters ? "ring-2 ring-azur-200 bg-azur-50/80 text-azur-700" : ""
           }`}
         >
           <SlidersHorizontal className="h-4 w-4" />
           <span className="hidden sm:inline">Filtres</span>
           {activeFilterCount > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-azur-500 text-[10px] font-bold text-white">
+            <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-azur-500 text-[10px] font-bold text-white shadow-sm shadow-azur-500/30">
               {activeFilterCount}
             </span>
           )}
@@ -131,70 +132,50 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
         )}
       </div>
 
-      {/* Filter Dropdowns */}
-      {showFilters && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <FilterSelect
-            label="Ville"
-            options={CITIES}
-            value={filters.city || ""}
-            onChange={(v) => updateFilter("city", v)}
-          />
-          <FilterSelect
-            label="Type"
-            options={TYPES}
-            value={filters.type || ""}
-            onChange={(v) => updateFilter("type", v)}
-          />
-          <FilterSelect
-            label="Vibe"
-            options={VIBES}
-            value={filters.vibe || ""}
-            onChange={(v) => updateFilter("vibe", v)}
-          />
-          <FilterSelect
-            label="Budget"
-            options={BUDGETS}
-            value={filters.budget || ""}
-            onChange={(v) => updateFilter("budget", v)}
-          />
-        </div>
-      )}
-
-      {/* Active Filters as Chips */}
-      {activeFilterCount > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {filters.city && (
-            <FilterChip
-              label={`Ville: ${filters.city}`}
-              onRemove={() => updateFilter("city", "")}
-            />
-          )}
-          {filters.type && (
-            <FilterChip
-              label={`Type: ${TYPES.find((t) => t.value === filters.type)?.label || filters.type}`}
-              onRemove={() => updateFilter("type", "")}
-            />
-          )}
-          {filters.vibe && (
-            <FilterChip
-              label={`Vibe: ${VIBES.find((v) => v.value === filters.vibe)?.label || filters.vibe}`}
-              onRemove={() => updateFilter("vibe", "")}
-            />
-          )}
-          {filters.budget && (
-            <FilterChip
-              label={`Budget: ${BUDGETS.find((b) => b.value === filters.budget)?.label || filters.budget}`}
-              onRemove={() => updateFilter("budget", "")}
-            />
-          )}
-        </div>
-      )}
+      {/* Filter Chip Rows */}
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-3 pt-1">
+              <FilterChipRow
+                label="Ville"
+                options={CITIES}
+                value={filters.city || ""}
+                onChange={(v) => updateFilter("city", v)}
+              />
+              <FilterChipRow
+                label="Type"
+                options={TYPES}
+                value={filters.type || ""}
+                onChange={(v) => updateFilter("type", v)}
+              />
+              <FilterChipRow
+                label="Vibe"
+                options={VIBES}
+                value={filters.vibe || ""}
+                onChange={(v) => updateFilter("vibe", v)}
+              />
+              <FilterChipRow
+                label="Budget"
+                options={BUDGETS}
+                value={filters.budget || ""}
+                onChange={(v) => updateFilter("budget", v)}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-function FilterSelect({
+function FilterChipRow({
   label,
   options,
   value,
@@ -206,41 +187,28 @@ function FilterSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="space-y-1">
-      <label className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+    <div className="flex items-center gap-3">
+      <span className="w-14 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
         {label}
-      </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="input-field appearance-none cursor-pointer pr-8 text-xs"
-      >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value} className="bg-white">
-            {opt.label}
-          </option>
-        ))}
-      </select>
+      </span>
+      <div className="flex gap-1.5 overflow-x-auto scrollbar-thin pb-0.5">
+        {options.map((opt) => {
+          const isActive = value === opt.value;
+          return (
+            <button
+              key={opt.value}
+              onClick={() => onChange(opt.value)}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                isActive
+                  ? "bg-gradient-to-r from-azur-600 to-azur-500 text-white shadow-md shadow-azur-500/25"
+                  : "bg-white/60 text-slate-600 ring-1 ring-white/80 backdrop-blur-sm hover:bg-white hover:text-slate-900 hover:shadow-sm"
+              }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
-  );
-}
-
-function FilterChip({
-  label,
-  onRemove,
-}: {
-  label: string;
-  onRemove: () => void;
-}) {
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-azur-100 px-3 py-1 text-xs font-medium text-azur-700">
-      {label}
-      <button
-        onClick={onRemove}
-        className="rounded-full p-0.5 transition-colors hover:bg-azur-200"
-      >
-        <X className="h-3 w-3" />
-      </button>
-    </span>
   );
 }

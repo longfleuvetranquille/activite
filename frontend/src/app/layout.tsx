@@ -1,6 +1,6 @@
 "use client";
 
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,11 +15,19 @@ import {
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import "./globals.css";
 
-const inter = Inter({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-body",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-serif",
 });
 
 const NAV_ITEMS = [
@@ -93,19 +101,20 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased scrollbar-thin`}
+        className={`${plusJakarta.variable} ${instrumentSerif.variable} font-sans antialiased scrollbar-thin`}
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
-          <aside className="glass-nav fixed left-0 top-0 z-40 hidden h-full w-64 flex-col lg:flex">
+          <aside className="sidebar-dark fixed left-0 top-0 z-40 hidden h-full w-64 flex-col lg:flex">
             <SidebarContent pathname={pathname} onNavigate={() => {}} />
           </aside>
 
           {/* Mobile Header */}
           <header className="glass-header fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between px-4 lg:hidden">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500">
                 <Sun className="h-5 w-5 text-white" />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 opacity-40 blur-lg" />
               </div>
               <span className="text-lg font-bold text-slate-900">
                 Nice Outside
@@ -113,7 +122,7 @@ export default function RootLayout({
             </Link>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-all hover:bg-azur-50 hover:text-azur-600 shadow-inner"
+              className="flex h-10 w-10 items-center justify-center rounded-2xl border border-black/[0.06] bg-white/80 text-slate-500 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-azur-600 hover:shadow-md"
               aria-label="Toggle navigation"
             >
               {sidebarOpen ? (
@@ -132,15 +141,15 @@ export default function RootLayout({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm lg:hidden"
+                  className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md lg:hidden"
                   onClick={() => setSidebarOpen(false)}
                 />
                 <motion.aside
-                  initial={{ x: -280 }}
+                  initial={{ x: -288 }}
                   animate={{ x: 0 }}
-                  exit={{ x: -280 }}
+                  exit={{ x: -288 }}
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="glass-nav fixed left-0 top-0 z-50 flex h-full w-72 flex-col shadow-lg lg:hidden"
+                  className="sidebar-dark fixed left-0 top-0 z-50 flex h-full w-72 flex-col shadow-elevated-lg lg:hidden"
                 >
                   <SidebarContent
                     pathname={pathname}
@@ -150,6 +159,9 @@ export default function RootLayout({
               </>
             )}
           </AnimatePresence>
+
+          {/* Animated Background */}
+          <AnimatedBackground />
 
           {/* Main Content */}
           <main className="flex-1 pt-16 lg:pl-64 lg:pt-0">
@@ -173,58 +185,88 @@ function SidebarContent({
   return (
     <>
       {/* Logo */}
-      <div className="flex h-16 items-center gap-3 border-b border-white/40 px-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 shadow-lg shadow-azur-500/20">
+      <div className="flex h-16 items-center gap-3 border-b border-white/[0.06] px-5">
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 shadow-lg shadow-azur-500/30">
           <Sun className="h-5 w-5 text-white" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-coral-500 to-azur-500 opacity-50 blur-xl animate-glow-pulse" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-slate-900">Nice Outside</h1>
-          <p className="text-[10px] uppercase tracking-widest text-slate-400">
+          <h1 className="font-serif text-lg text-white">Nice Outside</h1>
+          <p className="text-[10px] uppercase tracking-widest text-white/40">
             Cote d&apos;Azur
           </p>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map((item) => {
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/" && pathname.startsWith(item.href));
-          const Icon = item.icon;
+      <nav className="flex-1 px-3 py-5">
+        <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/30">
+          Navigation
+        </p>
+        <div className="space-y-1">
+          {NAV_ITEMS.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
+            const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                isActive
-                  ? "bg-azur-50 text-azur-700"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
-            >
-              <Icon
-                className={`h-[18px] w-[18px] transition-colors ${
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onNavigate}
+                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-300 ${
                   isActive
-                    ? "text-azur-600"
-                    : "text-slate-400 group-hover:text-slate-600"
+                    ? "text-white"
+                    : "text-white/50 hover:text-white/80"
                 }`}
-              />
-              {item.label}
-              {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-azur-600" />
-              )}
-            </Link>
-          );
-        })}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-active"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-azur-600/20 via-coral-500/10 to-transparent"
+                    transition={{
+                      type: "spring",
+                      stiffness: 350,
+                      damping: 30,
+                    }}
+                  />
+                )}
+                <div
+                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300 ${
+                    isActive
+                      ? "bg-azur-500/20 text-azur-400"
+                      : "text-white/40 group-hover:bg-white/5 group-hover:text-white/70"
+                  }`}
+                >
+                  <Icon className="h-[18px] w-[18px]" />
+                </div>
+                <span className="relative z-10">{item.label}</span>
+                {isActive && (
+                  <div className="absolute right-3 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-coral-500 shadow-sm shadow-coral-500/50" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-white/40 px-5 py-4">
-        <p className="text-xs text-slate-400">
-          v0.1.0 &middot; Nice, France
-        </p>
+      <div className="border-t border-white/[0.06] px-4 py-4">
+        <div className="rounded-xl bg-white/[0.04] px-3 py-2.5">
+          <div className="flex items-center gap-2">
+            <div className="relative h-2 w-2">
+              <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
+              <div className="relative h-2 w-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
+            </div>
+            <p className="text-[11px] font-medium text-white/50">
+              Systeme actif
+            </p>
+          </div>
+          <p className="mt-1 text-[10px] text-white/25">
+            v0.1.0 &middot; Nice, France
+          </p>
+        </div>
       </div>
     </>
   );
