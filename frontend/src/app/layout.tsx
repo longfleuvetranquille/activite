@@ -1,6 +1,6 @@
 "use client";
 
-import { Outfit, Instrument_Serif } from "next/font/google";
+import { Outfit, Instrument_Serif, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -28,6 +28,12 @@ const instrumentSerif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-serif",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-logo",
 });
 
 const NAV_ITEMS = [
@@ -101,7 +107,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${outfit.variable} ${instrumentSerif.variable} font-sans antialiased scrollbar-thin`}
+        className={`${outfit.variable} ${instrumentSerif.variable} ${playfair.variable} font-sans antialiased scrollbar-thin`}
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
@@ -116,7 +122,7 @@ export default function RootLayout({
                 <TreePalm className="h-5 w-5 text-white" />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500 opacity-40 blur-lg" />
               </div>
-              <span className="text-lg font-bold text-slate-900">
+              <span className="font-[family-name:var(--font-logo)] text-xl font-semibold tracking-wide text-slate-900">
                 Palmier
               </span>
             </Link>
@@ -191,10 +197,7 @@ function SidebarContent({
           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-champagne-500 to-olive-500 opacity-50 blur-xl animate-glow-pulse" />
         </div>
         <div>
-          <h1 className="font-serif text-lg text-white">Palmier</h1>
-          <p className="text-[10px] uppercase tracking-widest text-white/40">
-            La Croisette
-          </p>
+          <h1 className="font-[family-name:var(--font-logo)] text-xl font-semibold tracking-wide text-white">Palmier</h1>
         </div>
       </div>
 

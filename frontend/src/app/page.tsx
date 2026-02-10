@@ -21,6 +21,7 @@ import { getDashboardDigest, getDashboardStats, triggerCrawl, getCrawlStatus } f
 import EventCard from "@/components/EventCard";
 import TimelessSection from "@/components/TimelessSection";
 import DateIdeasSection from "@/components/DateIdeasSection";
+import FoodGuideSection from "@/components/FoodGuideSection";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -338,6 +339,15 @@ export default function DashboardPage() {
         transition={{ delay: 0.7 }}
       >
         <DateIdeasSection />
+      </motion.section>
+
+      {/* Food & Drink Guide */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
+        <FoodGuideSection />
       </motion.section>
 
       {/* Empty state */}
