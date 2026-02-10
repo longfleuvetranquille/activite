@@ -20,6 +20,7 @@ import type { DashboardDigest, DashboardStats } from "@/types";
 import { getDashboardDigest, getDashboardStats, triggerCrawl, getCrawlStatus } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import TimelessSection from "@/components/TimelessSection";
+import DateIdeasSection from "@/components/DateIdeasSection";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -328,6 +329,15 @@ export default function DashboardPage() {
         transition={{ delay: 0.6 }}
       >
         <TimelessSection />
+      </motion.section>
+
+      {/* Date Ideas */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+      >
+        <DateIdeasSection />
       </motion.section>
 
       {/* Empty state */}
