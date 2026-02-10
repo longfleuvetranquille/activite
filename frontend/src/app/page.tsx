@@ -22,6 +22,7 @@ import EventCard from "@/components/EventCard";
 import TimelessSection from "@/components/TimelessSection";
 import DateIdeasSection from "@/components/DateIdeasSection";
 import FoodGuideSection from "@/components/FoodGuideSection";
+import BeachSection from "@/components/BeachSection";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -348,6 +349,15 @@ export default function DashboardPage() {
         transition={{ delay: 0.8 }}
       >
         <FoodGuideSection />
+      </motion.section>
+
+      {/* Beaches */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9 }}
+      >
+        <BeachSection />
       </motion.section>
 
       {/* Empty state */}
