@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from datetime import datetime
 
@@ -16,28 +17,30 @@ _crawl_state = {
 }
 
 
-@router.post("/trigger", response_model=CrawlTriggerResponse)
-async def trigger_crawl():
-    if _crawl_state["is_running"]:
-        return CrawlTriggerResponse(message="Crawl already in progress")
-
-    # Import here to avoid circular imports
+async def _run_crawl_background():
+    """Run crawl pipeline in background and update state."""
     from app.scheduler.jobs import run_crawl_pipeline
-
-    job_id = str(uuid.uuid4())[:8]
-    _crawl_state["is_running"] = True
 
     try:
         await run_crawl_pipeline()
         _crawl_state["last_run"] = datetime.now()
         _crawl_state["last_status"] = "success"
-    except Exception as e:
+    except Exception:
         _crawl_state["last_status"] = "error"
-        return CrawlTriggerResponse(message=f"Crawl failed: {e}", job_id=job_id)
     finally:
         _crawl_state["is_running"] = False
 
-    return CrawlTriggerResponse(message="Crawl completed", job_id=job_id)
+
+@router.post("/trigger", response_model=CrawlTriggerResponse)
+async def trigger_crawl():
+    if _crawl_state["is_running"]:
+        return CrawlTriggerResponse(message="Crawl already in progress")
+
+    job_id = str(uuid.uuid4())[:8]
+    _crawl_state["is_running"] = True
+    asyncio.create_task(_run_crawl_background())
+
+    return CrawlTriggerResponse(message="Crawl started", job_id=job_id)
 
 
 @router.post("/dedup")

@@ -9,9 +9,10 @@ from app.crawlers.base import BaseCrawler, CrawledEvent
 
 logger = logging.getLogger(__name__)
 
-# nice.fr WP REST API — 2143+ events with full ACF metadata
+# nice.fr WP REST API — 2000+ events with full ACF metadata
 API_BASE = "https://www.nice.fr/wp-json/wp/v2/events"
 PER_PAGE = 50
+MAX_PAGES = 10  # 500 events — covers recently modified/created events
 
 
 class NiceFrCrawler(BaseCrawler):
@@ -30,12 +31,18 @@ class NiceFrCrawler(BaseCrawler):
             async with httpx.AsyncClient(
                 timeout=30, follow_redirects=True
             ) as client:
-                # Fetch recent/upcoming events (3 pages = ~150 events)
-                for page_num in range(1, 4):
+                # Fetch events sorted by recently modified first
+                # This ensures upcoming events (often updated) are fetched early
+                for page_num in range(1, MAX_PAGES + 1):
                     logger.info("nice.fr API page %d", page_num)
                     resp = await client.get(
                         API_BASE,
-                        params={"per_page": PER_PAGE, "page": page_num},
+                        params={
+                            "per_page": PER_PAGE,
+                            "page": page_num,
+                            "orderby": "modified",
+                            "order": "desc",
+                        },
                         headers={"User-Agent": "NiceOutside/1.0"},
                     )
 
@@ -98,7 +105,6 @@ _SKIP_KEYWORDS = [
     "thé dansant",
     "the dansant",
     "loto",
-    "exposition",
     "réunion d'information",
     "reunion d'information",
     "permanence mutuelle",

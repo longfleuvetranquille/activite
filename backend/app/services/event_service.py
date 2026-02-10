@@ -102,16 +102,18 @@ async def get_week_events() -> list[EventRead]:
 async def get_weekend_events() -> list[EventRead]:
     now = datetime.now()
     weekday = now.weekday()  # 0=Mon ... 6=Sun
-    if weekday < 5:  # Mon-Fri: next Saturday
-        saturday = now + timedelta(days=(5 - weekday))
-    elif weekday == 5:  # Saturday: today
-        saturday = now
-    else:  # Sunday: today (show remaining Sunday)
-        saturday = now - timedelta(days=1)
-    sat_str = saturday.strftime("%Y-%m-%d")
-    monday = (saturday + timedelta(days=2)).strftime("%Y-%m-%d")
+    if weekday < 4:  # Mon-Thu: next Friday
+        friday = now + timedelta(days=(4 - weekday))
+    elif weekday == 4:  # Friday: today
+        friday = now
+    elif weekday == 5:  # Saturday: yesterday (Friday)
+        friday = now - timedelta(days=1)
+    else:  # Sunday: Friday before
+        friday = now - timedelta(days=2)
+    fri_str = friday.strftime("%Y-%m-%d")
+    monday = (friday + timedelta(days=3)).strftime("%Y-%m-%d")
     filter_str = (
-        f'date_start >= "{sat_str}" && date_start < "{monday}" '
+        f'date_start >= "{fri_str}" && date_start < "{monday}" '
         f'&& status = "published"'
     )
     result = await pb_client.list_records(
@@ -148,11 +150,26 @@ async def get_featured_events() -> list[EventRead]:
     )
     result = await pb_client.list_records(
         "events",
-        per_page=20,
+        per_page=50,
         sort="-interest_score",
         filter_str=filter_str,
     )
-    return [_to_event_read(r) for r in result.get("items", [])]
+    all_events = [_to_event_read(r) for r in result.get("items", [])]
+
+    # Diversify: limit to max 2 events per primary type tag to avoid
+    # the featured section being dominated by a single event category.
+    diversified: list[EventRead] = []
+    type_counts: dict[str, int] = {}
+    max_per_type = 2
+
+    for event in all_events:
+        primary_type = event.tags_type[0] if event.tags_type else "_none"
+        count = type_counts.get(primary_type, 0)
+        if count < max_per_type:
+            diversified.append(event)
+            type_counts[primary_type] = count + 1
+
+    return diversified
 
 
 async def get_best_events(limit: int = 20) -> list[EventRead]:

@@ -19,6 +19,8 @@ def _get_active_crawlers() -> list[BaseCrawler]:
     from app.crawlers.flight_deals import FlightDealsCrawler
     from app.crawlers.ogcn import OGCNCrawler
     from app.crawlers.nikaia import NikaiaCrawler
+    from app.crawlers.google import GoogleSearchCrawler
+    from app.crawlers.lino_ventura import LinoVenturaCrawler
 
     return [
         NiceFrCrawler(),
@@ -26,6 +28,8 @@ def _get_active_crawlers() -> list[BaseCrawler]:
         FlightDealsCrawler(),
         OGCNCrawler(),
         NikaiaCrawler(),
+        LinoVenturaCrawler(),
+        GoogleSearchCrawler(),
     ]
 
 

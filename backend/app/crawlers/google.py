@@ -18,8 +18,12 @@ class GoogleSearchCrawler(BaseCrawler):
         "sortie Nice ce soir",
         "événements Nice cette semaine",
         "soirée Nice ce weekend",
+        "que faire à Nice samedi",
+        "que faire à Nice dimanche",
+        "sortie weekend Nice Côte d'Azur",
         "activités Monaco cette semaine",
         "événements Cannes aujourd'hui",
+        "événements weekend Cannes Monaco",
     ]
 
     async def crawl(self) -> list[CrawledEvent]:

@@ -16,10 +16,14 @@ Voici un événement :
 - Description : {description}
 - Date : {date}
 - Lieu : {location_name}, {location_city}
-- Prix : {price_min}€ - {price_max}€
+- Prix : {price_info}
 
 Voici les catégories de tags disponibles avec leurs codes :
 {tag_reference}
+
+IMPORTANT pour les tags budget :
+- N'utilise le tag "free" (gratuit) QUE si tu es certain que l'événement est gratuit (mentionné explicitement dans le titre ou la description).
+- Si le prix est marqué "Inconnu", ne mets PAS "free". Tu peux laisser la catégorie budget vide ou mettre un autre tag budget si tu as assez d'indices.
 
 Retourne UNIQUEMENT un objet JSON avec les tags pertinents pour cet événement.
 Chaque clé est une catégorie, chaque valeur est une liste de codes de tags.
@@ -57,14 +61,21 @@ async def tag_event(event: CrawledEvent) -> dict[str, list[str]]:
 
     client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
+    # Build price info string: distinguish unknown from free
+    if event.price_min < 0 or (event.price_min == 0 and event.price_max == 0):
+        price_info = "Inconnu"
+    elif event.price_min == 0 and event.price_max > 0:
+        price_info = f"0€ - {event.price_max}€"
+    else:
+        price_info = f"{event.price_min}€ - {event.price_max}€"
+
     prompt = TAGGER_PROMPT.format(
         title=event.title,
         description=event.description or "Non disponible",
         date=event.date_start.strftime("%Y-%m-%d %H:%M"),
         location_name=event.location_name or "Non spécifié",
         location_city=event.location_city or "Nice",
-        price_min=event.price_min,
-        price_max=event.price_max,
+        price_info=price_info,
         tag_reference=_build_tag_reference(),
     )
 

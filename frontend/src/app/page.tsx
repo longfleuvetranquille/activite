@@ -5,6 +5,7 @@ import {
   CalendarDays,
   CalendarRange,
   Database,
+  Loader2,
   RefreshCw,
   Sparkles,
   TrendingUp,
@@ -16,7 +17,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 
 import type { DashboardDigest, DashboardStats } from "@/types";
-import { getDashboardDigest, getDashboardStats } from "@/lib/api";
+import { getDashboardDigest, getDashboardStats, triggerCrawl, getCrawlStatus } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 
 function getGreeting(): string {
@@ -31,6 +32,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [crawling, setCrawling] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -52,6 +54,42 @@ export default function DashboardPage() {
     }
     load();
   }, []);
+
+  async function reloadData() {
+    const [digestData, statsData] = await Promise.all([
+      getDashboardDigest(),
+      getDashboardStats(),
+    ]);
+    setDigest(digestData);
+    setStats(statsData);
+  }
+
+  async function handleCrawl() {
+    try {
+      setCrawling(true);
+      await triggerCrawl();
+      // Poll status every 3s until crawl finishes
+      await new Promise<void>((resolve, reject) => {
+        const interval = setInterval(async () => {
+          try {
+            const status = await getCrawlStatus();
+            if (!status.is_running) {
+              clearInterval(interval);
+              resolve();
+            }
+          } catch {
+            clearInterval(interval);
+            reject(new Error("Erreur lors du suivi du crawl"));
+          }
+        }, 3000);
+      });
+      await reloadData();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Erreur lors du crawl");
+    } finally {
+      setCrawling(false);
+    }
+  }
 
   if (loading) {
     return <DashboardSkeleton />;
@@ -89,12 +127,26 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-1"
+        className="flex items-start justify-between"
       >
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-          {getGreeting()} !
-        </h1>
-        <p className="text-sm capitalize text-slate-500">{today}</p>
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+            {getGreeting()} !
+          </h1>
+          <p className="text-sm capitalize text-slate-500">{today}</p>
+        </div>
+        <button
+          onClick={handleCrawl}
+          disabled={crawling}
+          className="btn-primary flex items-center gap-2 disabled:opacity-50"
+        >
+          {crawling ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
+          {crawling ? "Crawl en cours..." : "Lancer un crawl"}
+        </button>
       </motion.div>
 
       {/* Stats Cards */}

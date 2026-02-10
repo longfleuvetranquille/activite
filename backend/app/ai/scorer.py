@@ -14,7 +14,7 @@ Profil de l'utilisateur :
 - Centres d'intérêt : GP Monaco, Formule E, matchs de foot, poker privé, conférences tech, jet-ski, wakeboard, karting, rooftops, bars à cocktails, voyages pas chers, soirées électro
 - Aime : les soirées, les sports mécaniques et nautiques, les événements exclusifs, les bons plans, les festivals, la street food
 - Budget : préfère les bons rapports qualité/prix
-- N'aime PAS : cinémathèque, rétrospectives de films anciens, expositions classiques, conférences patrimoine, activités seniors (bridge, loto, thé dansant, chorale), ateliers pour retraités
+- N'aime PAS : cinémathèque, rétrospectives de films anciens, expositions classiques, conférences patrimoine, activités seniors (bridge, loto, thé dansant, chorale), ateliers pour retraités, hard bounce, hard trance, hard techno, rave
 
 Règles de scoring :
 - 80-100 : événement parfaitement adapté (soirée, sport, bon plan voyage, événement exclusif)
@@ -28,7 +28,7 @@ Règles de scoring :
 - Description : {description}
 - Date : {date}
 - Lieu : {location_name}, {location_city}
-- Prix : {price_min}€ - {price_max}€
+- Prix : {price_info}
 - Tags : {tags}
 
 Donne un score d'intérêt de 0 à 100 pour cet événement.
@@ -50,14 +50,21 @@ async def score_event(
     for tag_list in tags.values():
         all_tags.extend(tag_list)
 
+    # Build price info string: distinguish unknown from free
+    if event.price_min < 0 or (event.price_min == 0 and event.price_max == 0):
+        price_info = "Inconnu"
+    elif event.price_min == 0 and event.price_max > 0:
+        price_info = f"0€ - {event.price_max}€"
+    else:
+        price_info = f"{event.price_min}€ - {event.price_max}€"
+
     prompt = SCORER_PROMPT.format(
         title=event.title,
         description=event.description or "Non disponible",
         date=event.date_start.strftime("%Y-%m-%d %H:%M"),
         location_name=event.location_name or "Non spécifié",
         location_city=event.location_city or "Nice",
-        price_min=event.price_min,
-        price_max=event.price_max,
+        price_info=price_info,
         tags=", ".join(all_tags) or "aucun",
     )
 
