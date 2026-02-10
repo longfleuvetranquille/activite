@@ -73,7 +73,13 @@ async def run_crawl_pipeline():
             raw_events = await crawler.crawl()
             events_found = len(raw_events)
 
+            now = datetime.now()
+
             for raw in raw_events:
+                # Skip past events
+                if raw.date_start < now:
+                    continue
+
                 # Dedup: exact hash match
                 if await event_exists(
                     raw.title, raw.date_start.isoformat(), raw.location_name
@@ -169,6 +175,14 @@ async def run_crawl_pipeline():
         total_found += events_found
         total_new += events_new
 
+    # Expire past events still marked as published
+    try:
+        expired_past = await _expire_past_events()
+        if expired_past:
+            logger.info("Expired %d past events", expired_past)
+    except Exception:
+        logger.exception("Failed to expire past events")
+
     # Post-crawl dedup pass to catch any remaining duplicates
     try:
         purged = await purge_duplicates()
@@ -190,3 +204,33 @@ async def run_crawl_pipeline():
     logger.info(
         "Crawl pipeline complete: %d found, %d new", total_found, total_new
     )
+
+
+async def _expire_past_events() -> int:
+    """Set status='expired' on published events whose date_start is in the past."""
+    now_iso = datetime.now().isoformat()
+    expired = 0
+    page = 1
+
+    while True:
+        result = await pb_client.list_records(
+            "events",
+            page=page,
+            per_page=200,
+            filter_str=f'status = "published" && date_start < "{now_iso}"',
+        )
+        items = result.get("items", [])
+        if not items:
+            break
+
+        for item in items:
+            await pb_client.update_record(
+                "events", item["id"], {"status": "expired"}
+            )
+            expired += 1
+
+        if page >= result.get("totalPages", 1):
+            break
+        page += 1
+
+    return expired
