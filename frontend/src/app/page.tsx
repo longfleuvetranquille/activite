@@ -123,30 +123,49 @@ export default function DashboardPage() {
               title="A la une"
               subtitle="Les evenements les mieux notes"
             />
-            {digest.featured.length >= 3 ? (
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                {/* Featured hero — wide variant */}
-                <div className="lg:col-span-7">
-                  <EventCard
-                    event={digest.featured[0]}
-                    index={0}
-                    variant="wide"
-                  />
+            {(() => {
+              if (digest.featured.length < 3) {
+                return (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {digest.featured.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i} />
+                    ))}
+                  </div>
+                );
+              }
+
+              // Pick the first non-sport event for the wide hero card
+              const wideIdx = digest.featured.findIndex(
+                (e) => !(e.tags_type ?? []).includes("sport_match")
+              );
+
+              // If all featured are sport_match, fall back to regular grid
+              if (wideIdx < 0) {
+                return (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {digest.featured.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i} />
+                    ))}
+                  </div>
+                );
+              }
+
+              const wideEvent = digest.featured[wideIdx];
+              const rest = digest.featured.filter((_, i) => i !== wideIdx).slice(0, 2);
+
+              return (
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                  <div className="lg:col-span-7">
+                    <EventCard event={wideEvent} index={0} variant="wide" />
+                  </div>
+                  <div className="flex flex-col gap-4 lg:col-span-5">
+                    {rest.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i + 1} />
+                    ))}
+                  </div>
                 </div>
-                {/* Stacked pair */}
-                <div className="flex flex-col gap-4 lg:col-span-5">
-                  {digest.featured.slice(1, 3).map((event, i) => (
-                    <EventCard key={event.id} event={event} index={i + 1} />
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {digest.featured.map((event, i) => (
-                  <EventCard key={event.id} event={event} index={i} />
-                ))}
-              </div>
-            )}
+              );
+            })()}
           </motion.section>
         )}
 
