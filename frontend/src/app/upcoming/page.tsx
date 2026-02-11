@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
-import { getUpcomingEvents } from "@/lib/api";
+import { getUpcomingEvents, parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
@@ -16,7 +16,7 @@ function groupByMonth(events: Event[]): { label: string; events: Event[] }[] {
   const groups = new Map<string, Event[]>();
 
   for (const event of events) {
-    const date = new Date(event.date_start);
+    const date = parseEventDate(event.date_start);
     const key = `${date.getFullYear()}-${String(date.getMonth()).padStart(2, "0")}`;
     const existing = groups.get(key);
     if (existing) {
@@ -37,7 +37,7 @@ function groupByMonth(events: Event[]): { label: string; events: Event[] }[] {
     const monthEvents = groups.get(key)!;
     monthEvents.sort((a, b) => b.interest_score - a.interest_score);
 
-    return { label, events: monthEvents };
+    return { label, events: monthEvents.slice(0, 6) };
   });
 }
 

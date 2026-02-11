@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { differenceInCalendarWeeks } from "date-fns";
 
 import type { Event } from "@/types";
-import { getMonthEvents } from "@/lib/api";
+import { getMonthEvents, parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
@@ -16,7 +16,7 @@ function groupByWeek(events: Event[]): { label: string; events: Event[] }[] {
   const groups = new Map<number, Event[]>();
 
   for (const event of events) {
-    const date = new Date(event.date_start);
+    const date = parseEventDate(event.date_start);
     const weekOffset = differenceInCalendarWeeks(date, today, { weekStartsOn: 1 });
     const key = Math.max(0, weekOffset);
     const existing = groups.get(key);

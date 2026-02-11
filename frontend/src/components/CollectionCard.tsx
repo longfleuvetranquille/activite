@@ -33,7 +33,7 @@ export default function CollectionCard({
           <span className="text-2xl">{emoji}</span>
           <h3 className="font-serif text-lg text-slate-900">{title}</h3>
         </div>
-        <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+        <p className="mt-1 line-clamp-2 min-h-[2.625rem] text-[13px] leading-relaxed text-slate-500">
           {description}
         </p>
         <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-slate-400">

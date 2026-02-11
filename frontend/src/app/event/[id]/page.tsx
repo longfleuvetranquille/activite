@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
-import { getEvent } from "@/lib/api";
+import { getEvent, parseEventDate } from "@/lib/api";
 import TagBadge from "@/components/TagBadge";
 import MapView from "@/components/MapView";
 import { TYPE_STYLES } from "@/components/EventCard";
@@ -80,11 +80,11 @@ export default function EventDetailPage() {
   const typeStyle = TYPE_STYLES[firstType] || DEFAULT_STYLE;
   const isSportWithLogo = firstType === "sport_match" && !!event.image_url;
 
-  const dateStart = new Date(event.date_start);
+  const dateStart = parseEventDate(event.date_start);
   const formattedDate = format(dateStart, "EEEE d MMMM yyyy", { locale: fr });
   const formattedTime = format(dateStart, "HH:mm");
   const formattedDateEnd = event.date_end
-    ? format(new Date(event.date_end), "HH:mm")
+    ? format(parseEventDate(event.date_end), "HH:mm")
     : null;
 
   const priceDisplay =

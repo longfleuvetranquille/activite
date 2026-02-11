@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { getDay } from "date-fns";
 
 import type { Event } from "@/types";
-import { getWeekendEvents } from "@/lib/api";
+import { getWeekendEvents, parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
@@ -19,7 +19,7 @@ function groupByWeekendDay(events: Event[]): { label: string; events: Event[] }[
   };
 
   for (const event of events) {
-    const day = getDay(new Date(event.date_start));
+    const day = getDay(parseEventDate(event.date_start));
     if (day === 5) {
       buckets["Vendredi soir"].push(event);
     } else if (day === 6) {

@@ -7,7 +7,7 @@ import { startOfDay, isToday, isTomorrow, format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
-import { getWeekEvents } from "@/lib/api";
+import { getWeekEvents, parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
@@ -16,7 +16,7 @@ function groupByDay(events: Event[]): { label: string; events: Event[] }[] {
   const groups = new Map<number, Event[]>();
 
   for (const event of events) {
-    const date = new Date(event.date_start);
+    const date = parseEventDate(event.date_start);
     const key = startOfDay(date).getTime();
     const existing = groups.get(key);
     if (existing) {

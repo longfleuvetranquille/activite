@@ -11,6 +11,16 @@ import type {
   CrawlStatusResponse,
 } from "@/types";
 
+/**
+ * Parse a PocketBase datetime as local French time.
+ * PocketBase stores naive datetimes with a Z suffix, but crawlers
+ * record local Europe/Paris times. Stripping the Z makes JS treat
+ * the value as local time (correct when browser is in CET/CEST).
+ */
+export function parseEventDate(iso: string): Date {
+  return new Date(iso.replace(/Z$/i, ""));
+}
+
 function getApiBase(): string {
   if (typeof window !== "undefined") {
     return `http://${window.location.hostname}:8000`;

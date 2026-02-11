@@ -13,6 +13,7 @@ import Link from "next/link";
 
 import type { DashboardDigest, Event } from "@/types";
 import { getDashboardDigest, getTodayEvents, getWeekendEvents } from "@/lib/api";
+import { parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import HeroSection from "@/components/HeroSection";
 import HorizontalCarousel from "@/components/HorizontalCarousel";
@@ -114,7 +115,7 @@ export default function DashboardPage() {
                 emoji={"\u2764\uFE0F"}
                 title="Idees de date"
                 description="Les meilleurs spots pour un rendez-vous"
-                count={10}
+                count={11}
                 href="#dates"
                 gradient="from-rose-50 to-pink-50"
               />
@@ -164,7 +165,7 @@ export default function DashboardPage() {
                 emoji={"\uD83C\uDFD6\uFE0F"}
                 title="Plages & criques"
                 description="Spots secrets et plages paradisiaques"
-                count={7}
+                count={8}
                 href="#beaches"
                 gradient="from-sky-50 to-cyan-50"
               />
@@ -411,7 +412,7 @@ function SectionHeader({
 }
 
 function FlightDealCard({ event, index }: { event: Event; index: number }) {
-  const dateStart = new Date(event.date_start);
+  const dateStart = parseEventDate(event.date_start);
   const formattedDate = format(dateStart, "EEE d MMM", { locale: fr });
 
   const priceDisplay =

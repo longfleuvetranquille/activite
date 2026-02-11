@@ -265,7 +265,7 @@ function SpotCard({ spot, index }: { spot: Spot; index: number }) {
 
 export default function FoodGuideSection() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-12 sm:space-y-16">
       {FOOD_CATEGORIES.map((category) => {
         return (
           <div key={category.id} id={category.id}>

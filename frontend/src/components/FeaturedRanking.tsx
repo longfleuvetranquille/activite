@@ -7,6 +7,7 @@ import { fr } from "date-fns/locale";
 import { motion } from "framer-motion";
 
 import type { Event } from "@/types";
+import { parseEventDate } from "@/lib/api";
 import TagBadge from "./TagBadge";
 
 export default function FeaturedRanking({ events }: { events: Event[] }) {
@@ -20,7 +21,7 @@ export default function FeaturedRanking({ events }: { events: Event[] }) {
 }
 
 function FeaturedRow({ event, rank }: { event: Event; rank: number }) {
-  const dateStart = new Date(event.date_start);
+  const dateStart = parseEventDate(event.date_start);
   const formattedDate = format(dateStart, "EEEE d MMM", { locale: fr });
   const formattedTime = format(dateStart, "HH:mm");
 

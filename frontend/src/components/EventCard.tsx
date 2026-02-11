@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { format } from "date-fns";
+import { parseEventDate } from "@/lib/api";
 import { fr } from "date-fns/locale";
 import { motion } from "framer-motion";
 
@@ -58,7 +59,7 @@ export default function EventCard({
   index = 0,
   variant = "default",
 }: EventCardProps) {
-  const dateStart = new Date(event.date_start);
+  const dateStart = parseEventDate(event.date_start);
   const formattedDate = format(dateStart, "EEE d MMM", { locale: fr });
   const formattedTime = format(dateStart, "HH:mm");
 
