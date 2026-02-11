@@ -111,7 +111,7 @@ export default function RootLayout({
           name="description"
           content="Decouvre les meilleures activites a Cannes et sur la Cote d'Azur"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="theme-color" content="#C49A4C" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -129,7 +129,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${instrumentSerif.variable} ${bodoniModa.variable} font-sans antialiased scrollbar-thin`}
       >
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen overflow-x-hidden">
           {/* Desktop Sidebar */}
           <aside className="sidebar-dark fixed left-0 top-0 z-40 hidden h-full w-64 flex-col lg:flex">
             <SidebarContent pathname={pathname} onNavigate={() => {}} onCrawl={handleCrawl} crawling={crawling} />
@@ -192,7 +192,7 @@ export default function RootLayout({
           <AnimatedBackground />
 
           {/* Main Content */}
-          <main className="flex-1 pt-16 lg:pl-64 lg:pt-0">
+          <main className="flex-1 overflow-x-hidden pt-16 lg:pl-64 lg:pt-0">
             {children}
           </main>
         </div>
