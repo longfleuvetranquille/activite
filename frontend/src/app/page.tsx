@@ -444,22 +444,27 @@ function FlightDealCard({ event, index }: { event: Event; index: number }) {
 function DashboardSkeleton() {
   return (
     <div>
-      {/* Hero skeleton — compact */}
-      <div className="relative min-h-[280px] overflow-hidden bg-gradient-to-b from-[#0f0d2e] via-[#112228] to-[#0f0d2e]">
-        {/* Glass card shimmer — bottom left */}
-        <div className="relative flex min-h-[280px] flex-col justify-end pb-16 sm:pb-20">
-          <div className="content-container">
-            <div className="inline-block rounded-2xl bg-white/[0.06] backdrop-blur-sm px-6 py-5 sm:px-8 sm:py-6 space-y-4">
-              <div className="h-10 w-72 max-w-full rounded-xl bg-white/10 shimmer" />
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-7 w-20 rounded-full bg-white/10 shimmer" />
-                ))}
-              </div>
-            </div>
+      {/* Hero skeleton — newspaper style */}
+      <div className="bg-[#FAF8F3]">
+        <div className="content-container pb-6 pt-6 sm:pt-8">
+          {/* Meta row */}
+          <div className="flex items-center justify-between">
+            <div className="h-3 w-40 rounded bg-champagne-200/50 shimmer" />
+            <div className="h-3 w-24 rounded bg-champagne-200/50 shimmer" />
+          </div>
+          {/* Thick divider */}
+          <div className="mt-3 h-[3px] bg-champagne-200/30 shimmer" />
+          {/* Masthead */}
+          <div className="mx-auto mt-6 h-14 w-56 rounded-lg bg-champagne-200/40 shimmer sm:h-16 sm:w-64" />
+          {/* Tagline */}
+          <div className="mx-auto mt-4 h-5 w-52 rounded bg-champagne-200/30 shimmer" />
+          {/* Pills */}
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-8 w-24 rounded-full border border-champagne-200/40 bg-champagne-100/20 shimmer" />
+            ))}
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/80 to-transparent" />
       </div>
 
       {/* Content skeleton */}
