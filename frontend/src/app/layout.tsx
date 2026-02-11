@@ -54,7 +54,7 @@ const NAV_ITEMS = [
   },
   {
     href: "/month",
-    label: "Ce mois",
+    label: "Le mois a venir",
     icon: CalendarClock,
   },
 ];
@@ -272,152 +272,126 @@ function SidebarContent({
         </div>
       </nav>
 
-      {/* Decorative palm tree — realistic pinnate coconut palm */}
+      {/* Decorative palm tree — Côte d'Azur silhouette */}
       <div className="flex flex-1 items-end justify-center overflow-hidden">
         <svg
-          viewBox="0 0 300 580"
+          viewBox="0 0 200 520"
           xmlns="http://www.w3.org/2000/svg"
           className="h-full max-h-[460px] w-auto"
-          style={{ opacity: 0.13 }}
+          style={{ opacity: 0.14 }}
         >
-          {/* Trunk — graceful curve with taper */}
+          {/* Trunk — gentle S-curve, tapered */}
           <path
-            d="M142 570 C140 535 137 500 138 465 C140 425 147 388 152 350
-               C156 312 155 278 153 245 C151 215 149 190 150 165"
-            fill="none" stroke="url(#pt)" strokeWidth="14" strokeLinecap="round"
+            d="M96 505 C94 465 92 400 93 345 C95 290 97 240 97 195
+               C97 178 97 167 97 162"
+            fill="none" stroke="url(#pt)" strokeWidth="12" strokeLinecap="round"
           />
-          {/* Trunk inner highlight */}
           <path
-            d="M142 570 C140 535 137 500 138 465 C140 425 147 388 152 350
-               C156 312 155 278 153 245 C151 215 149 190 150 165"
-            fill="none" stroke="url(#pt-hi)" strokeWidth="5" strokeLinecap="round" opacity="0.12"
+            d="M96 505 C94 465 92 400 93 345 C95 290 97 240 97 195
+               C97 178 97 167 97 162"
+            fill="none" stroke="url(#pt-hi)" strokeWidth="4" strokeLinecap="round" opacity="0.15"
           />
           {/* Bark rings */}
-          {Array.from({ length: 36 }, (_, i) => {
-            const t = i / 35;
-            const y = 560 - t * 400;
-            const x = 142 + Math.sin(t * 3.5) * 11 - t * 1;
-            const w = 7.5 - t * 2;
+          {Array.from({ length: 28 }, (_, i) => {
+            const t = i / 27;
+            const y = 498 - t * 340;
+            const x = 96 + Math.sin(t * 3) * 2.5 - t * 1;
+            const w = 6.5 - t * 1.5;
             return (
               <path
-                key={`bark-${i}`}
-                d={`M${x - w} ${y} Q${x} ${y - 1.8} ${x + w} ${y}`}
-                fill="none" stroke="url(#pt)" strokeWidth="0.6" opacity={0.12 + (i % 2) * 0.06}
+                key={`b-${i}`}
+                d={`M${x - w} ${y} Q${x} ${y - 1.5} ${x + w} ${y}`}
+                fill="none" stroke="url(#pt)" strokeWidth="0.5" opacity={0.12}
               />
             );
           })}
-          {/* Coconut cluster */}
-          <ellipse cx="146" cy="163" rx="5.5" ry="6" fill="url(#pc)" />
-          <ellipse cx="155" cy="161" rx="5" ry="5.5" fill="url(#pc)" />
-          <ellipse cx="150" cy="157" rx="4.5" ry="5" fill="url(#pc)" />
-          {/* ——— Pinnate fronds with cubic bezier rachis & true-perpendicular leaflets ——— */}
+          {/* Coconuts */}
+          <ellipse cx="94" cy="160" rx="4.5" ry="5" fill="url(#pc)" />
+          <ellipse cx="102" cy="158" rx="4" ry="4.5" fill="url(#pc)" />
+          <ellipse cx="98" cy="155" rx="3.5" ry="4" fill="url(#pc)" />
+          {/* ——— Filled fronds — Côte d'Azur palm silhouette ——— */}
           {(() => {
-            // Crown origin
-            const ox = 150, oy = 160;
-
-            // Each frond: angle (degrees from up), length, gravity droop, leaflet count
+            const ox = 98, oy = 158;
             const fronds = [
-              // Left side — heavy droop on outermost
-              { a: -165, len: 145, droop: 55, lc: 15 },
-              { a: -140, len: 160, droop: 42, lc: 16 },
-              { a: -115, len: 150, droop: 25, lc: 15 },
-              { a: -88,  len: 135, droop: 12, lc: 14 },
-              { a: -60,  len: 120, droop: 4,  lc: 12 },
-              // Right side — mirror
-              { a: 165,  len: 140, droop: 52, lc: 15 },
-              { a: 140,  len: 155, droop: 40, lc: 16 },
-              { a: 115,  len: 148, droop: 22, lc: 15 },
-              { a: 88,   len: 130, droop: 10, lc: 13 },
-              { a: 60,   len: 118, droop: 3,  lc: 12 },
-              // Top cluster — upright, shorter
-              { a: -30,  len: 105, droop: 0,  lc: 11 },
-              { a: 30,   len: 100, droop: 0,  lc: 11 },
-              { a: 5,    len: 88,  droop: 0,  lc: 10 },
+              // Back layer (lower opacity = depth)
+              { a: -168, l: 138, d: 52, w: 8,  o: 0.38 },
+              { a: -128, l: 148, d: 28, w: 9,  o: 0.42 },
+              { a: -95,  l: 132, d: 10, w: 8,  o: 0.38 },
+              { a: 168,  l: 134, d: 50, w: 8,  o: 0.38 },
+              { a: 128,  l: 145, d: 26, w: 9,  o: 0.42 },
+              { a: 95,   l: 130, d: 8,  w: 8,  o: 0.38 },
+              // Front layer
+              { a: -160, l: 144, d: 48, w: 9,  o: 0.7 },
+              { a: -138, l: 158, d: 36, w: 10, o: 0.78 },
+              { a: -112, l: 148, d: 20, w: 9,  o: 0.72 },
+              { a: -82,  l: 130, d: 7,  w: 8,  o: 0.65 },
+              { a: -55,  l: 114, d: 1,  w: 7,  o: 0.6 },
+              { a: 160,  l: 140, d: 46, w: 9,  o: 0.7 },
+              { a: 138,  l: 155, d: 34, w: 10, o: 0.78 },
+              { a: 112,  l: 146, d: 18, w: 9,  o: 0.72 },
+              { a: 82,   l: 128, d: 5,  w: 8,  o: 0.65 },
+              { a: 55,   l: 110, d: 0,  w: 7,  o: 0.6 },
+              // Top cluster
+              { a: -28,  l: 98,  d: 0,  w: 6.5, o: 0.55 },
+              { a: 28,   l: 94,  d: 0,  w: 6.5, o: 0.55 },
+              { a: -5,   l: 82,  d: 0,  w: 6,  o: 0.5 },
+              { a: 10,   l: 78,  d: 0,  w: 6,  o: 0.5 },
             ];
-
             const els: React.ReactElement[] = [];
-
-            fronds.forEach((f, fi) => {
+            fronds.forEach((f, i) => {
               const rad = (f.a * Math.PI) / 180;
-              const c = Math.cos(rad), s = Math.sin(rad);
-
-              // Cubic bezier control points for rachis
-              // P0: crown, P1: initial direction, P2: midway + gravity, P3: tip + full droop
-              const p0x = ox, p0y = oy;
-              const p1x = ox + c * f.len * 0.35, p1y = oy + s * f.len * 0.35 + f.droop * 0.05;
-              const p2x = ox + c * f.len * 0.7,  p2y = oy + s * f.len * 0.7 + f.droop * 0.55;
-              const p3x = ox + c * f.len,         p3y = oy + s * f.len + f.droop;
-
-              // Rachis stroke
+              const cos = Math.cos(rad), sin = Math.sin(rad);
+              const nx = -sin, ny = cos;
+              // Crown attachment points
+              const s1x = ox + nx * f.w * 0.25, s1y = oy + ny * f.w * 0.25;
+              const s2x = ox - nx * f.w * 0.25, s2y = oy - ny * f.w * 0.25;
+              // Tip
+              const tx = ox + cos * f.l, ty = oy + sin * f.l + f.d;
+              // Outer edge cubic bezier controls
+              const oc1x = ox + cos * f.l * 0.3 + nx * f.w * 0.85;
+              const oc1y = oy + sin * f.l * 0.3 + ny * f.w * 0.85 + f.d * 0.06;
+              const oc2x = ox + cos * f.l * 0.65 + nx * f.w * 0.45;
+              const oc2y = oy + sin * f.l * 0.65 + ny * f.w * 0.45 + f.d * 0.45;
+              // Inner edge cubic bezier controls
+              const ic1x = ox + cos * f.l * 0.65 - nx * f.w * 0.45;
+              const ic1y = oy + sin * f.l * 0.65 - ny * f.w * 0.45 + f.d * 0.45;
+              const ic2x = ox + cos * f.l * 0.3 - nx * f.w * 0.85;
+              const ic2y = oy + sin * f.l * 0.3 - ny * f.w * 0.85 + f.d * 0.06;
+              // Filled frond shape
               els.push(
                 <path
-                  key={`rc-${fi}`}
-                  d={`M${p0x} ${p0y} C${p1x} ${p1y} ${p2x} ${p2y} ${p3x} ${p3y}`}
-                  fill="none" stroke="url(#pf)" strokeWidth="2.2" strokeLinecap="round" opacity="0.85"
+                  key={`f-${i}`}
+                  d={`M${s1x} ${s1y} C${oc1x} ${oc1y} ${oc2x} ${oc2y} ${tx} ${ty} C${ic1x} ${ic1y} ${ic2x} ${ic2y} ${s2x} ${s2y} Z`}
+                  fill="url(#pf)"
+                  opacity={f.o}
                 />
               );
-
-              // Leaflets along the rachis
-              for (let li = 1; li <= f.lc; li++) {
-                const t = li / (f.lc + 1);
-                const mt = 1 - t;
-
-                // Point on cubic bezier at parameter t
-                const bx = mt*mt*mt*p0x + 3*mt*mt*t*p1x + 3*mt*t*t*p2x + t*t*t*p3x;
-                const by = mt*mt*mt*p0y + 3*mt*mt*t*p1y + 3*mt*t*t*p2y + t*t*t*p3y;
-
-                // Tangent vector (derivative of cubic bezier)
-                const dx = 3*mt*mt*(p1x-p0x) + 6*mt*t*(p2x-p1x) + 3*t*t*(p3x-p2x);
-                const dy = 3*mt*mt*(p1y-p0y) + 6*mt*t*(p2y-p1y) + 3*t*t*(p3y-p2y);
-                const dLen = Math.sqrt(dx*dx + dy*dy) || 1;
-
-                // Normal (perpendicular to tangent)
-                const nx = -dy / dLen, ny = dx / dLen;
-
-                // Leaflet length: bell-curve distribution, peak at ~40% of rachis
-                const leafLen = (18 + 16 * Math.sin(t * Math.PI * 0.95)) * (1 - t * 0.2);
-                const sw = 1.3 - t * 0.4; // stroke width tapers
-                const op = 0.72 - t * 0.15; // opacity fades toward tip
-
-                // Left leaflet — slight gravity droop
-                const llTipX = bx + nx * leafLen;
-                const llTipY = by + ny * leafLen + leafLen * 0.12;
+              // Central spine on front-layer fronds
+              if (f.o >= 0.55) {
                 els.push(
                   <path
-                    key={`ll-${fi}-${li}`}
-                    d={`M${bx} ${by} Q${bx + nx * leafLen * 0.55} ${by + ny * leafLen * 0.55 + leafLen * 0.04} ${llTipX} ${llTipY}`}
-                    fill="none" stroke="url(#pf)" strokeWidth={sw} strokeLinecap="round" opacity={op}
-                  />
-                );
-
-                // Right leaflet
-                const rlTipX = bx - nx * leafLen;
-                const rlTipY = by - ny * leafLen + leafLen * 0.12;
-                els.push(
-                  <path
-                    key={`rl-${fi}-${li}`}
-                    d={`M${bx} ${by} Q${bx - nx * leafLen * 0.55} ${by - ny * leafLen * 0.55 + leafLen * 0.04} ${rlTipX} ${rlTipY}`}
-                    fill="none" stroke="url(#pf)" strokeWidth={sw} strokeLinecap="round" opacity={op}
+                    key={`sp-${i}`}
+                    d={`M${ox} ${oy} C${ox + cos * f.l * 0.35} ${oy + sin * f.l * 0.35 + f.d * 0.08} ${ox + cos * f.l * 0.7} ${oy + sin * f.l * 0.7 + f.d * 0.5} ${tx} ${ty}`}
+                    fill="none" stroke="url(#pf)" strokeWidth="0.7" opacity="0.25" strokeLinecap="round"
                   />
                 );
               }
             });
-
             return els;
           })()}
           <defs>
-            <linearGradient id="pt" x1="148" y1="160" x2="148" y2="580" gradientUnits="userSpaceOnUse">
+            <linearGradient id="pt" x1="97" y1="160" x2="97" y2="510" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#C49A4C" />
               <stop offset="100%" stopColor="#5C4E30" />
             </linearGradient>
-            <linearGradient id="pt-hi" x1="148" y1="160" x2="148" y2="580" gradientUnits="userSpaceOnUse">
+            <linearGradient id="pt-hi" x1="97" y1="160" x2="97" y2="510" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#E8C97A" />
               <stop offset="100%" stopColor="#C49A4C" />
             </linearGradient>
-            <linearGradient id="pf" x1="150" y1="20" x2="150" y2="320" gradientUnits="userSpaceOnUse">
+            <linearGradient id="pf" x1="100" y1="0" x2="100" y2="320" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#D4AA50" />
               <stop offset="40%" stopColor="#C49A4C" />
-              <stop offset="100%" stopColor="#8B7340" />
+              <stop offset="100%" stopColor="#7A6535" />
             </linearGradient>
             <radialGradient id="pc" cx="40%" cy="30%">
               <stop offset="0%" stopColor="#D4AA50" />

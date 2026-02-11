@@ -1,14 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { CalendarRange, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
+import { startOfDay, isToday, isTomorrow, format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
 import { getWeekEvents } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
+
+function groupByDay(events: Event[]): { label: string; events: Event[] }[] {
+  const groups = new Map<number, Event[]>();
+
+  for (const event of events) {
+    const date = new Date(event.date_start);
+    const key = startOfDay(date).getTime();
+    const existing = groups.get(key);
+    if (existing) {
+      existing.push(event);
+    } else {
+      groups.set(key, [event]);
+    }
+  }
+
+  // Sort keys chronologically
+  const sortedKeys = [...groups.keys()].sort((a, b) => a - b);
+
+  return sortedKeys.map((key) => {
+    const date = new Date(key);
+    let label: string;
+    if (isToday(date)) {
+      label = "Aujourd'hui";
+    } else if (isTomorrow(date)) {
+      label = "Demain";
+    } else {
+      label = format(date, "EEEE d MMM", { locale: fr });
+      label = label.charAt(0).toUpperCase() + label.slice(1);
+    }
+
+    const dayEvents = groups.get(key)!;
+    dayEvents.sort((a, b) => b.interest_score - a.interest_score);
+
+    return { label, events: dayEvents };
+  });
+}
 
 export default function WeekPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -67,6 +105,8 @@ export default function WeekPage() {
 
     setFiltered(result);
   };
+
+  const groups = useMemo(() => groupByDay(filtered), [filtered]);
 
   const featuredCount = events.filter((e) => e.is_featured).length;
   const dealsCount = events.filter((e) => e.tags_deals.length > 0).length;
@@ -127,19 +167,28 @@ export default function WeekPage() {
         </div>
       )}
 
-      {/* Events Grid */}
+      {/* Events grouped by day */}
       {!loading && !error && (
         <>
-          {filtered.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
-              {filtered.map((event, i) => (
-                <EventCard key={event.id} event={event} index={i} />
+          {groups.length > 0 ? (
+            <div className="space-y-8">
+              {groups.map((group) => (
+                <motion.section
+                  key={group.label}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <h2 className="mb-4 border-b border-slate-200/60 pb-2 font-serif text-lg font-semibold text-slate-800">
+                    {group.label}
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {group.events.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i} />
+                    ))}
+                  </div>
+                </motion.section>
               ))}
-            </motion.div>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <CalendarRange className="mb-4 h-12 w-12 text-slate-300" />

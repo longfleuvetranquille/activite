@@ -1,14 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { CalendarHeart, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
+import { getDay } from "date-fns";
 
 import type { Event } from "@/types";
 import { getWeekendEvents } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
+
+function groupByWeekendDay(events: Event[]): { label: string; events: Event[] }[] {
+  const buckets: Record<string, Event[]> = {
+    "Vendredi soir": [],
+    "Samedi": [],
+    "Dimanche": [],
+  };
+
+  for (const event of events) {
+    const day = getDay(new Date(event.date_start));
+    if (day === 5) {
+      buckets["Vendredi soir"].push(event);
+    } else if (day === 6) {
+      buckets["Samedi"].push(event);
+    } else if (day === 0) {
+      buckets["Dimanche"].push(event);
+    }
+  }
+
+  const order = ["Vendredi soir", "Samedi", "Dimanche"];
+  return order
+    .filter((label) => buckets[label].length > 0)
+    .map((label) => {
+      buckets[label].sort((a, b) => b.interest_score - a.interest_score);
+      return { label, events: buckets[label] };
+    });
+}
 
 export default function WeekendPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -67,6 +95,8 @@ export default function WeekendPage() {
 
     setFiltered(result);
   };
+
+  const groups = useMemo(() => groupByWeekendDay(filtered), [filtered]);
 
   const featuredCount = events.filter((e) => e.is_featured).length;
   const dealsCount = events.filter((e) => e.tags_deals.length > 0).length;
@@ -127,19 +157,28 @@ export default function WeekendPage() {
         </div>
       )}
 
-      {/* Events Grid */}
+      {/* Events grouped by weekend day */}
       {!loading && !error && (
         <>
-          {filtered.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
-              {filtered.map((event, i) => (
-                <EventCard key={event.id} event={event} index={i} />
+          {groups.length > 0 ? (
+            <div className="space-y-8">
+              {groups.map((group) => (
+                <motion.section
+                  key={group.label}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <h2 className="mb-4 border-b border-slate-200/60 pb-2 font-serif text-lg font-semibold text-slate-800">
+                    {group.label}
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {group.events.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i} />
+                    ))}
+                  </div>
+                </motion.section>
               ))}
-            </motion.div>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <CalendarHeart className="mb-4 h-12 w-12 text-slate-300" />
