@@ -21,6 +21,7 @@ class CrawledEvent:
     currency: str = "EUR"
     source_url: str = ""
     image_url: str = ""
+    is_sold_out: bool = False
 
 
 class BaseCrawler(ABC):

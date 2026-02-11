@@ -273,98 +273,89 @@ function SidebarContent({
       </nav>
 
       {/* Decorative palm tree */}
-      <div className="flex flex-1 items-end justify-center overflow-hidden px-6 pb-6">
+      <div className="flex flex-1 items-end justify-center overflow-hidden">
         <svg
-          viewBox="0 0 200 400"
+          viewBox="0 0 260 520"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-auto w-40 opacity-[0.14]"
+          className="h-full max-h-[420px] w-auto opacity-[0.12]"
         >
-          {/* Trunk — thick curved body tapering upward */}
+          {/* Trunk — tapered with slight lean */}
           <path
-            d="M102 390 C104 370 108 345 110 320 C112 295 108 270 106 245 C104 220 108 195 107 172 C106 155 104 140 103 125"
-            fill="none" stroke="url(#palm-g)" strokeWidth="14" strokeLinecap="round"
+            d="M128 510 Q126 480 127 450 Q130 400 134 355 Q137 310 135 270
+               Q133 235 132 205 Q131 180 131 160"
+            fill="none" stroke="url(#palm-trunk)" strokeWidth="16" strokeLinecap="round"
           />
-          {/* Trunk bark texture */}
-          {[360, 340, 322, 305, 288, 272, 257, 243, 230, 218, 206, 195, 185, 175, 165, 155, 145, 136].map((y, i) => (
-            <path
-              key={i}
-              d={`M${96 + (i % 2) * 3} ${y} Q${104 + (i % 3)} ${y - 3} ${112 - (i % 2) * 3} ${y}`}
-              fill="none" stroke="url(#palm-g)" strokeWidth="1.5" opacity="0.3"
-            />
-          ))}
+          <path
+            d="M128 510 Q126 480 127 450 Q130 400 134 355 Q137 310 135 270
+               Q133 235 132 205 Q131 180 131 160"
+            fill="none" stroke="url(#palm-trunk)" strokeWidth="10" strokeLinecap="round" opacity="0.3"
+          />
+          {/* Trunk segments — curved bark lines */}
+          {[480, 458, 437, 418, 400, 383, 367, 352, 338, 325, 312, 300, 289, 278, 268, 258, 249, 240, 232, 224, 217, 210, 203, 197, 191, 185, 179, 174, 169].map((y, i) => {
+            const xOff = Math.sin(i * 0.3) * 1.5;
+            const trunkX = 128 + (y < 350 ? (350 - y) * 0.012 : (y - 350) * -0.006);
+            return (
+              <path
+                key={i}
+                d={`M${trunkX - 7 + xOff} ${y} Q${trunkX + xOff} ${y - 2.5} ${trunkX + 7 + xOff} ${y}`}
+                fill="none" stroke="url(#palm-trunk)" strokeWidth="0.8" opacity={0.2 + (i % 3) * 0.05}
+              />
+            );
+          })}
           {/* Coconuts */}
-          <circle cx="98" cy="123" r="6" fill="url(#palm-g)" opacity="0.6" />
-          <circle cx="110" cy="121" r="5.5" fill="url(#palm-g)" opacity="0.6" />
-          <circle cx="104" cy="116" r="5" fill="url(#palm-g)" opacity="0.55" />
-          {/* === FRONDS — big lush filled leaves === */}
-          {/* Far left — drooping low */}
-          <path
-            d="M103 120 C85 108 50 100 8 112
-               C12 106 20 100 30 96
-               C50 88 82 100 103 116Z"
-            fill="url(#palm-g)"
-          />
-          {/* Left mid — reaching out */}
-          <path
-            d="M103 118 C80 96 45 72 5 62
-               C12 58 25 56 38 58
-               C62 64 88 90 103 114Z"
-            fill="url(#palm-g)"
-          />
-          {/* Left upper — angled up */}
-          <path
-            d="M103 115 C88 86 62 50 28 22
-               C38 20 48 24 58 32
-               C78 50 96 84 103 112Z"
-            fill="url(#palm-g)"
-          />
-          {/* Far right — drooping low */}
-          <path
-            d="M105 120 C123 108 158 100 200 112
-               C196 106 188 100 178 96
-               C158 88 126 100 105 116Z"
-            fill="url(#palm-g)"
-          />
-          {/* Right mid — reaching out */}
-          <path
-            d="M105 118 C128 96 163 72 203 62
-               C196 58 183 56 170 58
-               C146 64 120 90 105 114Z"
-            fill="url(#palm-g)"
-          />
-          {/* Right upper — angled up */}
-          <path
-            d="M105 115 C120 86 146 50 180 22
-               C170 20 160 24 150 32
-               C130 50 112 84 105 112Z"
-            fill="url(#palm-g)"
-          />
-          {/* Top left frond */}
-          <path
-            d="M103 114 C96 80 82 42 62 6
-               C70 8 78 16 84 28
-               C94 52 100 84 103 110Z"
-            fill="url(#palm-g)"
-          />
-          {/* Top right frond */}
-          <path
-            d="M105 114 C112 80 126 42 146 6
-               C138 8 130 16 124 28
-               C114 52 108 84 105 110Z"
-            fill="url(#palm-g)"
-          />
-          {/* Center top frond */}
-          <path
-            d="M103 112 C102 76 100 40 104 4
-               C108 40 106 76 105 112Z"
-            fill="url(#palm-g)" opacity="0.9"
-          />
+          <ellipse cx="126" cy="157" rx="6.5" ry="6" fill="url(#palm-coconut)" />
+          <ellipse cx="137" cy="155" rx="6" ry="5.5" fill="url(#palm-coconut)" />
+          <ellipse cx="131" cy="150" rx="5.5" ry="5" fill="url(#palm-coconut)" />
+          {/* ——— FRONDS ——— */}
+          {/* Each frond: filled leaf with serrated edge via multiple curves */}
+          {/* LEFT — drooping far */}
+          <path d="M130 155 C118 148 85 142 40 152 C42 146 48 140 58 137 C80 130 112 138 130 150Z" fill="url(#palm-frond)" />
+          <path d="M130 155 C108 148 68 145 18 158 C22 150 30 144 42 140 C68 132 108 138 130 150Z" fill="url(#palm-frond)" opacity="0.7" />
+          {/* LEFT — mid reach */}
+          <path d="M130 152 C112 134 72 108 16 92 C22 86 34 82 48 84 C78 90 112 118 130 146Z" fill="url(#palm-frond)" />
+          <path d="M130 152 C108 130 62 100 8 80 C14 76 26 74 40 76 C70 82 108 114 130 144Z" fill="url(#palm-frond)" opacity="0.65" />
+          {/* LEFT — upper */}
+          <path d="M130 148 C118 120 90 78 50 38 C58 34 68 36 76 42 C98 62 120 104 130 142Z" fill="url(#palm-frond)" />
+          <path d="M130 148 C116 116 84 68 38 24 C48 22 58 26 66 34 C90 56 118 100 130 140Z" fill="url(#palm-frond)" opacity="0.6" />
+          {/* RIGHT — drooping far */}
+          <path d="M134 155 C146 148 179 142 224 152 C222 146 216 140 206 137 C184 130 152 138 134 150Z" fill="url(#palm-frond)" />
+          <path d="M134 155 C156 148 196 145 246 158 C242 150 234 144 222 140 C196 132 156 138 134 150Z" fill="url(#palm-frond)" opacity="0.7" />
+          {/* RIGHT — mid reach */}
+          <path d="M134 152 C152 134 192 108 248 92 C242 86 230 82 216 84 C186 90 152 118 134 146Z" fill="url(#palm-frond)" />
+          <path d="M134 152 C156 130 202 100 256 80 C250 76 238 74 224 76 C194 82 156 114 134 144Z" fill="url(#palm-frond)" opacity="0.65" />
+          {/* RIGHT — upper */}
+          <path d="M134 148 C146 120 174 78 214 38 C206 34 196 36 188 42 C166 62 144 104 134 142Z" fill="url(#palm-frond)" />
+          <path d="M134 148 C148 116 180 68 226 24 C216 22 206 26 198 34 C174 56 146 100 134 140Z" fill="url(#palm-frond)" opacity="0.6" />
+          {/* TOP — left lean */}
+          <path d="M130 146 C124 110 110 66 88 16 C96 14 104 20 110 32 C122 60 128 106 130 140Z" fill="url(#palm-frond)" />
+          <path d="M130 146 C122 106 104 56 76 4 C84 4 92 12 100 26 C116 56 126 102 130 138Z" fill="url(#palm-frond)" opacity="0.55" />
+          {/* TOP — right lean */}
+          <path d="M134 146 C140 110 154 66 176 16 C168 14 160 20 154 32 C142 60 136 106 134 140Z" fill="url(#palm-frond)" />
+          <path d="M134 146 C142 106 160 56 188 4 C180 4 172 12 164 26 C148 56 138 102 134 138Z" fill="url(#palm-frond)" opacity="0.55" />
+          {/* TOP — center */}
+          <path d="M130 142 C129 100 128 55 132 6 C136 55 135 100 134 142Z" fill="url(#palm-frond)" opacity="0.5" />
+          {/* Frond spines — thin central veins */}
+          <path d="M131 156 C110 140 60 128 14 154" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M131 152 C108 128 55 96 10 82" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M131 148 C112 110 78 60 44 28" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M133 156 C154 140 204 128 250 154" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M133 152 C156 128 209 96 254 82" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M133 148 C152 110 186 60 220 28" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.3" />
+          <path d="M131 144 C126 100 108 52 82 8" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.25" />
+          <path d="M133 144 C138 100 156 52 182 8" fill="none" stroke="url(#palm-frond)" strokeWidth="0.7" opacity="0.25" />
           <defs>
-            <linearGradient id="palm-g" x1="100" y1="0" x2="100" y2="400" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#D4A84B" />
-              <stop offset="40%" stopColor="#C49A4C" />
-              <stop offset="100%" stopColor="#8B7340" />
+            <linearGradient id="palm-trunk" x1="130" y1="140" x2="130" y2="520" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#B8904A" />
+              <stop offset="100%" stopColor="#6B5D3E" />
             </linearGradient>
+            <linearGradient id="palm-frond" x1="130" y1="0" x2="130" y2="170" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#D4AA50" />
+              <stop offset="100%" stopColor="#A8884A" />
+            </linearGradient>
+            <radialGradient id="palm-coconut" cx="50%" cy="40%">
+              <stop offset="0%" stopColor="#C49A4C" />
+              <stop offset="100%" stopColor="#7A6535" />
+            </radialGradient>
           </defs>
         </svg>
       </div>

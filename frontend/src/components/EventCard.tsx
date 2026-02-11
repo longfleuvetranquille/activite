@@ -79,6 +79,7 @@ export default function EventCard({
   const typeLabel = TYPE_LABELS[firstType] || "";
   const typeStyle = TYPE_STYLES[firstType] || DEFAULT_STYLE;
   const isSportWithLogo = firstType === "sport_match" && !!event.image_url;
+  const isSoldOut = event.tags_exclusivity.includes("sold_out");
 
   // Collect tags for display
   const allTags: { code: string; category: string }[] = [];
@@ -203,7 +204,11 @@ export default function EventCard({
               {locationDisplay && (
                 <span className="truncate">{locationDisplay}</span>
               )}
-              <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
+              {isSoldOut ? (
+                <span className="ml-auto shrink-0 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600">Complet</span>
+              ) : (
+                <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
+              )}
             </div>
           </div>
         </div>
@@ -254,12 +259,18 @@ export default function EventCard({
                   </span>
                 </span>
               )}
-              <span className="ml-auto shrink-0 font-semibold text-slate-700">
-                {priceDisplay}
-              </span>
-              <span className="shrink-0 text-xs text-slate-400">
-                {event.interest_score}/100
-              </span>
+              {isSoldOut ? (
+                <span className="ml-auto shrink-0 rounded bg-red-100 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-red-600">Complet</span>
+              ) : (
+                <>
+                  <span className="ml-auto shrink-0 font-semibold text-slate-700">
+                    {priceDisplay}
+                  </span>
+                  <span className="shrink-0 text-xs text-slate-400">
+                    {event.interest_score}/100
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Tags — always visible */}

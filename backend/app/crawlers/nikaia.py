@@ -111,13 +111,14 @@ def _parse_card(card, now: datetime) -> CrawledEvent | None:
             if image_url and not image_url.startswith("http"):
                 image_url = f"https://www.nikaia.fr{image_url}"
 
-    # Price: from meta[itemprop="offers"]
+    # Price & sold-out detection from meta[itemprop="offers"]
     price_min = -1.0
+    sold_out = False
     offers_meta = card.select_one('meta[itemprop="offers"]')
     if offers_meta:
         offers_text = offers_meta.get("content", "")
         if "complet" in offers_text.lower():
-            price_min = -1.0
+            sold_out = True
         else:
             # "De 33 à 45€" or "49€"
             price_match = re.search(r"(\d+(?:[.,]\d+)?)\s*(?:€|EUR)", offers_text)
@@ -134,4 +135,5 @@ def _parse_card(card, now: datetime) -> CrawledEvent | None:
         price_min=price_min,
         price_max=price_min,
         currency="EUR",
+        is_sold_out=sold_out,
     )

@@ -125,6 +125,13 @@ async def run_crawl_pipeline():
                         bonus, interest, raw.title, opponent_name,
                     )
 
+                # Sold-out flag from crawler
+                if raw.is_sold_out:
+                    excl = tags.get("exclusivity", [])
+                    if "sold_out" not in excl:
+                        excl.append("sold_out")
+                    tags["exclusivity"] = excl
+
                 # Store
                 event_hash = compute_event_hash(
                     raw.title, raw.date_start.isoformat(), raw.location_name
