@@ -108,7 +108,7 @@ export default function EventCard({
       >
         <Link
           href={`/event/${event.id}`}
-          className="group relative block aspect-[3/1] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
+          className="group relative block aspect-[2/1] sm:aspect-[3/1] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
         >
           {/* Full gradient background */}
           <div className={`absolute inset-0 bg-gradient-to-br ${typeStyle.gradient}`} />
@@ -182,25 +182,25 @@ export default function EventCard({
         {/* Mobile: compact horizontal layout */}
         <div className="flex sm:hidden">
           {/* Gradient emoji circle or team logo */}
-          <div className="flex shrink-0 items-center justify-center pl-3 py-2.5">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${typeStyle.gradient} shadow-sm`}>
+          <div className="flex shrink-0 items-center justify-center pl-3 py-3">
+            <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${typeStyle.gradient} shadow-sm`}>
               {isSportWithLogo ? (
-                <img src={event.image_url} alt="" className="h-7 w-7 object-contain" />
+                <img src={event.image_url} alt="" className="h-8 w-8 object-contain" />
               ) : (
-                <span className="text-lg leading-none">{typeStyle.emoji}</span>
+                <span className="text-xl leading-none">{typeStyle.emoji}</span>
               )}
             </div>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 p-2.5">
-            <h3 className="line-clamp-1 text-sm font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 p-3">
+            <h3 className="line-clamp-2 text-[15px] font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
               {event.title}
             </h3>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center gap-2 text-[13px] text-slate-500">
               <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
               <span>&middot;</span>
               <span>{formattedTime}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center gap-2 text-[13px] text-slate-500">
               {locationDisplay && (
                 <span className="truncate">{locationDisplay}</span>
               )}

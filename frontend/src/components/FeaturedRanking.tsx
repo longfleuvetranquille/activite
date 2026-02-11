@@ -70,8 +70,8 @@ function FeaturedRow({ event, rank }: { event: Event; rank: number }) {
           <span
             className={`font-[family-name:var(--font-logo)] leading-none tracking-tight ${
               isTop
-                ? "text-5xl font-bold text-champagne-500 sm:text-6xl"
-                : "text-3xl font-semibold text-champagne-300 sm:text-4xl"
+                ? "text-4xl font-bold text-champagne-500 sm:text-6xl"
+                : "text-2xl font-semibold text-champagne-300 sm:text-4xl"
             }`}
           >
             {String(rank).padStart(2, "0")}

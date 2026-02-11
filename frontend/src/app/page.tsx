@@ -104,7 +104,7 @@ export default function DashboardPage() {
             />
             <HorizontalCarousel>
               {todayEvents.map((event, i) => (
-                <div key={event.id} className="w-[260px] shrink-0">
+                <div key={event.id} className="w-[75vw] sm:w-[260px] shrink-0">
                   <EventCard event={event} index={i} />
                 </div>
               ))}
@@ -175,7 +175,7 @@ export default function DashboardPage() {
               <div className="mt-6">
                 <HorizontalCarousel>
                   {flightDeals.map((event, i) => (
-                    <div key={event.id} className="w-[260px] shrink-0">
+                    <div key={event.id} className="w-[75vw] sm:w-[260px] shrink-0">
                       <FlightDealCard event={event} index={i} />
                     </div>
                   ))}
@@ -200,7 +200,7 @@ export default function DashboardPage() {
             />
             <HorizontalCarousel>
               {otherDeals.map((event, i) => (
-                <div key={event.id} className="w-[260px] shrink-0">
+                <div key={event.id} className="w-[75vw] sm:w-[260px] shrink-0">
                   <EventCard event={event} index={i} />
                 </div>
               ))}

@@ -12,6 +12,11 @@ import {
   Menu,
   X,
   RefreshCw,
+  Compass,
+  Heart,
+  Coffee,
+  UtensilsCrossed,
+  Waves,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
@@ -36,27 +41,22 @@ const bodoniModa = Bodoni_Moda({
   variable: "--font-logo",
 });
 
-const NAV_ITEMS = [
-  {
-    href: "/",
-    label: "Dashboard",
-    icon: TreePalm,
-  },
-  {
-    href: "/weekend",
-    label: "Ce week-end",
-    icon: CalendarHeart,
-  },
-  {
-    href: "/week",
-    label: "Cette semaine",
-    icon: CalendarRange,
-  },
-  {
-    href: "/month",
-    label: "Le mois a venir",
-    icon: CalendarClock,
-  },
+const NAV_DASHBOARD = [
+  { href: "/", label: "Dashboard", icon: TreePalm },
+];
+
+const NAV_PERIOD = [
+  { href: "/weekend", label: "Ce week-end", icon: CalendarHeart },
+  { href: "/week", label: "Cette semaine", icon: CalendarRange },
+  { href: "/month", label: "Le mois a venir", icon: CalendarClock },
+];
+
+const NAV_OBJECTIVES = [
+  { href: "/#timeless", label: "Intemporelles", icon: Compass },
+  { href: "/#dates", label: "Idees de date", icon: Heart },
+  { href: "/#cafes", label: "Cafes & brunchs", icon: Coffee },
+  { href: "/#restaurants", label: "Restos & food", icon: UtensilsCrossed },
+  { href: "/#beaches", label: "Plages & criques", icon: Waves },
 ];
 
 export default function RootLayout({
@@ -197,6 +197,74 @@ export default function RootLayout({
   );
 }
 
+function NavGroup({
+  label,
+  items,
+  pathname,
+  onNavigate,
+  isAnchor,
+}: {
+  label: string;
+  items: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[];
+  pathname: string;
+  onNavigate: () => void;
+  isAnchor?: boolean;
+}) {
+  return (
+    <div>
+      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white">
+        {label}
+      </p>
+      <div className="space-y-0.5">
+        {items.map((item) => {
+          const isActive = isAnchor ? false : pathname === item.href;
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onNavigate}
+              className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-300 ${
+                isActive
+                  ? "text-white"
+                  : isAnchor
+                    ? "text-white/40 hover:text-white/70"
+                    : "text-white/40 hover:text-white/70"
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="nav-active"
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-champagne-600/20 via-olive-500/10 to-transparent"
+                  transition={{
+                    type: "spring",
+                    stiffness: 350,
+                    damping: 30,
+                  }}
+                />
+              )}
+              <div
+                className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-300 ${
+                  isActive
+                    ? "bg-champagne-500/20 text-champagne-400"
+                    : "text-white/30 group-hover:bg-white/5 group-hover:text-white/60"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+              </div>
+              <span className="relative z-10">{item.label}</span>
+              {isActive && (
+                <div className="absolute right-3 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-champagne-500 shadow-sm shadow-champagne-500/50" />
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function SidebarContent({
   pathname,
   onNavigate,
@@ -222,58 +290,19 @@ function SidebarContent({
       </div>
 
       {/* Navigation */}
-      <nav className="px-3 py-5">
-        <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/30">
-          Navigation
-        </p>
-        <div className="space-y-1">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
+        {/* Dashboard */}
+        <NavGroup label="Dashboard" items={NAV_DASHBOARD} pathname={pathname} onNavigate={onNavigate} />
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onNavigate}
-                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-300 ${
-                  isActive
-                    ? "text-white"
-                    : "text-white/50 hover:text-white/80"
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-active"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-champagne-600/20 via-olive-500/10 to-transparent"
-                    transition={{
-                      type: "spring",
-                      stiffness: 350,
-                      damping: 30,
-                    }}
-                  />
-                )}
-                <div
-                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300 ${
-                    isActive
-                      ? "bg-champagne-500/20 text-champagne-400"
-                      : "text-white/40 group-hover:bg-white/5 group-hover:text-white/70"
-                  }`}
-                >
-                  <Icon className="h-[18px] w-[18px]" />
-                </div>
-                <span className="relative z-10">{item.label}</span>
-                {isActive && (
-                  <div className="absolute right-3 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-champagne-500 shadow-sm shadow-champagne-500/50" />
-                )}
-              </Link>
-            );
-          })}
-        </div>
+        {/* Par periode */}
+        <NavGroup label="Par periode" items={NAV_PERIOD} pathname={pathname} onNavigate={onNavigate} />
+
+        {/* Objectifs */}
+        <NavGroup label="Objectifs" items={NAV_OBJECTIVES} pathname={pathname} onNavigate={onNavigate} isAnchor />
       </nav>
 
       {/* Decorative palm tree — Côte d'Azur silhouette */}
-      <div className="flex flex-1 items-end justify-center overflow-hidden">
+      <div className="hidden lg:flex flex-1 items-end justify-center overflow-hidden min-h-0">
         <svg
           viewBox="0 0 200 520"
           xmlns="http://www.w3.org/2000/svg"

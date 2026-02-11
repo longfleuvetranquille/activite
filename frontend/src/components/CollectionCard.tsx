@@ -20,7 +20,7 @@ export default function CollectionCard({
   return (
     <a
       href={href}
-      className={`group relative block aspect-[3/2] overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} border border-white/60 shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg`}
+      className={`group relative block aspect-[5/3] sm:aspect-[3/2] overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} border border-white/60 shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg`}
     >
       {/* Large background emoji */}
       <span className="absolute right-4 top-4 text-[120px] leading-none opacity-[0.06] transition-transform duration-700 group-hover:scale-110">

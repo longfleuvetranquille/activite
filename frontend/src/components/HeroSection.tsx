@@ -33,7 +33,7 @@ export default function HeroSection() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-champagne-600">
             Nice &middot; Cannes &middot; Monaco &amp; the Riviera Towns
           </p>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-champagne-600">
+          <p className="hidden sm:block text-[11px] font-semibold uppercase tracking-[0.25em] text-champagne-600">
             {today}
           </p>
         </motion.div>
@@ -92,7 +92,7 @@ export default function HeroSection() {
                 delay: 0.35 + i * 0.05,
                 ease: "easeOut",
               }}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-champagne-200 bg-transparent px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-slate-600 transition-all duration-200 hover:border-champagne-300 hover:bg-champagne-50 hover:text-slate-800"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-champagne-200 bg-transparent px-3.5 py-2 text-xs font-medium uppercase tracking-wider text-slate-600 transition-all duration-200 hover:border-champagne-300 hover:bg-champagne-50 hover:text-slate-800"
             >
               <span className="text-sm">{pill.emoji}</span>
               {pill.label}
