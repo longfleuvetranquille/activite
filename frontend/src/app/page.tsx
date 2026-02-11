@@ -21,6 +21,7 @@ import TimelessSection, { getSeasonalActivities } from "@/components/TimelessSec
 import DateIdeasSection from "@/components/DateIdeasSection";
 import FoodGuideSection from "@/components/FoodGuideSection";
 import BeachSection from "@/components/BeachSection";
+import FeaturedRanking from "@/components/FeaturedRanking";
 
 export default function DashboardPage() {
   const [digest, setDigest] = useState<DashboardDigest | null>(null);
@@ -123,11 +124,7 @@ export default function DashboardPage() {
               title="A la une"
               subtitle="Les evenements les mieux notes"
             />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              {digest.featured.map((event, i) => (
-                <EventCard key={event.id} event={event} index={i} />
-              ))}
-            </div>
+            <FeaturedRanking events={digest.featured} />
           </motion.section>
         )}
 
