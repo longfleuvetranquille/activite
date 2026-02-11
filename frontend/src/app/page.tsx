@@ -218,8 +218,8 @@ export default function DashboardPage() {
           className="content-container py-6 sm:py-8"
         >
           <SectionHeader
-            title="Collections"
-            subtitle="Nos selections curatees de la Riviera"
+            title="Nos guides"
+            subtitle="Selections thematiques de la Cote d'Azur"
           />
           <HorizontalCarousel>
             <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">

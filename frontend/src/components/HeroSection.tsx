@@ -4,16 +4,6 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
-const CATEGORY_PILLS = [
-  { emoji: "\uD83C\uDFB6", label: "Soirees", href: "#tonight" },
-  { emoji: "\uD83C\uDF78", label: "Rooftops", href: "#weekend" },
-  { emoji: "\uD83C\uDF0A", label: "Nautique", href: "#beaches" },
-  { emoji: "\uD83C\uDFCE\uFE0F", label: "Adrenaline", href: "#timeless" },
-  { emoji: "\u2708\uFE0F", label: "Voyages", href: "#flights" },
-  { emoji: "\uD83C\uDF7D\uFE0F", label: "Food", href: "#cafes" },
-  { emoji: "\u2764\uFE0F", label: "Date", href: "#dates" },
-];
-
 export default function HeroSection() {
   const today = format(new Date(), "d MMM yyyy", { locale: fr });
 
@@ -78,27 +68,6 @@ export default function HeroSection() {
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
           className="mx-auto mt-5 h-px w-full max-w-md origin-center bg-champagne-200/60"
         />
-
-        {/* Category pills */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          {CATEGORY_PILLS.map((pill, i) => (
-            <motion.a
-              key={pill.label}
-              href={pill.href}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.35,
-                delay: 0.35 + i * 0.05,
-                ease: "easeOut",
-              }}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-champagne-200 bg-transparent px-3.5 py-2 text-xs font-medium uppercase tracking-wider text-slate-600 transition-all duration-200 hover:border-champagne-300 hover:bg-champagne-50 hover:text-slate-800"
-            >
-              <span className="text-sm">{pill.emoji}</span>
-              {pill.label}
-            </motion.a>
-          ))}
-        </div>
       </div>
 
       {/* Bottom fade into page background */}
