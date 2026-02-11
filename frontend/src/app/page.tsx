@@ -87,6 +87,91 @@ export default function DashboardPage() {
       <HeroSection />
 
       <div className="space-y-0">
+        {/* Nos guides — right under hero */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="content-container py-4 sm:py-6"
+        >
+          <SectionHeader
+            title="Nos guides"
+            subtitle="Selections thematiques de la Cote d'Azur"
+          />
+          <HorizontalCarousel>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83E\uDDED"}
+                title="Intemporelles"
+                description="Activites permanentes et saisonnieres"
+                count={getSeasonalActivities().length}
+                href="#timeless"
+                gradient="from-emerald-50 to-teal-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\u2764\uFE0F"}
+                title="Idees de date"
+                description="Les meilleurs spots pour un rendez-vous"
+                count={10}
+                href="#dates"
+                gradient="from-rose-50 to-pink-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\u2615"}
+                title="Cafes & brunchs"
+                description="Les meilleurs cafes de la Riviera"
+                count={4}
+                href="#cafes"
+                gradient="from-amber-50 to-orange-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83C\uDF7D\uFE0F"}
+                title="Restos date"
+                description="Les meilleures adresses pour un diner en amoureux"
+                count={10}
+                href="#restaurants-date"
+                gradient="from-violet-50 to-purple-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83D\uDD7A"}
+                title="Restos dansants"
+                description="Diner et danser dans la meme soiree"
+                count={2}
+                href="#resto-dansant"
+                gradient="from-fuchsia-50 to-pink-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83C\uDF78"}
+                title="Bars branches"
+                description="Les bars ou sortir boire un verre"
+                count={2}
+                href="#bars"
+                gradient="from-indigo-50 to-violet-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83C\uDFD6\uFE0F"}
+                title="Plages & criques"
+                description="Spots secrets et plages paradisiaques"
+                count={7}
+                href="#beaches"
+                gradient="from-sky-50 to-cyan-50"
+              />
+            </div>
+          </HorizontalCarousel>
+        </motion.section>
+
         {/* 2. "Ce soir" — carousel */}
         {todayEvents.length > 0 && (
           <motion.section
@@ -208,74 +293,7 @@ export default function DashboardPage() {
           </motion.section>
         )}
 
-        <div className="editorial-divider content-container" />
-
-        {/* 6. Collections */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="content-container py-6 sm:py-8"
-        >
-          <SectionHeader
-            title="Nos guides"
-            subtitle="Selections thematiques de la Cote d'Azur"
-          />
-          <HorizontalCarousel>
-            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
-              <CollectionCard
-                emoji={"\u2764\uFE0F"}
-                title="Idees de date"
-                description="Les meilleurs spots pour un rendez-vous"
-                count={10}
-                href="#dates"
-                gradient="from-rose-50 to-pink-50"
-              />
-            </div>
-            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
-              <CollectionCard
-                emoji={"\uD83C\uDFD6\uFE0F"}
-                title="Plages & criques"
-                description="Spots secrets et plages paradisiaques"
-                count={7}
-                href="#beaches"
-                gradient="from-sky-50 to-cyan-50"
-              />
-            </div>
-            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
-              <CollectionCard
-                emoji={"\u2615"}
-                title="Cafes & brunchs"
-                description="Les meilleurs cafes de la Riviera"
-                count={4}
-                href="#cafes"
-                gradient="from-amber-50 to-orange-50"
-              />
-            </div>
-            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
-              <CollectionCard
-                emoji={"\uD83E\uDDED"}
-                title="Intemporelles"
-                description="Activites permanentes et saisonnieres"
-                count={getSeasonalActivities().length}
-                href="#timeless"
-                gradient="from-emerald-50 to-teal-50"
-              />
-            </div>
-            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
-              <CollectionCard
-                emoji={"\uD83C\uDF7D\uFE0F"}
-                title="Restos & clubs"
-                description="Restaurant pour un date en bien"
-                count={14}
-                href="#restaurants-date"
-                gradient="from-violet-50 to-purple-50"
-              />
-            </div>
-          </HorizontalCarousel>
-        </motion.section>
-
-        {/* 7. "Les gros events" — top upcoming, diversified */}
+        {/* 6. "Les gros events" — top upcoming, diversified */}
         {digest && digest.top_upcoming.length > 0 && (() => {
           // Diversify: cap sport_match to 2 on dashboard
           const typeCounts: Record<string, number> = {};
