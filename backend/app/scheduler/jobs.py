@@ -17,12 +17,42 @@ logger = logging.getLogger(__name__)
 _BLOCKED_PATTERNS: list[re.Pattern] = [
     re.compile(p, re.IGNORECASE)
     for p in [
+        # Hard electronic music
         r"\btechno\b",
         r"\brave\b",
         r"\bhard\s*bounce\b",
         r"\bhard\s*trance\b",
         r"\bhard\s*style\b",
         r"\bgabber\b",
+        # Yoga / wellness / personal development
+        r"\byoga\b",
+        r"\bm[eé]ditation\b",
+        r"\bbien[- ]?[eê]tre\b",
+        r"\bd[eé]veloppement\s+personnel\b",
+        r"\bpleine\s+conscience\b",
+        r"\bmindfulness\b",
+        # Salons & expos not interesting
+        r"\bsalon\s+du\s+mariage\b",
+        r"\bsalon\s+b[eé]b[eé]\b",
+        r"\bpu[eé]riculture\b",
+        r"\bsalon\s+de\s+la\s+parentalit[eé]\b",
+        # Political / social gatherings
+        r"\bmanifestation\b",
+        r"\bgr[eè]ve\b",
+        r"\brassemblement\s+politique\b",
+        # Senior activities
+        r"\bth[eé]\s+dansant\b",
+        r"\bbridge\b.*\btourn",
+        r"\bchorale\b",
+        r"\bloto\b",
+        # Education open days
+        r"\bjourn[eé]e[s]?\s+portes?\s+ouvertes?\b",
+        # Parenting / education workshops
+        r"\batelier\s+parentalit[eé]\b",
+        r"\batelier\s+[eé]ducation\b",
+        # Braderies / vide-greniers
+        r"\bbraderie\b",
+        r"\bvide[- ]?grenier\b",
     ]
 ]
 

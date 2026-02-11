@@ -11,17 +11,60 @@ logger = logging.getLogger(__name__)
 SCORER_PROMPT = """Tu es un assistant qui évalue l'intérêt d'un événement pour un jeune actif de 25 ans vivant à Nice.
 
 Profil de l'utilisateur :
-- Centres d'intérêt : GP Monaco, Formule E, matchs de foot, poker privé, conférences tech, jet-ski, wakeboard, karting, rooftops, bars à cocktails, voyages pas chers, soirées électro
-- Aime : les soirées, les sports mécaniques et nautiques, les événements exclusifs, les bons plans, les festivals, la street food
-- Budget : préfère les bons rapports qualité/prix
-- N'aime PAS : cinémathèque, rétrospectives de films anciens, expositions classiques, conférences patrimoine, activités seniors (bridge, loto, thé dansant, chorale), ateliers pour retraités, hard bounce, hard trance, hard techno, rave
 
-Règles de scoring :
-- 80-100 : événement parfaitement adapté (soirée, sport, bon plan voyage, événement exclusif)
-- 60-79 : intéressant (concert, festival, food, conférence tech)
-- 40-59 : moyennement intéressant (expo contemporaine, marché, activité familiale)
-- 20-39 : peu intéressant (cinéma art et essai, conférence académique, théâtre classique)
-- 0-19 : pas du tout adapté (cinémathèque, activité seniors, rétrospective, bridge, loto)
+ADORE (score 80-100) :
+- Soirées électro, DJ sets, festivals de musique
+- Rooftops & bars à cocktails
+- GP Monaco, Formule E, motorsport
+- Matchs de foot (Ligue 1, Champions League)
+- Poker entre potes
+- Jet-ski, wakeboard, sports nautiques
+- Karting
+- Vols pas chers depuis Nice
+- Restos dansants (type Baoli, Medusa)
+- Événements exclusifs, places limitées
+- Spectacles d'humour, stand-up, one-man show
+- Street food, food markets
+
+AIME BIEN (score 60-79) :
+- Restos pour un date (italien, asiatique fusion)
+- Escalade, bloc (Arkose)
+- Paintball, accrobranche, quad, activités outdoor fun
+- Padel
+- Marchés de Noël (en saison nov-déc-jan)
+
+MOYEN (score 40-59) :
+- Afterworks
+- Marchés locaux, brocantes
+- Concerts de jazz (plutôt 50-55)
+- Ateliers créatifs (céramique, peinture)
+- Expos classiques (peinture ancienne, sculptures)
+- Opéra, musique classique
+- Conférences médicales, scientifiques grand public
+
+PEU INTÉRESSANT (score 25-39) :
+- Randonnées, trails
+- Cinémathèque, rétro films
+
+N'AIME PAS DU TOUT (score 0-20) :
+- Expos d'art contemporain
+- Théâtre contemporain
+- Yoga, bien-être, méditation, développement personnel
+- Conférences féminisme, diversité, inclusion, sociétales
+- Conférences patrimoine, histoire locale
+- Activités seniors (bridge, loto, thé dansant, chorale)
+- Salons du mariage, salons bébé, puériculture
+- Braderies, vide-greniers
+- Hard techno, hardstyle, rave, gabber
+- Ateliers parentalité, éducation
+- Journées portes ouvertes écoles, universités
+- Manifestations, grèves, rassemblements politiques
+- Tout ce qui est associatif / caritatif / solidaire sans dimension fun
+
+BONUS :
+- Événement exclusif, rare, places limitées : +10
+- Bon rapport qualité/prix ou gratuit : +5
+- Aujourd'hui ou dernière minute : +5
 
 Événement :
 - Titre : {title}
