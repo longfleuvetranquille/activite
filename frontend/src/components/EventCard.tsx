@@ -71,6 +71,10 @@ export default function EventCard({
           ? `${event.price_min}\u00A0\u20AC`
           : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
 
+  const cleanLocation = (val: string | undefined) =>
+    val && !/^lieu#/i.test(val) ? val : "";
+  const locationDisplay = cleanLocation(event.location_name) || cleanLocation(event.location_city);
+
   const firstType = event.tags_type[0] || "";
   const typeLabel = TYPE_LABELS[firstType] || "";
   const typeStyle = TYPE_STYLES[firstType] || DEFAULT_STYLE;
@@ -103,7 +107,7 @@ export default function EventCard({
       >
         <Link
           href={`/event/${event.id}`}
-          className="group relative block aspect-[16/7] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
+          className="group relative block aspect-[3/1] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
         >
           {/* Full gradient background */}
           <div className={`absolute inset-0 bg-gradient-to-br ${typeStyle.gradient}`} />
@@ -145,10 +149,10 @@ export default function EventCard({
               {event.title}
             </h3>
             <div className="mt-2 flex items-center gap-3 text-sm text-white/60">
-              {(event.location_name || event.location_city) && (
+              {locationDisplay && (
                 <span className="inline-flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5" />
-                  {event.location_name || event.location_city}
+                  {locationDisplay}
                 </span>
               )}
               <span className="font-medium text-white/80">{priceDisplay}</span>
@@ -196,8 +200,8 @@ export default function EventCard({
               <span>{formattedTime}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-500">
-              {(event.location_name || event.location_city) && (
-                <span className="truncate">{event.location_name || event.location_city}</span>
+              {locationDisplay && (
+                <span className="truncate">{locationDisplay}</span>
               )}
               <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
             </div>
@@ -242,11 +246,11 @@ export default function EventCard({
 
             {/* Location + Price + Score row */}
             <div className="flex items-center gap-2 text-[13px] text-slate-500">
-              {(event.location_name || event.location_city) && (
+              {locationDisplay && (
                 <span className="inline-flex items-center gap-1 truncate">
                   <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
                   <span className="truncate">
-                    {event.location_name || event.location_city}
+                    {locationDisplay}
                   </span>
                 </span>
               )}

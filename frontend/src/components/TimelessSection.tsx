@@ -38,7 +38,7 @@ interface TimelessActivity {
 const TIMELESS_ACTIVITIES: TimelessActivity[] = [
   {
     id: "ski",
-    title: "Ski alpin",
+    title: "Ski & Snow",
     subtitle: "Auron & Isola 2000",
     description:
       "Les stations de ski de l'arriere-pays nicois, a 1h30 de la mer.",
