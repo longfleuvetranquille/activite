@@ -72,7 +72,7 @@ export default function EventCard({
           : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
 
   const cleanLocation = (val: string | undefined) =>
-    val && !/^lieu#/i.test(val) ? val : "";
+    val && !/^lieu\s*#/i.test(val) ? val : "";
   const locationDisplay = cleanLocation(event.location_name) || cleanLocation(event.location_city);
 
   const firstType = event.tags_type[0] || "";
