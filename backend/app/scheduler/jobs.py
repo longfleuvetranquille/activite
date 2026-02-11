@@ -42,12 +42,14 @@ def _get_active_crawlers() -> list[BaseCrawler]:
     from app.crawlers.nikaia import NikaiaCrawler
     from app.crawlers.google import GoogleSearchCrawler
     from app.crawlers.lino_ventura import LinoVenturaCrawler
+    from app.crawlers.asmonaco import ASMonacoCrawler
 
     return [
         NiceFrCrawler(),
         ShotgunCrawler(),
         FlightDealsCrawler(),
         OGCNCrawler(),
+        ASMonacoCrawler(),
         NikaiaCrawler(),
         LinoVenturaCrawler(),
         GoogleSearchCrawler(),
@@ -106,6 +108,22 @@ async def run_crawl_pipeline():
                 tags = await tag_event(raw)
                 interest = await score_event(raw, tags)
                 summary = await summarize_event(raw)
+
+                # Ligue 1 ranking bonus for football matches
+                if (
+                    source_name in ("ogcn", "asmonaco")
+                    and "sport_match" in tags.get("type", [])
+                ):
+                    from app.data.ligue1 import get_opponent_bonus
+
+                    opponent_name = _extract_opponent(raw.title)
+                    bonus = get_opponent_bonus(opponent_name)
+                    if bonus:
+                        interest = min(100, interest + bonus)
+                        logger.info(
+                            "Ligue 1 bonus +%d for %s (opponent: %s)",
+                            bonus, raw.title, opponent_name,
+                        )
 
                 # Store
                 event_hash = compute_event_hash(
@@ -204,6 +222,12 @@ async def run_crawl_pipeline():
     logger.info(
         "Crawl pipeline complete: %d found, %d new", total_found, total_new
     )
+
+
+def _extract_opponent(title: str) -> str:
+    """Extract opponent name from a match title like 'OGC Nice vs Lyon (Ligue 1)'."""
+    match = re.match(r"(?:OGC Nice|AS Monaco)\s+vs\s+(.+?)(?:\s*\(|$)", title)
+    return match.group(1).strip() if match else ""
 
 
 async def _expire_past_events() -> int:

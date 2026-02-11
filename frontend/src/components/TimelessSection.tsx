@@ -88,11 +88,24 @@ const TIMELESS_ACTIVITIES: TimelessActivity[] = [
     gradient: "from-cyan-50 to-sky-50",
   },
   {
-    id: "lerins",
-    title: "Iles de Lerins",
-    subtitle: "Sainte-Marguerite & Saint-Honorat",
+    id: "location-bateau",
+    title: "Location de bateau",
+    subtitle: "Nice, Cannes, Antibes",
     description:
-      "Escapade sur les iles au large de Cannes : nature, patrimoine et eaux turquoise.",
+      "Louer un bateau a la journee pour explorer la cote, les criques et les iles. Avec ou sans permis.",
+    location: "Cote d'Azur",
+    icon: Sailboat,
+    seasonStart: 5,
+    seasonEnd: 9,
+    seasonLabel: "Mai a septembre",
+    gradient: "from-blue-50 to-sky-50",
+  },
+  {
+    id: "lerins",
+    title: "Ile Sainte-Marguerite",
+    subtitle: "Iles de Lerins, Cannes",
+    description:
+      "Ile Sainte-Marguerite au large de Cannes : sentiers dans la foret, Fort Royal, eaux turquoise. Traversee en 15 min depuis Cannes.",
     location: "Cannes",
     icon: Sailboat,
     seasonStart: 4,

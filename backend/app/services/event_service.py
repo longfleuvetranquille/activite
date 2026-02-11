@@ -156,16 +156,19 @@ async def get_featured_events() -> list[EventRead]:
     )
     all_events = [_to_event_read(r) for r in result.get("items", [])]
 
-    # Diversify: limit to max 2 events per primary type tag to avoid
+    # Diversify: limit events per primary type tag to avoid
     # the featured section being dominated by a single event category.
+    type_limits: dict[str, int] = {"sport_match": 1}
+    default_limit = 2
+
     diversified: list[EventRead] = []
     type_counts: dict[str, int] = {}
-    max_per_type = 2
 
     for event in all_events:
         primary_type = event.tags_type[0] if event.tags_type else "_none"
         count = type_counts.get(primary_type, 0)
-        if count < max_per_type:
+        limit = type_limits.get(primary_type, default_limit)
+        if count < limit:
             diversified.append(event)
             type_counts[primary_type] = count + 1
 

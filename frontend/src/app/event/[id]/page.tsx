@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   ArrowLeft,
   ExternalLink,
@@ -19,6 +18,9 @@ import type { Event } from "@/types";
 import { getEvent } from "@/lib/api";
 import TagBadge from "@/components/TagBadge";
 import MapView from "@/components/MapView";
+import { TYPE_STYLES } from "@/components/EventCard";
+
+const DEFAULT_STYLE = { gradient: "from-champagne-400 to-champagne-600", emoji: "\uD83C\uDF34" };
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -74,6 +76,10 @@ export default function EventDetailPage() {
     );
   }
 
+  const firstType = event.tags_type[0] || "";
+  const typeStyle = TYPE_STYLES[firstType] || DEFAULT_STYLE;
+  const isSportWithLogo = firstType === "sport_match" && !!event.image_url;
+
   const dateStart = new Date(event.date_start);
   const formattedDate = format(dateStart, "EEEE d MMMM yyyy", { locale: fr });
   const formattedTime = format(dateStart, "HH:mm");
@@ -108,33 +114,30 @@ export default function EventDetailPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {/* Hero Image — larger, full-bleed */}
+      {/* Compact gradient header */}
       <div className="relative">
-        <div className="relative min-h-[40vh] w-full overflow-hidden sm:min-h-[45vh] lg:min-h-[55vh]">
-          {event.image_url ? (
-            <Image
-              src={event.image_url}
-              alt={event.title}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority
-            />
-          ) : (
-            <div className="flex h-full min-h-[40vh] w-full items-center justify-center bg-gradient-to-br from-champagne-200 via-olive-100 to-riviera-200 sm:min-h-[45vh] lg:min-h-[55vh]">
-              <span className="text-8xl opacity-20 select-none">
-                {"\uD83C\uDF34"}
-              </span>
-            </div>
-          )}
+        <div className={`relative flex h-[180px] w-full items-center justify-center overflow-hidden bg-gradient-to-br ${typeStyle.gradient}`}>
+          {/* Centered large emoji in gradient circle */}
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
+            className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm"
+          >
+            {isSportWithLogo ? (
+              <img src={event.image_url} alt="" className="h-14 w-14 object-contain" />
+            ) : (
+              <span className="text-[56px] leading-none">{typeStyle.emoji}</span>
+            )}
+          </motion.div>
 
-          {/* Gradient overlay at bottom */}
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/60 to-transparent" />
+          {/* Gradient fade at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/60 to-transparent" />
 
           {/* Back button overlay */}
           <button
             onClick={() => router.back()}
-            className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/30 text-white backdrop-blur-md transition-all hover:bg-black/50 sm:left-6 lg:left-6"
+            className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 sm:left-6 lg:left-6"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -297,8 +300,8 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 function DetailSkeleton() {
   return (
     <div>
-      {/* Hero image skeleton */}
-      <div className="h-[40vh] w-full bg-slate-200/50 shimmer sm:h-[45vh] lg:h-[55vh]" />
+      {/* Compact gradient header skeleton */}
+      <div className="h-[180px] w-full bg-slate-200/50 shimmer" />
       {/* Content */}
       <div className="mx-auto max-w-3xl space-y-4 px-4 py-8 sm:px-6">
         <div className="h-5 w-60 rounded-lg bg-slate-200/60 shimmer" />

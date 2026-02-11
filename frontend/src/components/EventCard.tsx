@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -9,24 +8,6 @@ import { motion } from "framer-motion";
 
 import type { Event } from "@/types";
 import TagBadge from "./TagBadge";
-
-// Map event types to emojis for placeholders
-const TYPE_EMOJIS: Record<string, string> = {
-  party: "\uD83C\uDFB6",
-  bar_rooftop: "\uD83C\uDF78",
-  dj_set: "\uD83C\uDFA7",
-  concert: "\uD83C\uDFA4",
-  show: "\uD83C\uDFAD",
-  conference: "\uD83E\uDDE0",
-  sport_match: "\u26BD",
-  motorsport: "\uD83C\uDFCE\uFE0F",
-  watersport: "\uD83C\uDF0A",
-  outdoor: "\uD83C\uDFD5\uFE0F",
-  gaming: "\uD83C\uDFAE",
-  cinema: "\uD83C\uDFAC",
-  food: "\uD83C\uDF7D\uFE0F",
-  travel: "\u2708\uFE0F",
-};
 
 const TYPE_LABELS: Record<string, string> = {
   party: "Soiree",
@@ -45,22 +26,25 @@ const TYPE_LABELS: Record<string, string> = {
   travel: "Voyage",
 };
 
-const TYPE_GRADIENTS: Record<string, string> = {
-  party: "from-purple-400 to-pink-400",
-  bar_rooftop: "from-amber-400 to-orange-400",
-  dj_set: "from-violet-400 to-fuchsia-400",
-  concert: "from-rose-400 to-red-400",
-  show: "from-indigo-400 to-purple-400",
-  conference: "from-sky-400 to-blue-400",
-  sport_match: "from-emerald-400 to-green-400",
-  motorsport: "from-red-400 to-orange-400",
-  watersport: "from-cyan-400 to-teal-400",
-  outdoor: "from-green-400 to-emerald-400",
-  gaming: "from-violet-400 to-indigo-400",
-  cinema: "from-slate-400 to-gray-500",
-  food: "from-orange-400 to-amber-400",
-  travel: "from-sky-400 to-cyan-400",
+export const TYPE_STYLES: Record<string, { gradient: string; emoji: string }> = {
+  party: { gradient: "from-violet-500 to-purple-600", emoji: "\uD83C\uDFB6" },
+  bar_rooftop: { gradient: "from-amber-400 to-orange-500", emoji: "\uD83C\uDF78" },
+  dj_set: { gradient: "from-indigo-500 to-blue-600", emoji: "\uD83C\uDFA7" },
+  concert: { gradient: "from-rose-400 to-pink-600", emoji: "\uD83C\uDFA4" },
+  show: { gradient: "from-fuchsia-500 to-pink-600", emoji: "\uD83C\uDFAD" },
+  conference: { gradient: "from-slate-500 to-slate-700", emoji: "\uD83E\uDDE0" },
+  poker_games: { gradient: "from-emerald-600 to-green-800", emoji: "\uD83C\uDCCF" },
+  sport_match: { gradient: "from-green-500 to-emerald-600", emoji: "\u26BD" },
+  motorsport: { gradient: "from-red-500 to-orange-600", emoji: "\uD83C\uDFCE\uFE0F" },
+  watersport: { gradient: "from-cyan-400 to-teal-500", emoji: "\uD83C\uDF0A" },
+  outdoor: { gradient: "from-emerald-400 to-green-600", emoji: "\uD83C\uDFD5\uFE0F" },
+  gaming: { gradient: "from-purple-500 to-indigo-600", emoji: "\uD83C\uDFAE" },
+  cinema: { gradient: "from-slate-600 to-zinc-800", emoji: "\uD83C\uDFAC" },
+  food: { gradient: "from-orange-400 to-amber-600", emoji: "\uD83C\uDF7D\uFE0F" },
+  travel: { gradient: "from-sky-400 to-blue-500", emoji: "\u2708\uFE0F" },
 };
+
+const DEFAULT_STYLE = { gradient: "from-champagne-400 to-champagne-600", emoji: "\uD83C\uDF34" };
 
 interface EventCardProps {
   event: Event;
@@ -72,7 +56,6 @@ interface EventCardProps {
 export default function EventCard({
   event,
   index = 0,
-  compact = false,
   variant = "default",
 }: EventCardProps) {
   const dateStart = new Date(event.date_start);
@@ -90,10 +73,10 @@ export default function EventCard({
 
   const firstType = event.tags_type[0] || "";
   const typeLabel = TYPE_LABELS[firstType] || "";
-  const typeEmoji = TYPE_EMOJIS[firstType] || "\uD83D\uDCC5";
-  const typeGradient = TYPE_GRADIENTS[firstType] || "from-champagne-400 to-riviera-400";
+  const typeStyle = TYPE_STYLES[firstType] || DEFAULT_STYLE;
+  const isSportWithLogo = firstType === "sport_match" && !!event.image_url;
 
-  // Collect tags for hover display
+  // Collect tags for display
   const allTags: { code: string; category: string }[] = [];
   const tagSources: [string[], string][] = [
     [event.tags_type, "type"],
@@ -104,7 +87,7 @@ export default function EventCard({
   ];
   for (const [tags, category] of tagSources) {
     for (const code of tags) {
-      if (allTags.length < 4) {
+      if (allTags.length < 3) {
         allTags.push({ code, category });
       }
     }
@@ -120,27 +103,27 @@ export default function EventCard({
       >
         <Link
           href={`/event/${event.id}`}
-          className="group relative block aspect-[16/9] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
+          className="group relative block aspect-[21/9] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
         >
-          {/* Image */}
-          {event.image_url ? (
-            <Image
-              src={event.image_url}
-              alt={event.title}
-              fill
-              className="object-cover transition-transform duration-1000 group-hover:scale-[1.04]"
-              style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
-              sizes="(max-width: 1024px) 100vw, 60vw"
-            />
+          {/* Full gradient background */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${typeStyle.gradient}`} />
+
+          {/* Giant watermark emoji or team logo */}
+          {isSportWithLogo ? (
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-3">
+              <img src={event.image_url} alt="" className="h-32 w-32 object-contain opacity-20" />
+            </div>
           ) : (
-            <WideplaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[160px] leading-none opacity-[0.08] transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-3">
+              {typeStyle.emoji}
+            </div>
           )}
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
           {/* Score on hover */}
-          <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100">
+          <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/30 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100">
             <span className="text-xs font-bold text-white">{event.interest_score}</span>
           </div>
 
@@ -152,7 +135,7 @@ export default function EventCard({
           {/* Content overlaid at bottom */}
           <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
             <div className="flex items-center gap-2 text-sm text-white/70">
-              {typeLabel && <span className="text-champagne-300">{typeLabel}</span>}
+              {typeLabel && <span className="text-white/90 font-medium">{typeLabel}</span>}
               {typeLabel && <span className="text-white/30">|</span>}
               <span className="capitalize">{formattedDate}</span>
               <span className="text-white/30">&middot;</span>
@@ -176,6 +159,7 @@ export default function EventCard({
     );
   }
 
+  // Default variant
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -184,29 +168,26 @@ export default function EventCard({
     >
       <Link
         href={`/event/${event.id}`}
-        className={`group block overflow-hidden rounded-2xl border bg-white/60 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-elevated-lg ${
+        className={`group block overflow-hidden rounded-2xl border bg-white/60 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg ${
           event.is_featured
             ? "border-champagne-200/60 ring-2 ring-champagne-400/20"
             : "border-white/60"
         }`}
       >
-        {/* Mobile: horizontal layout */}
+        {/* Mobile: compact horizontal layout */}
         <div className="flex sm:hidden">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden">
-            {event.image_url ? (
-              <Image
-                src={event.image_url}
-                alt={event.title}
-                fill
-                className="object-cover"
-                sizes="80px"
-              />
-            ) : (
-              <PlaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
-            )}
+          {/* Gradient emoji circle or team logo */}
+          <div className="flex shrink-0 items-center justify-center pl-3 py-2.5">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${typeStyle.gradient} shadow-sm`}>
+              {isSportWithLogo ? (
+                <img src={event.image_url} alt="" className="h-7 w-7 object-contain" />
+              ) : (
+                <span className="text-lg leading-none">{typeStyle.emoji}</span>
+              )}
+            </div>
           </div>
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 p-2.5">
-            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
+            <h3 className="line-clamp-1 text-sm font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
               {event.title}
             </h3>
             <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -223,46 +204,25 @@ export default function EventCard({
           </div>
         </div>
 
-        {/* Desktop: vertical photo-first layout */}
-        <div className="hidden sm:block">
-          {/* Image — aspect 4/3 */}
-          <div className={`relative w-full overflow-hidden ${compact ? "aspect-[3/2]" : "aspect-[4/3]"}`}>
-            {event.image_url ? (
-              <Image
-                src={event.image_url}
-                alt={event.title}
-                fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-[1.06]"
-                style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
-                sizes="(max-width: 1024px) 50vw, 33vw"
-              />
-            ) : (
-              <PlaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
-            )}
+        {/* Desktop: horizontal card with left accent strip */}
+        <div className="hidden sm:flex">
+          {/* Left accent strip */}
+          <div className={`w-[3px] shrink-0 rounded-l-2xl bg-gradient-to-b ${typeStyle.gradient}`} />
 
-            {/* Score — appears on hover */}
-            <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
-              <span className="text-xs font-bold text-white">{event.interest_score}</span>
+          {/* Gradient icon zone */}
+          <div className="flex shrink-0 items-center justify-center px-4 py-4">
+            <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${typeStyle.gradient} shadow-md`}>
+              {isSportWithLogo ? (
+                <img src={event.image_url} alt="" className="h-8 w-8 object-contain" />
+              ) : (
+                <span className="text-xl leading-none">{typeStyle.emoji}</span>
+              )}
             </div>
-
-            {/* Tags — appear on hover */}
-            {allTags.length > 0 && (
-              <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-1 bg-gradient-to-t from-black/40 to-transparent px-3 pb-2.5 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                {allTags.map((tag, i) => (
-                  <TagBadge
-                    key={`${tag.category}-${tag.code}-${i}`}
-                    code={tag.code}
-                    category={tag.category}
-                    small
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Content */}
-          <div className="space-y-1.5 p-3.5 pt-3">
-            {/* Category + Date */}
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 py-3 pr-3.5">
+            {/* Type + date row */}
             <div className="flex items-center gap-2 text-xs text-slate-500">
               {typeLabel && (
                 <>
@@ -271,6 +231,8 @@ export default function EventCard({
                 </>
               )}
               <span className="capitalize">{formattedDate}</span>
+              <span className="text-slate-300">&middot;</span>
+              <span>{formattedTime}</span>
             </div>
 
             {/* Title */}
@@ -278,7 +240,7 @@ export default function EventCard({
               {event.title}
             </h3>
 
-            {/* Location + Price */}
+            {/* Location + Price + Score row */}
             <div className="flex items-center gap-2 text-[13px] text-slate-500">
               {(event.location_name || event.location_city) && (
                 <span className="inline-flex items-center gap-1 truncate">
@@ -291,42 +253,27 @@ export default function EventCard({
               <span className="ml-auto shrink-0 font-semibold text-slate-700">
                 {priceDisplay}
               </span>
+              <span className="shrink-0 text-xs text-slate-400">
+                {event.interest_score}/100
+              </span>
             </div>
+
+            {/* Tags — always visible */}
+            {allTags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-0.5">
+                {allTags.map((tag, i) => (
+                  <TagBadge
+                    key={`${tag.category}-${tag.code}-${i}`}
+                    code={tag.code}
+                    category={tag.category}
+                    small
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </Link>
     </motion.div>
-  );
-}
-
-function PlaceholderImage({
-  typeEmoji,
-  typeGradient,
-}: {
-  typeEmoji: string;
-  typeGradient: string;
-}) {
-  return (
-    <div
-      className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br ${typeGradient}`}
-    >
-      <span className="text-7xl opacity-30 select-none">{typeEmoji}</span>
-    </div>
-  );
-}
-
-function WideplaceholderImage({
-  typeEmoji,
-  typeGradient,
-}: {
-  typeEmoji: string;
-  typeGradient: string;
-}) {
-  return (
-    <div
-      className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${typeGradient}`}
-    >
-      <span className="text-8xl opacity-20 select-none">{typeEmoji}</span>
-    </div>
   );
 }

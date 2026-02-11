@@ -102,7 +102,7 @@ export default function DashboardPage() {
             />
             <HorizontalCarousel>
               {todayEvents.map((event, i) => (
-                <div key={event.id} className="w-[280px] shrink-0">
+                <div key={event.id} className="w-[260px] shrink-0">
                   <EventCard event={event} index={i} />
                 </div>
               ))}
@@ -165,8 +165,8 @@ export default function DashboardPage() {
               linkHref="/weekend"
               linkLabel="Tout voir"
             />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {weekendEvents.slice(0, 6).map((event, i) => (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {weekendEvents.slice(0, 8).map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
               ))}
             </div>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
               <div className="mt-6">
                 <HorizontalCarousel>
                   {flightDeals.map((event, i) => (
-                    <div key={event.id} className="w-[280px] shrink-0">
+                    <div key={event.id} className="w-[260px] shrink-0">
                       <FlightDealCard event={event} index={i} />
                     </div>
                   ))}
@@ -219,7 +219,7 @@ export default function DashboardPage() {
             />
             <HorizontalCarousel>
               {otherDeals.map((event, i) => (
-                <div key={event.id} className="w-[280px] shrink-0">
+                <div key={event.id} className="w-[260px] shrink-0">
                   <EventCard event={event} index={i} />
                 </div>
               ))}
@@ -333,7 +333,7 @@ export default function DashboardPage() {
           todayEvents.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 text-center content-container">
               <div className="mb-4 text-5xl">
-                \uD83C\uDF34
+                {"\uD83C\uDF34"}
               </div>
               <h3 className="mb-2 font-serif text-xl text-slate-900">
                 Aucun evenement
@@ -411,19 +411,12 @@ function FlightDealCard({ event, index }: { event: Event; index: number }) {
         href={`/event/${event.id}`}
         className="group block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
       >
-        {/* Image */}
-        <div className="relative aspect-[3/2] overflow-hidden">
-          {event.image_url ? (
-            <img
-              src={event.image_url}
-              alt={event.title}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-sky-600/30 to-cyan-600/30">
-              <span className="text-6xl opacity-30 select-none">{"\u2708\uFE0F"}</span>
-            </div>
-          )}
+        {/* Gradient header with plane emoji */}
+        <div className="relative flex h-28 items-center justify-center overflow-hidden bg-gradient-to-br from-sky-500 to-blue-600">
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[80px] leading-none opacity-[0.1]">{"\u2708\uFE0F"}</span>
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+            <Plane className="h-6 w-6 text-white" />
+          </div>
         </div>
 
         <div className="p-3.5">
@@ -451,26 +444,27 @@ function FlightDealCard({ event, index }: { event: Event; index: number }) {
 function DashboardSkeleton() {
   return (
     <div>
-      {/* Hero skeleton — dark */}
-      <div className="relative min-h-[50vh] overflow-hidden bg-gradient-to-b from-[#0f0d2e] via-[#112228] to-[#0f0d2e]">
-        <div className="flex min-h-[50vh] flex-col justify-end pb-20">
-          <div className="content-container space-y-4">
-            <div className="h-4 w-40 rounded-lg bg-white/10 shimmer" />
-            <div className="h-14 w-3/4 max-w-lg rounded-2xl bg-white/10 shimmer" />
-            <div className="h-6 w-60 rounded-lg bg-white/10 shimmer" />
-            <div className="flex gap-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-8 w-24 rounded-full bg-white/10 shimmer" />
-              ))}
+      {/* Hero skeleton — compact */}
+      <div className="relative min-h-[280px] overflow-hidden bg-gradient-to-b from-[#0f0d2e] via-[#112228] to-[#0f0d2e]">
+        {/* Glass card shimmer — bottom left */}
+        <div className="relative flex min-h-[280px] flex-col justify-end pb-16 sm:pb-20">
+          <div className="content-container">
+            <div className="inline-block rounded-2xl bg-white/[0.06] backdrop-blur-sm px-6 py-5 sm:px-8 sm:py-6 space-y-4">
+              <div className="h-10 w-72 max-w-full rounded-xl bg-white/10 shimmer" />
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-7 w-20 rounded-full bg-white/10 shimmer" />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF8F3] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/80 to-transparent" />
       </div>
 
       {/* Content skeleton */}
       <div className="content-container space-y-12 py-10">
-        {/* Carousel skeleton */}
+        {/* Carousel skeleton — compact cards */}
         <div>
           <div className="mb-5 space-y-2">
             <div className="h-8 w-40 rounded-lg bg-slate-200/60 shimmer" />
@@ -478,19 +472,19 @@ function DashboardSkeleton() {
           </div>
           <div className="flex gap-4 overflow-hidden">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-80 w-[280px] shrink-0 rounded-2xl bg-slate-200/40 shimmer" />
+              <div key={i} className="h-28 w-[260px] shrink-0 rounded-2xl bg-slate-200/40 shimmer" />
             ))}
           </div>
         </div>
 
-        {/* Grid skeleton */}
+        {/* Grid skeleton — wide + 2 stacked */}
         <div>
           <div className="mb-5 h-8 w-48 rounded-lg bg-slate-200/60 shimmer" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-            <div className="h-64 rounded-2xl bg-slate-200/40 shimmer lg:col-span-7" />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+            <div className="h-40 rounded-2xl bg-slate-200/40 shimmer lg:col-span-7" />
             <div className="flex flex-col gap-4 lg:col-span-5">
-              <div className="h-[122px] rounded-2xl bg-slate-200/40 shimmer" />
-              <div className="h-[122px] rounded-2xl bg-slate-200/40 shimmer" />
+              <div className="h-28 rounded-2xl bg-slate-200/40 shimmer" />
+              <div className="h-28 rounded-2xl bg-slate-200/40 shimmer" />
             </div>
           </div>
         </div>

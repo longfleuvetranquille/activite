@@ -142,6 +142,15 @@ const FOOD_CATEGORIES: FoodCategory[] = [
           "Cuisine mediterraneenne les pieds dans l\u2019eau, vue sur la baie des Anges.",
         gradient: "from-sky-50 to-blue-50",
       },
+      {
+        id: "mayabay",
+        name: "Mayabay",
+        subtitle: "Monaco",
+        description:
+          "Restaurant thailandais premium sur le port de Monaco. Ambiance tropicale, cuisine raffinee et vue sur les yachts.",
+        gradient: "from-emerald-50 to-cyan-50",
+        url: "https://www.mayabay.mc",
+      },
     ],
   },
   {
@@ -167,6 +176,15 @@ const FOOD_CATEGORIES: FoodCategory[] = [
         description:
           "Restaurant-club mythique de la Croisette. Cuisine asiatique puis clubbing jusqu\u2019au bout de la nuit.",
         gradient: "from-champagne-100 to-rose-50",
+      },
+      {
+        id: "buddha-bar",
+        name: "Buddha Bar",
+        subtitle: "Monaco",
+        description:
+          "Restaurant-bar iconique au Port de Monaco. Cuisine asiatique fusion, cocktails et DJ sets dans un decor spectaculaire.",
+        gradient: "from-amber-50 to-red-50",
+        url: "https://www.buddhabar.com/en/monaco/",
       },
     ],
   },

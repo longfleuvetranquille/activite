@@ -94,6 +94,14 @@ def _parse_match_block(block, now: datetime) -> CrawledEvent | None:
     away_el = block.select_one(".calendrier_bloc_equipeext .calendrier_bloc_equipe_nom")
     opponent = away_el.get_text(strip=True) if away_el else "?"
 
+    # Get opponent logo
+    opponent_logo = ""
+    away_img = block.select_one(".calendrier_bloc_equipeext img")
+    if away_img:
+        opponent_logo = away_img.get("src", "") or away_img.get("data-src", "")
+        if opponent_logo and not opponent_logo.startswith("http"):
+            opponent_logo = f"https://www.ogcnice.com{opponent_logo}"
+
     # Get competition from CSS class
     competition = ""
     classes = block.get("class", [])
@@ -152,6 +160,7 @@ def _parse_match_block(block, now: datetime) -> CrawledEvent | None:
         location_name=venue,
         location_city="Nice",
         source_url=link or CALENDAR_URL,
+        image_url=opponent_logo,
         price_min=-1,
         price_max=-1,
         currency="EUR",

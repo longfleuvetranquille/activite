@@ -45,7 +45,7 @@ const BEACHES: Beach[] = [
   {
     id: "petit-caneiret",
     name: "Calanque du Petit Caneiret",
-    location: "La Ciotat",
+    location: "Saint-Raphael",
     description:
       "Eau turquoise dans un ecrin de falaises, ambiance bout du monde.",
     gradient: "from-emerald-50 to-teal-50",

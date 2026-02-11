@@ -109,7 +109,7 @@ export default function MonthPage() {
       {loading && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-72 rounded-2xl bg-slate-200/40 shimmer" />
+            <div key={i} className="h-28 rounded-2xl bg-slate-200/40 shimmer" />
           ))}
         </div>
       )}
