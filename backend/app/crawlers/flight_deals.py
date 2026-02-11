@@ -148,10 +148,19 @@ class FlightDealsCrawler(BaseCrawler):
         except Exception:
             logger.exception("Flight deals crawler failed")
 
-        # Keep only the top 3 deals by discount percentage
-        MAX_FLIGHT_DEALS = 3
+        # Deduplicate by destination — keep best discount per city
+        seen_destinations: set[str] = set()
+        unique_deals: list[tuple[float, CrawledEvent]] = []
         deal_candidates.sort(key=lambda x: x[0], reverse=True)
-        events = [event for _, event in deal_candidates[:MAX_FLIGHT_DEALS]]
+        for discount, event in deal_candidates:
+            dest = event.location_city or event.title
+            if dest not in seen_destinations:
+                seen_destinations.add(dest)
+                unique_deals.append((discount, event))
+
+        # Keep top 5 deals (one per destination, best discounts first)
+        MAX_FLIGHT_DEALS = 5
+        events = [event for _, event in unique_deals[:MAX_FLIGHT_DEALS]]
 
         logger.info(
             "Flight deals: %d candidates, returning top %d",

@@ -22,12 +22,23 @@ async def get_digest():
         e for e in all_upcoming if e.tags_deals or "deal_detected" in e.tags_meta
     ]
 
+    # Deduplicate flight deals by destination — keep best score per city
+    seen_cities: set[str] = set()
+    unique_deals: list = []
+    for d in deals:
+        if d.source_name == "google_flights":
+            city = d.location_city or d.title
+            if city in seen_cities:
+                continue
+            seen_cities.add(city)
+        unique_deals.append(d)
+
     return DashboardDigest(
         today_count=len(today),
         week_count=len(week),
         featured=featured[:5],
         top_upcoming=best[:15],
-        deals=deals[:5],
+        deals=unique_deals[:5],
     )
 
 
