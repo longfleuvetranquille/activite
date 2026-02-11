@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Mountain,
   Umbrella,
@@ -13,9 +14,11 @@ import {
   Grip,
   Calendar,
   ExternalLink,
+  Sun,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import HorizontalCarousel from "./HorizontalCarousel";
 
 interface TimelessActivity {
@@ -220,6 +223,11 @@ export function getSeasonalActivities(): TimelessActivity[] {
   return TIMELESS_ACTIVITIES.filter((a) => isInSeason(a, currentMonth));
 }
 
+function getOffSeasonActivities(): TimelessActivity[] {
+  const currentMonth = new Date().getMonth() + 1;
+  return TIMELESS_ACTIVITIES.filter((a) => !isInSeason(a, currentMonth));
+}
+
 function TimelessCard({
   activity,
   index,
@@ -282,8 +290,10 @@ function TimelessCard({
 
 export default function TimelessSection() {
   const activities = getSeasonalActivities();
+  const summerActivities = getOffSeasonActivities();
+  const [showSummer, setShowSummer] = useState(false);
 
-  if (activities.length === 0) return null;
+  if (activities.length === 0 && summerActivities.length === 0) return null;
 
   return (
     <div>
@@ -299,11 +309,46 @@ export default function TimelessSection() {
         </p>
       </div>
 
-      <HorizontalCarousel>
-        {activities.map((activity, i) => (
-          <TimelessCard key={activity.id} activity={activity} index={i} />
-        ))}
-      </HorizontalCarousel>
+      {activities.length > 0 && (
+        <HorizontalCarousel>
+          {activities.map((activity, i) => (
+            <TimelessCard key={activity.id} activity={activity} index={i} />
+          ))}
+        </HorizontalCarousel>
+      )}
+
+      {summerActivities.length > 0 && (
+        <div className="mt-6">
+          <button
+            onClick={() => setShowSummer(!showSummer)}
+            className="group inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-champagne-600"
+          >
+            <Sun className="h-3.5 w-3.5" />
+            Voir les activites de cet ete
+            <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${showSummer ? "rotate-180" : ""}`} />
+          </button>
+
+          <AnimatePresence>
+            {showSummer && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 opacity-75">
+                  <HorizontalCarousel>
+                    {summerActivities.map((activity, i) => (
+                      <TimelessCard key={activity.id} activity={activity} index={i} />
+                    ))}
+                  </HorizontalCarousel>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }
