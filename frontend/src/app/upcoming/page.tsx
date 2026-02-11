@@ -1,14 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Telescope, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 import type { Event } from "@/types";
 import { getUpcomingEvents } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import FilterBar from "@/components/FilterBar";
 import DailyDigest from "@/components/DailyDigest";
+
+function groupByMonth(events: Event[]): { label: string; events: Event[] }[] {
+  const groups = new Map<string, Event[]>();
+
+  for (const event of events) {
+    const date = new Date(event.date_start);
+    const key = `${date.getFullYear()}-${String(date.getMonth()).padStart(2, "0")}`;
+    const existing = groups.get(key);
+    if (existing) {
+      existing.push(event);
+    } else {
+      groups.set(key, [event]);
+    }
+  }
+
+  const sortedKeys = [...groups.keys()].sort();
+
+  return sortedKeys.map((key) => {
+    const [year, month] = key.split("-").map(Number);
+    const date = new Date(year, month, 1);
+    let label = format(date, "MMMM yyyy", { locale: fr });
+    label = label.charAt(0).toUpperCase() + label.slice(1);
+
+    const monthEvents = groups.get(key)!;
+    monthEvents.sort((a, b) => b.interest_score - a.interest_score);
+
+    return { label, events: monthEvents };
+  });
+}
 
 export default function UpcomingPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -67,6 +98,8 @@ export default function UpcomingPage() {
 
     setFiltered(result);
   };
+
+  const groups = useMemo(() => groupByMonth(filtered), [filtered]);
 
   const featuredCount = events.filter((e) => e.is_featured).length;
   const dealsCount = events.filter((e) => e.tags_deals.length > 0).length;
@@ -127,19 +160,28 @@ export default function UpcomingPage() {
         </div>
       )}
 
-      {/* Events Grid */}
+      {/* Events grouped by month */}
       {!loading && !error && (
         <>
-          {filtered.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
-              {filtered.map((event, i) => (
-                <EventCard key={event.id} event={event} index={i} />
+          {groups.length > 0 ? (
+            <div className="space-y-8">
+              {groups.map((group) => (
+                <motion.section
+                  key={group.label}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <h2 className="mb-4 border-b border-slate-200/60 pb-2 font-serif text-lg font-semibold text-slate-800">
+                    {group.label}
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {group.events.map((event, i) => (
+                      <EventCard key={event.id} event={event} index={i} />
+                    ))}
+                  </div>
+                </motion.section>
               ))}
-            </motion.div>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <Telescope className="mb-4 h-12 w-12 text-slate-300" />

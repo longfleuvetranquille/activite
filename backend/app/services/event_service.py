@@ -201,6 +201,7 @@ async def get_upcoming_events() -> list[EventRead]:
     filter_str = (
         f'date_start >= "{today}" && date_start < "{end}" '
         f'&& status = "published"'
+        f' && tags_type !~ "travel"'
     )
     result = await pb_client.list_records(
         "events",
