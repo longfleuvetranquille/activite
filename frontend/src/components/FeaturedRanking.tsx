@@ -61,7 +61,7 @@ function FeaturedRow({ event, rank }: { event: Event; rank: number }) {
     >
       <Link
         href={`/event/${event.id}`}
-        className={`group flex items-start gap-4 rounded-2xl px-3 py-3 transition-all duration-300 hover:bg-champagne-50/50 sm:gap-5 ${
+        className={`group flex items-start gap-3 sm:gap-4 rounded-2xl px-2 sm:px-3 py-2 sm:py-3 transition-all duration-300 hover:bg-champagne-50/50 ${
           isTop ? "sm:gap-6" : ""
         }`}
       >
@@ -95,7 +95,7 @@ function FeaturedRow({ event, rank }: { event: Event; rank: number }) {
           </h3>
 
           {/* Date + Location row */}
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-500">
+          <div className="mt-1 sm:mt-1.5 flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-0.5 text-xs sm:text-sm text-slate-500">
             <span className="capitalize">{formattedDate}</span>
             <span className="text-champagne-300">&middot;</span>
             <span>{formattedTime}</span>
@@ -143,19 +143,19 @@ function FeaturedRow({ event, rank }: { event: Event; rank: number }) {
           <div
             className={`flex items-center justify-center rounded-full ${
               isTop
-                ? "h-12 w-12 bg-gradient-to-br from-champagne-400 to-champagne-600 shadow-lg shadow-champagne-400/25"
-                : "h-10 w-10 bg-slate-100"
+                ? "h-10 w-10 sm:h-12 sm:w-12 bg-gradient-to-br from-champagne-400 to-champagne-600 shadow-lg shadow-champagne-400/25"
+                : "h-8 w-8 sm:h-10 sm:w-10 bg-slate-100"
             }`}
           >
             <span
-              className={`text-sm font-bold ${
+              className={`text-xs sm:text-sm font-bold ${
                 isTop ? "text-white" : "text-slate-600"
               }`}
             >
               {event.interest_score}
             </span>
           </div>
-          <span className="text-[10px] text-slate-400">/100</span>
+          <span className="hidden sm:block text-[10px] text-slate-400">/100</span>
         </div>
       </Link>
     </motion.div>

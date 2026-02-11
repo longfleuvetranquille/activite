@@ -94,7 +94,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="content-container py-10"
+            className="content-container py-6 sm:py-10"
           >
             <SectionHeader
               title="Ce soir"
@@ -118,7 +118,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="content-container py-8"
+            className="content-container py-6 sm:py-8"
           >
             <SectionHeader
               title="A la une"
@@ -137,7 +137,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="content-container py-8"
+            className="content-container py-6 sm:py-8"
           >
             <SectionHeader
               title="Ce week-end"
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-gradient-to-r from-[#0f0d2e] via-[#112228] to-[#0f0d2e] py-12 sm:py-16"
+            className="bg-gradient-to-r from-[#0f0d2e] via-[#112228] to-[#0f0d2e] py-8 sm:py-16"
           >
             <div className="content-container">
               <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-champagne-400/70">
@@ -172,8 +172,8 @@ export default function DashboardPage() {
               <p className="mt-1.5 text-sm text-white/40">
                 Meilleurs prix au depart de Nice &middot; {flightDeals.length} offres
               </p>
-              <div className="mt-6">
-                <HorizontalCarousel>
+              <div className="mt-4 sm:mt-6">
+                <HorizontalCarousel dark>
                   {flightDeals.map((event, i) => (
                     <div key={event.id} className="w-[75vw] sm:w-[260px] shrink-0">
                       <FlightDealCard event={event} index={i} />
@@ -191,7 +191,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45 }}
-            className="content-container py-8"
+            className="content-container py-6 sm:py-8"
           >
             <SectionHeader
               title="Bons plans"
@@ -215,54 +215,64 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="content-container py-8"
+          className="content-container py-6 sm:py-8"
         >
           <SectionHeader
             title="Collections"
             subtitle="Nos selections curatees de la Riviera"
           />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            <CollectionCard
-              emoji={"\u2764\uFE0F"}
-              title="Idees de date"
-              description="Les meilleurs spots pour un rendez-vous"
-              count={10}
-              href="#dates"
-              gradient="from-rose-50 to-pink-50"
-            />
-            <CollectionCard
-              emoji={"\uD83C\uDFD6\uFE0F"}
-              title="Plages & criques"
-              description="Spots secrets et plages paradisiaques"
-              count={7}
-              href="#beaches"
-              gradient="from-sky-50 to-cyan-50"
-            />
-            <CollectionCard
-              emoji={"\u2615"}
-              title="Cafes & brunchs"
-              description="Les meilleurs cafes de la Riviera"
-              count={4}
-              href="#cafes"
-              gradient="from-amber-50 to-orange-50"
-            />
-            <CollectionCard
-              emoji={"\uD83E\uDDED"}
-              title="Intemporelles"
-              description="Activites permanentes et saisonnieres"
-              count={getSeasonalActivities().length}
-              href="#timeless"
-              gradient="from-emerald-50 to-teal-50"
-            />
-            <CollectionCard
-              emoji={"\uD83C\uDF7D\uFE0F"}
-              title="Restos & clubs"
-              description="Restaurant pour un date en bien"
-              count={14}
-              href="#restaurants"
-              gradient="from-violet-50 to-purple-50"
-            />
-          </div>
+          <HorizontalCarousel>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\u2764\uFE0F"}
+                title="Idees de date"
+                description="Les meilleurs spots pour un rendez-vous"
+                count={10}
+                href="#dates"
+                gradient="from-rose-50 to-pink-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83C\uDFD6\uFE0F"}
+                title="Plages & criques"
+                description="Spots secrets et plages paradisiaques"
+                count={7}
+                href="#beaches"
+                gradient="from-sky-50 to-cyan-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\u2615"}
+                title="Cafes & brunchs"
+                description="Les meilleurs cafes de la Riviera"
+                count={4}
+                href="#cafes"
+                gradient="from-amber-50 to-orange-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83E\uDDED"}
+                title="Intemporelles"
+                description="Activites permanentes et saisonnieres"
+                count={getSeasonalActivities().length}
+                href="#timeless"
+                gradient="from-emerald-50 to-teal-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\uD83C\uDF7D\uFE0F"}
+                title="Restos & clubs"
+                description="Restaurant pour un date en bien"
+                count={14}
+                href="#restaurants-date"
+                gradient="from-violet-50 to-purple-50"
+              />
+            </div>
+          </HorizontalCarousel>
         </motion.section>
 
         {/* 7. "Les gros events" — top upcoming, diversified */}
@@ -281,10 +291,11 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className="content-container py-8"
+              className="content-container py-6 sm:py-8"
             >
               <SectionHeader
-                title="Les gros events des 6 prochains mois"
+                title="Les gros events"
+                subtitle="Dans les 6 prochains mois"
                 count={diversified.length}
                 linkHref="/upcoming"
                 linkLabel="Voir tout"
@@ -301,19 +312,19 @@ export default function DashboardPage() {
         <div className="editorial-divider content-container" />
 
         {/* 8. Curated sections — carousels */}
-        <div id="timeless" className="content-container py-8">
+        <div id="timeless" className="content-container py-6 sm:py-8">
           <TimelessSection />
         </div>
 
-        <div id="dates" className="content-container py-8">
+        <div id="dates" className="content-container py-6 sm:py-8">
           <DateIdeasSection />
         </div>
 
-        <div className="content-container py-8">
+        <div className="content-container py-6 sm:py-8">
           <FoodGuideSection />
         </div>
 
-        <div id="beaches" className="content-container py-8">
+        <div id="beaches" className="content-container py-6 sm:py-8">
           <BeachSection />
         </div>
 
@@ -354,8 +365,8 @@ function SectionHeader({
   linkLabel?: string;
 }) {
   return (
-    <div className="mb-5 flex items-end justify-between gap-4">
-      <div>
+    <div className="mb-4 sm:mb-5 flex items-end justify-between gap-3">
+      <div className="min-w-0">
         <h2 className="font-serif text-section-title text-slate-900">
           {title}
           {count !== undefined && (
@@ -365,16 +376,16 @@ function SectionHeader({
           )}
         </h2>
         {subtitle && (
-          <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+          <p className="mt-0.5 text-xs sm:text-sm text-slate-500">{subtitle}</p>
         )}
       </div>
       {linkHref && linkLabel && (
         <Link
           href={linkHref}
-          className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-champagne-600 transition-colors hover:text-champagne-700"
+          className="group inline-flex shrink-0 items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-medium text-champagne-600 transition-colors hover:text-champagne-700"
         >
           {linkLabel}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
       )}
     </div>
@@ -403,7 +414,7 @@ function FlightDealCard({ event, index }: { event: Event; index: number }) {
         className="group block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
       >
         {/* Gradient header with plane emoji */}
-        <div className="relative flex h-28 items-center justify-center overflow-hidden bg-gradient-to-br from-sky-500 to-blue-600">
+        <div className="relative flex h-24 sm:h-28 items-center justify-center overflow-hidden bg-gradient-to-br from-sky-500 to-blue-600">
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[80px] leading-none opacity-[0.1]">{"\u2708\uFE0F"}</span>
           <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
             <Plane className="h-6 w-6 text-white" />

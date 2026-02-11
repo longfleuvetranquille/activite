@@ -75,7 +75,7 @@
   }
 
   .editorial-divider {
-    @apply h-px bg-gradient-to-r from-transparent via-champagne-300/40 to-transparent my-12 sm:my-16;
+    @apply h-px bg-gradient-to-r from-transparent via-champagne-300/40 to-transparent my-6 sm:my-12 lg:my-16;
   }
 
   .content-container {

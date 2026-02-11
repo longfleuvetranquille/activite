@@ -6,11 +6,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 interface HorizontalCarouselProps {
   children: React.ReactNode;
   className?: string;
+  dark?: boolean;
 }
 
 export default function HorizontalCarousel({
   children,
   className = "",
+  dark = false,
 }: HorizontalCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -63,12 +65,12 @@ export default function HorizontalCarousel({
 
       {/* Left fade */}
       {canScrollLeft && (
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#FAF8F3] to-transparent" />
+        <div className={`pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-16 bg-gradient-to-r ${dark ? "from-[#0f0d2e]" : "from-[#FAF8F3]"} to-transparent`} />
       )}
 
       {/* Right fade */}
       {canScrollRight && (
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#FAF8F3] to-transparent" />
+        <div className={`pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-16 bg-gradient-to-l ${dark ? "from-[#0f0d2e]" : "from-[#FAF8F3]"} to-transparent`} />
       )}
 
       {/* Left arrow */}
