@@ -67,6 +67,14 @@ const BEACHES: Beach[] = [
     gradient: "from-amber-50 to-orange-50",
   },
   {
+    id: "plage-reserve",
+    name: "Plage de la Reserve",
+    location: "Nice",
+    description:
+      "Crique rocheuse au pied de la colline du Chateau avec eau turquoise et plongeoir naturel. Le spot le plus sauvage de Nice.",
+    gradient: "from-cyan-50 to-teal-50",
+  },
+  {
     id: "arma-di-taggia",
     name: "Arma Di Taggia",
     location: "Italie (Ligurie)",

@@ -10,6 +10,7 @@ import {
   IceCream,
   Plane,
   Footprints,
+  UtensilsCrossed,
   ExternalLink,
   type LucideIcon,
 } from "lucide-react";
@@ -112,6 +113,16 @@ const DATE_IDEAS: DateIdea[] = [
     icon: Plane,
     gradient: "from-champagne-100 to-amber-50",
     url: "https://www.monacair.mc",
+  },
+  {
+    id: "le-plongeoir",
+    title: "Le Plongeoir",
+    subtitle: "Nice",
+    description:
+      "Restaurant perche sur un rocher au-dessus de la mer, accessible par une passerelle. Cadre unique pour un diner les pieds dans le vide.",
+    icon: UtensilsCrossed,
+    gradient: "from-sky-50 to-cyan-50",
+    url: "https://www.leplongeoir.com",
   },
   {
     id: "chateau-promenade",
