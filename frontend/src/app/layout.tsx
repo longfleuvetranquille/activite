@@ -228,9 +228,7 @@ function SidebarContent({
         </p>
         <div className="space-y-1">
           {NAV_ITEMS.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href + "/"));
+            const isActive = pathname === item.href;
             const Icon = item.icon;
 
             return (
