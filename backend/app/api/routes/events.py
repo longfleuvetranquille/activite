@@ -65,6 +65,14 @@ async def upcoming_events():
     return await event_service.get_upcoming_events()
 
 
+@router.post("/recalibrate-scores")
+async def recalibrate_scores():
+    from app.scheduler.jobs import recalibrate_match_scores
+
+    updated = await recalibrate_match_scores()
+    return {"updated": updated}
+
+
 @router.get("/{event_id}", response_model=EventRead)
 async def get_event(event_id: str):
     event = await event_service.get_event_by_id(event_id)

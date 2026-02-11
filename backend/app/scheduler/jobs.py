@@ -109,7 +109,8 @@ async def run_crawl_pipeline():
                 interest = await score_event(raw, tags)
                 summary = await summarize_event(raw)
 
-                # Ligue 1 ranking bonus for football matches
+                # Ligue 1 scoring for football matches — use fixed base + tier bonus
+                # instead of raw AI score to ensure consistent differentiation.
                 if (
                     source_name in ("ogcn", "asmonaco")
                     and "sport_match" in tags.get("type", [])
@@ -118,12 +119,11 @@ async def run_crawl_pipeline():
 
                     opponent_name = _extract_opponent(raw.title)
                     bonus = get_opponent_bonus(opponent_name)
-                    if bonus:
-                        interest = min(100, interest + bonus)
-                        logger.info(
-                            "Ligue 1 bonus +%d for %s (opponent: %s)",
-                            bonus, raw.title, opponent_name,
-                        )
+                    interest = min(100, 70 + bonus)
+                    logger.info(
+                        "Ligue 1 score: 70 + %d = %d for %s (opponent: %s)",
+                        bonus, interest, raw.title, opponent_name,
+                    )
 
                 # Store
                 event_hash = compute_event_hash(
@@ -228,6 +228,60 @@ def _extract_opponent(title: str) -> str:
     """Extract opponent name from a match title like 'OGC Nice vs Lyon (Ligue 1)'."""
     match = re.match(r"(?:OGC Nice|AS Monaco)\s+vs\s+(.+?)(?:\s*\(|$)", title)
     return match.group(1).strip() if match else ""
+
+
+async def recalibrate_match_scores() -> int:
+    """Recalibrate football match scores based on opponent Ligue 1 tier.
+
+    Sets a base score of 70 for all football matches from ogcn/asmonaco,
+    then adds a tier-based bonus (+15 for Tier 1, +10 Tier 2, +5 Tier 3, +0 Tier 4).
+    """
+    from app.data.ligue1 import get_opponent_bonus
+
+    updated = 0
+    base_score = 70
+    page = 1
+
+    while True:
+        result = await pb_client.list_records(
+            "events",
+            page=page,
+            per_page=200,
+            filter_str=(
+                '(source_name = "ogcn" || source_name = "asmonaco")'
+                ' && status = "published"'
+            ),
+        )
+        items = result.get("items", [])
+        if not items:
+            break
+
+        for item in items:
+            opponent = _extract_opponent(item["title"])
+            bonus = get_opponent_bonus(opponent)
+            new_score = min(100, base_score + bonus)
+            old_score = item.get("interest_score", 0)
+
+            if new_score != old_score:
+                await pb_client.update_record(
+                    "events",
+                    item["id"],
+                    {
+                        "interest_score": new_score,
+                        "is_featured": new_score >= 80,
+                    },
+                )
+                logger.info(
+                    "Recalibrated %s: %d → %d (opponent=%s, bonus=+%d)",
+                    item["title"], old_score, new_score, opponent, bonus,
+                )
+                updated += 1
+
+        if page >= result.get("totalPages", 1):
+            break
+        page += 1
+
+    return updated
 
 
 async def _expire_past_events() -> int:

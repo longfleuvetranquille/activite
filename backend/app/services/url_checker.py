@@ -47,6 +47,11 @@ async def check_source_url(url: str) -> bool:
     if "google.com/travel" in url:
         return True
 
+    # Skip validation for official team sites (always valid, some match
+    # preview pages may not exist yet)
+    if "asmonaco.com" in url or "ogcnice.com" in url:
+        return True
+
     return await is_url_alive(url)
 
 

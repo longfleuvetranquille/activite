@@ -50,6 +50,12 @@ LIGUE1_TIERS: dict[str, int] = {
     "st-etienne": 4,
     "saint-etienne": 4,
     "asse": 4,
+    "lorient": 4,
+    "fc lorient": 4,
+    "metz": 4,
+    "fc metz": 4,
+    "clermont": 4,
+    "clermont foot": 4,
 }
 
 _TIER_BONUS = {1: 15, 2: 10, 3: 5, 4: 0}

@@ -274,59 +274,79 @@ function SidebarContent({
         </div>
       </nav>
 
-      {/* Decorative palm tree — fine line art */}
+      {/* Decorative palm tree — filled silhouette */}
       <div className="flex flex-1 items-end justify-center overflow-hidden px-4 pb-4">
         <svg
-          viewBox="0 0 100 240"
+          viewBox="0 0 120 280"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-auto w-24 opacity-[0.09]"
+          className="h-auto w-28 opacity-[0.07]"
         >
-          {/* Trunk — elegant curve with notches */}
+          {/* Trunk — gentle S-curve */}
           <path
-            d="M50 235 C49 210 46 180 47 155 C48 130 52 105 51 85 C50.5 75 50 65 50 58"
-            stroke="url(#palm-g)" strokeWidth="3.5" strokeLinecap="round"
+            d="M58 270 C57 250 54 225 55 200 C56 175 62 150 61 128 C60 115 59 105 59 95"
+            stroke="url(#palm-g)" strokeWidth="8" strokeLinecap="round"
           />
-          {/* Trunk texture lines */}
-          {[170, 155, 140, 125, 112, 100, 90, 80, 70].map((y, i) => (
+          {/* Trunk notches */}
+          {[240, 222, 205, 190, 176, 163, 151, 140, 130, 120, 111].map((y, i) => (
             <path
               key={i}
-              d={`M${47 + (i % 2)} ${y} C${49} ${y - 1.5} ${51} ${y - 1.5} ${53 - (i % 2)} ${y}`}
-              stroke="url(#palm-g)" strokeWidth="1" opacity="0.5"
+              d={`M${54 + (i % 2) * 2} ${y} Q59 ${y - 2} ${64 - (i % 2) * 2} ${y}`}
+              stroke="url(#palm-g)" strokeWidth="1.2" opacity="0.35"
             />
           ))}
-          {/* Fronds — flowing leaf strokes */}
-          {/* Left drooping */}
-          <path d="M50 58 C40 48 22 42 4 48" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C38 42 18 32 2 34" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C42 38 25 22 8 18" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          {/* Left — leaf veins */}
-          <path d="M35 46 C30 46 20 46 10 50" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          <path d="M36 39 C28 36 16 34 6 36" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          <path d="M38 32 C30 26 20 22 12 20" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          {/* Right drooping */}
-          <path d="M50 58 C60 48 78 42 96 48" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C62 42 82 32 98 34" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C58 38 75 22 92 18" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          {/* Right — leaf veins */}
-          <path d="M65 46 C70 46 80 46 90 50" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          <path d="M64 39 C72 36 84 34 94 36" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          <path d="M62 32 C70 26 80 22 88 20" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
+          {/* Coconut cluster */}
+          <ellipse cx="56" cy="94" rx="4.5" ry="4" fill="url(#palm-g)" opacity="0.5" />
+          <ellipse cx="63" cy="93" rx="4" ry="3.5" fill="url(#palm-g)" opacity="0.5" />
+          <ellipse cx="59" cy="89" rx="3.5" ry="3.5" fill="url(#palm-g)" opacity="0.5" />
+          {/* Fronds — filled leaf shapes */}
+          {/* Left drooping frond */}
+          <path
+            d="M59 90 C48 78 28 68 4 72 C28 64 48 72 59 88Z"
+            fill="url(#palm-g)" opacity="0.85"
+          />
+          {/* Left mid frond */}
+          <path
+            d="M59 88 C44 68 20 50 0 44 C22 44 46 62 59 85Z"
+            fill="url(#palm-g)" opacity="0.9"
+          />
+          {/* Left upper frond */}
+          <path
+            d="M59 86 C48 62 30 35 10 18 C32 28 50 55 59 82Z"
+            fill="url(#palm-g)" opacity="0.8"
+          />
+          {/* Right drooping frond */}
+          <path
+            d="M61 90 C72 78 92 68 116 72 C92 64 72 72 61 88Z"
+            fill="url(#palm-g)" opacity="0.85"
+          />
+          {/* Right mid frond */}
+          <path
+            d="M61 88 C76 68 100 50 120 44 C98 44 74 62 61 85Z"
+            fill="url(#palm-g)" opacity="0.9"
+          />
+          {/* Right upper frond */}
+          <path
+            d="M61 86 C72 62 90 35 110 18 C88 28 70 55 61 82Z"
+            fill="url(#palm-g)" opacity="0.8"
+          />
           {/* Top fronds */}
-          <path d="M50 58 C48 40 44 20 38 4" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C52 40 56 20 62 4" stroke="url(#palm-g)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 58 C49 38 50 16 50 0" stroke="url(#palm-g)" strokeWidth="1.5" strokeLinecap="round" />
-          {/* Top veins */}
-          <path d="M47 30 C45 22 42 14 40 8" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          <path d="M53 30 C55 22 58 14 60 8" stroke="url(#palm-g)" strokeWidth="0.6" opacity="0.4" />
-          {/* Coconuts */}
-          <circle cx="47" cy="59" r="3" fill="url(#palm-g)" opacity="0.6" />
-          <circle cx="53" cy="59" r="3" fill="url(#palm-g)" opacity="0.6" />
-          <circle cx="50" cy="56" r="2.5" fill="url(#palm-g)" opacity="0.6" />
+          <path
+            d="M59 86 C56 60 50 32 42 6 C52 28 58 58 60 84Z"
+            fill="url(#palm-g)" opacity="0.75"
+          />
+          <path
+            d="M61 86 C64 60 70 32 78 6 C68 28 62 58 60 84Z"
+            fill="url(#palm-g)" opacity="0.75"
+          />
+          <path
+            d="M60 85 C59 55 58 28 60 0 C62 28 61 55 60 85Z"
+            fill="url(#palm-g)" opacity="0.7"
+          />
           <defs>
-            <linearGradient id="palm-g" x1="50" y1="0" x2="50" y2="240" gradientUnits="userSpaceOnUse">
+            <linearGradient id="palm-g" x1="60" y1="0" x2="60" y2="280" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#C49A4C" />
-              <stop offset="60%" stopColor="#A8884A" />
+              <stop offset="50%" stopColor="#B8904A" />
               <stop offset="100%" stopColor="#6B5D3E" />
             </linearGradient>
           </defs>
