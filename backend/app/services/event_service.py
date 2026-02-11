@@ -84,8 +84,10 @@ async def get_today_events() -> list[EventRead]:
 
 
 async def get_week_events() -> list[EventRead]:
-    today = datetime.now().strftime("%Y-%m-%d")
-    week_end = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    now = datetime.now()
+    today = now.strftime("%Y-%m-%d")
+    days_until_monday = 7 - now.weekday()  # days until next Monday
+    week_end = (now + timedelta(days=days_until_monday)).strftime("%Y-%m-%d")
     filter_str = (
         f'date_start >= "{today}" && date_start < "{week_end}" '
         f'&& status = "published"'

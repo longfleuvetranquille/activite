@@ -127,7 +127,7 @@ export default function WeekPage() {
             Cette semaine
           </h1>
           <p className="text-sm text-slate-500">
-            Les meilleurs evenements des 7 prochains jours
+            Les meilleurs evenements jusqu'a dimanche
           </p>
         </div>
       </motion.div>
