@@ -154,19 +154,6 @@ const TIMELESS_ACTIVITIES: TimelessActivity[] = [
     gradient: "from-sky-50 to-cyan-50",
   },
   {
-    id: "marches-noel",
-    title: "Marches de Noel",
-    subtitle: "Nice, Monaco, Cannes",
-    description:
-      "Chalets en bois, vin chaud, illuminations et ambiance festive sur la Cote d'Azur. Place Massena a Nice, Port de Monaco, Cannes.",
-    location: "Cote d'Azur",
-    icon: TreePine,
-    seasonStart: 11,
-    seasonEnd: 1,
-    seasonLabel: "Novembre a janvier",
-    gradient: "from-red-50 to-amber-50",
-  },
-  {
     id: "golf",
     title: "Golf",
     subtitle: "Mougins, Mandelieu",

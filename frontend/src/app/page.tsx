@@ -145,9 +145,19 @@ export default function DashboardPage() {
                 emoji={"\uD83D\uDD7A"}
                 title="Restos dansants"
                 description="Diner et danser dans la meme soiree"
-                count={2}
+                count={3}
                 href="#resto-dansant"
                 gradient="from-fuchsia-50 to-pink-50"
+              />
+            </div>
+            <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
+              <CollectionCard
+                emoji={"\u2728"}
+                title="Clubs branches"
+                description="Les clubs ou sortir danser le soir"
+                count={3}
+                href="#clubs"
+                gradient="from-fuchsia-50 to-purple-50"
               />
             </div>
             <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">

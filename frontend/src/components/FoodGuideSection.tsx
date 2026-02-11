@@ -5,6 +5,7 @@ import {
   UtensilsCrossed,
   Music,
   Wine,
+  Sparkles,
   ExternalLink,
   type LucideIcon,
 } from "lucide-react";
@@ -186,6 +187,48 @@ const FOOD_CATEGORIES: FoodCategory[] = [
         description:
           "Restaurant-club mythique de la Croisette. Cuisine asiatique puis clubbing jusqu\u2019au bout de la nuit.",
         gradient: "from-champagne-100 to-rose-50",
+      },
+      {
+        id: "le-pablo",
+        name: "Le Pablo",
+        subtitle: "Nice",
+        description:
+          "Restaurant festif qui se transforme en dancefloor en fin de soiree. Ambiance latine et cocktails.",
+        gradient: "from-orange-50 to-rose-50",
+      },
+    ],
+  },
+  {
+    id: "clubs",
+    title: "Clubs branches",
+    subtitle:
+      "Les clubs ou sortir danser le soir sur la Riviera",
+    icon: Sparkles,
+    iconColor: "text-fuchsia-500",
+    spots: [
+      {
+        id: "bisous-bisous",
+        name: "Bisous Bisous",
+        subtitle: "Cannes",
+        description:
+          "Club select sur le port de Cannes, ambiance festive et DJ sets tous les week-ends.",
+        gradient: "from-fuchsia-50 to-pink-50",
+      },
+      {
+        id: "nuits-blanches",
+        name: "Les Nuits Blanches",
+        subtitle: "Cannes",
+        description:
+          "Incontournable de la nuit cannoise. Musique variee, soirees thematiques et ambiance electrique.",
+        gradient: "from-indigo-50 to-violet-50",
+      },
+      {
+        id: "bibliotech",
+        name: "Bibliotech",
+        subtitle: "Cannes",
+        description:
+          "Club au concept unique entre bibliotheque et dancefloor. Soirees electro et house.",
+        gradient: "from-slate-100 to-purple-50",
       },
     ],
   },
