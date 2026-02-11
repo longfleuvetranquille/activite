@@ -34,7 +34,7 @@ export const TYPE_STYLES: Record<string, { gradient: string; emoji: string }> = 
   show: { gradient: "from-fuchsia-500 to-pink-600", emoji: "\uD83C\uDFAD" },
   conference: { gradient: "from-slate-500 to-slate-700", emoji: "\uD83E\uDDE0" },
   poker_games: { gradient: "from-emerald-600 to-green-800", emoji: "\uD83C\uDCCF" },
-  sport_match: { gradient: "from-slate-700 to-slate-900", emoji: "\u26BD" },
+  sport_match: { gradient: "from-slate-700 to-slate-900", emoji: "\uD83C\uDFC5" },
   motorsport: { gradient: "from-red-500 to-orange-600", emoji: "\uD83C\uDFCE\uFE0F" },
   watersport: { gradient: "from-cyan-400 to-teal-500", emoji: "\uD83C\uDF0A" },
   outdoor: { gradient: "from-emerald-400 to-green-600", emoji: "\uD83C\uDFD5\uFE0F" },

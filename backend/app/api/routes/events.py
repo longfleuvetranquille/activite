@@ -60,6 +60,11 @@ async def featured_events():
     return await event_service.get_featured_events()
 
 
+@router.get("/upcoming", response_model=list[EventRead])
+async def upcoming_events():
+    return await event_service.get_upcoming_events()
+
+
 @router.get("/{event_id}", response_model=EventRead)
 async def get_event(event_id: str):
     event = await event_service.get_event_by_id(event_id)

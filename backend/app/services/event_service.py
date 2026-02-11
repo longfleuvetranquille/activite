@@ -190,3 +190,37 @@ async def get_best_events(limit: int = 20) -> list[EventRead]:
         filter_str=filter_str,
     )
     return [_to_event_read(r) for r in result.get("items", [])]
+
+
+async def get_upcoming_events() -> list[EventRead]:
+    """Get the best upcoming events over the next 6 months, diversified."""
+    today = datetime.now().strftime("%Y-%m-%d")
+    end = (datetime.now() + timedelta(days=180)).strftime("%Y-%m-%d")
+    filter_str = (
+        f'date_start >= "{today}" && date_start < "{end}" '
+        f'&& status = "published"'
+    )
+    result = await pb_client.list_records(
+        "events",
+        per_page=200,
+        sort="-interest_score",
+        filter_str=filter_str,
+    )
+    all_events = [_to_event_read(r) for r in result.get("items", [])]
+
+    # Diversify: cap sport_match to avoid football domination
+    type_limits: dict[str, int] = {"sport_match": 3}
+    default_limit = 100
+
+    diversified: list[EventRead] = []
+    type_counts: dict[str, int] = {}
+
+    for event in all_events:
+        primary_type = event.tags_type[0] if event.tags_type else "_none"
+        count = type_counts.get(primary_type, 0)
+        limit = type_limits.get(primary_type, default_limit)
+        if count < limit:
+            diversified.append(event)
+            type_counts[primary_type] = count + 1
+
+    return diversified

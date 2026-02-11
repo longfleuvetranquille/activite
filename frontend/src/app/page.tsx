@@ -265,27 +265,38 @@ export default function DashboardPage() {
           </div>
         </motion.section>
 
-        {/* 7. "A ne pas manquer" — top upcoming */}
-        {digest && digest.top_upcoming.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
-            className="content-container py-8"
-          >
-            <SectionHeader
-              title="A ne pas manquer"
-              count={digest.top_upcoming.length}
-              linkHref="/week"
-              linkLabel="Voir la semaine"
-            />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {digest.top_upcoming.slice(0, 8).map((event, i) => (
-                <EventCard key={event.id} event={event} index={i} />
-              ))}
-            </div>
-          </motion.section>
-        )}
+        {/* 7. "Les gros events" — top upcoming, diversified */}
+        {digest && digest.top_upcoming.length > 0 && (() => {
+          // Diversify: cap sport_match to 2 on dashboard
+          const typeCounts: Record<string, number> = {};
+          const diversified = digest.top_upcoming.filter((e) => {
+            const t = e.tags_type[0] || "_none";
+            typeCounts[t] = (typeCounts[t] || 0) + 1;
+            if (t === "sport_match" && typeCounts[t] > 2) return false;
+            return true;
+          });
+
+          return (
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="content-container py-8"
+            >
+              <SectionHeader
+                title="Les gros events des 6 prochains mois"
+                count={diversified.length}
+                linkHref="/upcoming"
+                linkLabel="Voir tout"
+              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {diversified.slice(0, 8).map((event, i) => (
+                  <EventCard key={event.id} event={event} index={i} />
+                ))}
+              </div>
+            </motion.section>
+          );
+        })()}
 
         <div className="editorial-divider content-container" />
 

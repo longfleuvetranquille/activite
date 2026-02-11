@@ -85,6 +85,10 @@ export async function getFeaturedEvents(): Promise<Event[]> {
   return fetchAPI<Event[]>("/api/events/featured");
 }
 
+export async function getUpcomingEvents(): Promise<Event[]> {
+  return fetchAPI<Event[]>("/api/events/upcoming");
+}
+
 // --- Dashboard ---
 
 export async function getDashboardDigest(): Promise<DashboardDigest> {

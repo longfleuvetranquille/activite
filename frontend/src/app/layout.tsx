@@ -6,11 +6,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   TreePalm,
-  CalendarDays,
   CalendarRange,
   CalendarHeart,
   CalendarClock,
-  Settings,
   Menu,
   X,
   RefreshCw,
@@ -45,9 +43,9 @@ const NAV_ITEMS = [
     icon: TreePalm,
   },
   {
-    href: "/today",
-    label: "Aujourd'hui",
-    icon: CalendarDays,
+    href: "/weekend",
+    label: "Ce week-end",
+    icon: CalendarHeart,
   },
   {
     href: "/week",
@@ -55,19 +53,9 @@ const NAV_ITEMS = [
     icon: CalendarRange,
   },
   {
-    href: "/weekend",
-    label: "Ce week-end",
-    icon: CalendarHeart,
-  },
-  {
     href: "/month",
     label: "Ce mois",
     icon: CalendarClock,
-  },
-  {
-    href: "/settings",
-    label: "Parametres",
-    icon: Settings,
   },
 ];
 
@@ -234,7 +222,7 @@ function SidebarContent({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-5">
+      <nav className="px-3 py-5">
         <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/30">
           Navigation
         </p>
@@ -285,6 +273,81 @@ function SidebarContent({
           })}
         </div>
       </nav>
+
+      {/* Decorative palm tree */}
+      <div className="flex flex-1 items-end justify-center overflow-hidden px-4 pb-2">
+        <svg
+          viewBox="0 0 120 200"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-auto w-28 opacity-[0.07]"
+        >
+          {/* Trunk */}
+          <path
+            d="M58 200 C58 200 55 140 57 100 C59 60 62 55 60 50"
+            stroke="url(#trunk-grad)"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M62 200 C62 200 65 140 63 100 C61 60 58 55 60 50"
+            stroke="url(#trunk-grad)"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
+          {/* Left fronds */}
+          <path
+            d="M60 50 C45 35 15 30 2 38 C20 28 42 30 55 45"
+            fill="url(#frond-grad)"
+          />
+          <path
+            d="M58 48 C40 25 10 15 0 20 C18 12 45 18 55 40"
+            fill="url(#frond-grad)"
+          />
+          <path
+            d="M56 52 C42 42 18 42 5 50 C22 40 44 40 55 48"
+            fill="url(#frond-grad)"
+          />
+          {/* Right fronds */}
+          <path
+            d="M60 50 C75 35 105 30 118 38 C100 28 78 30 65 45"
+            fill="url(#frond-grad)"
+          />
+          <path
+            d="M62 48 C80 25 110 15 120 20 C102 12 75 18 65 40"
+            fill="url(#frond-grad)"
+          />
+          <path
+            d="M64 52 C78 42 102 42 115 50 C98 40 76 40 65 48"
+            fill="url(#frond-grad)"
+          />
+          {/* Top frond */}
+          <path
+            d="M60 50 C58 30 55 10 50 0 C56 12 59 30 60 45"
+            fill="url(#frond-grad)"
+          />
+          <path
+            d="M60 50 C62 30 65 10 70 0 C64 12 61 30 60 45"
+            fill="url(#frond-grad)"
+          />
+          {/* Coconuts */}
+          <circle cx="55" cy="52" r="4" fill="url(#trunk-grad)" />
+          <circle cx="65" cy="52" r="4" fill="url(#trunk-grad)" />
+          <circle cx="60" cy="48" r="3.5" fill="url(#trunk-grad)" />
+          <defs>
+            <linearGradient id="frond-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#C49A4C" />
+              <stop offset="100%" stopColor="#819647" />
+            </linearGradient>
+            <linearGradient id="trunk-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#C49A4C" />
+              <stop offset="100%" stopColor="#8B7355" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
 
       {/* Footer */}
       <div className="border-t border-white/[0.06] px-4 py-4">
