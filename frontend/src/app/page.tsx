@@ -17,7 +17,7 @@ import EventCard from "@/components/EventCard";
 import HeroSection from "@/components/HeroSection";
 import HorizontalCarousel from "@/components/HorizontalCarousel";
 import CollectionCard from "@/components/CollectionCard";
-import TimelessSection from "@/components/TimelessSection";
+import TimelessSection, { getSeasonalActivities } from "@/components/TimelessSection";
 import DateIdeasSection from "@/components/DateIdeasSection";
 import FoodGuideSection from "@/components/FoodGuideSection";
 import BeachSection from "@/components/BeachSection";
@@ -89,6 +89,7 @@ export default function DashboardPage() {
         {/* 2. "Ce soir" — carousel */}
         {todayEvents.length > 0 && (
           <motion.section
+            id="tonight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -154,6 +155,7 @@ export default function DashboardPage() {
         {/* 4. "Ce week-end" — grid */}
         {weekendEvents.length > 0 && (
           <motion.section
+            id="weekend"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -176,6 +178,7 @@ export default function DashboardPage() {
         {/* 5. Flight Deals — dark strip full-bleed */}
         {flightDeals.length > 0 && (
           <motion.section
+            id="flights"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -269,7 +272,7 @@ export default function DashboardPage() {
               emoji={"\uD83E\uDDED"}
               title="Intemporelles"
               description="Activites permanentes et saisonnieres"
-              count={12}
+              count={getSeasonalActivities().length}
               href="#timeless"
               gradient="from-emerald-50 to-teal-50"
             />

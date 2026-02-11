@@ -215,7 +215,7 @@ function isInSeason(activity: TimelessActivity, month: number): boolean {
   return month >= activity.seasonStart && month <= activity.seasonEnd;
 }
 
-function getSeasonalActivities(): TimelessActivity[] {
+export function getSeasonalActivities(): TimelessActivity[] {
   const currentMonth = new Date().getMonth() + 1;
   return TIMELESS_ACTIVITIES.filter((a) => isInSeason(a, currentMonth));
 }

@@ -5,21 +5,14 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const CATEGORY_PILLS = [
-  { emoji: "\uD83C\uDFB6", label: "Soirees" },
-  { emoji: "\uD83C\uDF78", label: "Rooftops" },
-  { emoji: "\uD83C\uDF0A", label: "Nautique" },
-  { emoji: "\uD83C\uDFCE\uFE0F", label: "Adrenaline" },
-  { emoji: "\u2708\uFE0F", label: "Voyages" },
-  { emoji: "\uD83C\uDF7D\uFE0F", label: "Food" },
-  { emoji: "\u2764\uFE0F", label: "Date" },
+  { emoji: "\uD83C\uDFB6", label: "Soirees", href: "#tonight" },
+  { emoji: "\uD83C\uDF78", label: "Rooftops", href: "#weekend" },
+  { emoji: "\uD83C\uDF0A", label: "Nautique", href: "#beaches" },
+  { emoji: "\uD83C\uDFCE\uFE0F", label: "Adrenaline", href: "#timeless" },
+  { emoji: "\u2708\uFE0F", label: "Voyages", href: "#flights" },
+  { emoji: "\uD83C\uDF7D\uFE0F", label: "Food", href: "#cafes" },
+  { emoji: "\u2764\uFE0F", label: "Date", href: "#dates" },
 ];
-
-function getContextualTitle(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Aujourd\u2019hui sur la Riviera";
-  if (hour < 18) return "Cet apres-midi sur la Riviera";
-  return "Ce soir sur la Riviera";
-}
 
 export default function HeroSection() {
   const today = format(new Date(), "d MMM yyyy", { locale: fr });
@@ -38,7 +31,7 @@ export default function HeroSection() {
           className="flex items-center justify-between"
         >
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-champagne-600">
-            Nice &middot; Cannes &middot; Monaco
+            Nice &middot; Cannes &middot; Monaco &amp; the Riviera Towns
           </p>
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-champagne-600">
             {today}
@@ -73,7 +66,7 @@ export default function HeroSection() {
         >
           <div className="h-px w-12 bg-champagne-400/50 sm:w-16" />
           <p className="whitespace-nowrap font-[family-name:var(--font-serif)] text-base italic text-slate-500 sm:text-lg">
-            {getContextualTitle()}
+            Les activites de la French Riviera
           </p>
           <div className="h-px w-12 bg-champagne-400/50 sm:w-16" />
         </motion.div>
@@ -89,8 +82,9 @@ export default function HeroSection() {
         {/* Category pills */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           {CATEGORY_PILLS.map((pill, i) => (
-            <motion.span
+            <motion.a
               key={pill.label}
+              href={pill.href}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -102,7 +96,7 @@ export default function HeroSection() {
             >
               <span className="text-sm">{pill.emoji}</span>
               {pill.label}
-            </motion.span>
+            </motion.a>
           ))}
         </div>
       </div>

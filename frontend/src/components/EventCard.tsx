@@ -103,7 +103,7 @@ export default function EventCard({
       >
         <Link
           href={`/event/${event.id}`}
-          className="group relative block aspect-[21/9] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
+          className="group relative block aspect-[16/7] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
         >
           {/* Full gradient background */}
           <div className={`absolute inset-0 bg-gradient-to-br ${typeStyle.gradient}`} />

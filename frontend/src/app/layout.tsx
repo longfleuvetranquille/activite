@@ -1,6 +1,6 @@
 "use client";
 
-import { Outfit, Instrument_Serif, Playfair_Display } from "next/font/google";
+import { Outfit, Instrument_Serif, Bodoni_Moda } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-serif",
 });
 
-const playfair = Playfair_Display({
+const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-logo",
@@ -135,7 +135,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${outfit.variable} ${instrumentSerif.variable} ${playfair.variable} font-sans antialiased scrollbar-thin`}
+        className={`${outfit.variable} ${instrumentSerif.variable} ${bodoniModa.variable} font-sans antialiased scrollbar-thin`}
       >
         <div className="flex min-h-screen">
           {/* Desktop Sidebar */}
