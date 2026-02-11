@@ -5,14 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
-  Calendar,
-  Clock,
   ExternalLink,
   MapPin,
   RefreshCw,
-  Star,
   Tag,
-  Wallet,
+  TreePalm,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -110,11 +107,10 @@ export default function EventDetailPage() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-6"
     >
-      {/* Hero Image — full-bleed */}
-      <div className="relative -mx-4 -mt-5 sm:-mx-6 lg:-mx-6 lg:-mt-6">
-        <div className="relative h-56 w-full overflow-hidden sm:h-72 lg:h-96">
+      {/* Hero Image — larger, full-bleed */}
+      <div className="relative">
+        <div className="relative min-h-[40vh] w-full overflow-hidden sm:min-h-[45vh] lg:min-h-[55vh]">
           {event.image_url ? (
             <Image
               src={event.image_url}
@@ -125,15 +121,15 @@ export default function EventDetailPage() {
               priority
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-champagne-100 via-olive-50 to-riviera-100">
-              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/60 backdrop-blur-sm ring-1 ring-white/80">
-                <Star className="h-10 w-10 text-slate-400" />
-              </div>
+            <div className="flex h-full min-h-[40vh] w-full items-center justify-center bg-gradient-to-br from-champagne-200 via-olive-100 to-riviera-200 sm:min-h-[45vh] lg:min-h-[55vh]">
+              <span className="text-8xl opacity-20 select-none">
+                {"\uD83C\uDF34"}
+              </span>
             </div>
           )}
 
           {/* Gradient overlay at bottom */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/60 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#FAF8F3] via-[#FAF8F3]/60 to-transparent" />
 
           {/* Back button overlay */}
           <button
@@ -143,134 +139,99 @@ export default function EventDetailPage() {
             <ArrowLeft className="h-5 w-5" />
           </button>
 
-          {/* Score badge — animated */}
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
-            className="absolute right-4 top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/90 shadow-elevated backdrop-blur-md sm:right-6 lg:right-6"
-          >
-            <div className="text-center">
-              <p className="text-xl font-bold text-slate-900">
-                {event.interest_score}
-              </p>
-              <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">
-                score
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Featured badge */}
-          {event.is_featured && (
-            <div className="absolute left-4 top-4 ml-12 inline-flex items-center gap-1.5 rounded-full bg-champagne-500/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm shadow-sm sm:left-6 sm:ml-12">
-              <Star className="h-3 w-3" />
-              A la une
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Title & Info Pills */}
-      <div className="space-y-4">
-        <h1 className="font-serif text-2xl font-bold text-slate-900 sm:text-3xl lg:text-4xl">
-          {event.title}
-        </h1>
-
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-riviera-100/80 px-3 py-1.5 text-sm font-medium text-riviera-700 ring-1 ring-riviera-200/50">
-            <Calendar className="h-3.5 w-3.5" />
-            <span className="capitalize">{formattedDate}</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-riviera-100/80 px-3 py-1.5 text-sm font-medium text-riviera-700 ring-1 ring-riviera-200/50">
-            <Clock className="h-3.5 w-3.5" />
-            {formattedTime}
-            {formattedDateEnd && ` - ${formattedDateEnd}`}
-          </span>
-          {(event.location_name || event.location_city) && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-olive-100/80 px-3 py-1.5 text-sm font-medium text-olive-700 ring-1 ring-olive-200/50">
-              <MapPin className="h-3.5 w-3.5" />
-              {event.location_name}
-              {event.location_name && event.location_city && ", "}
-              {event.location_city}
-            </span>
-          )}
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1.5 text-sm font-medium text-emerald-700 ring-1 ring-emerald-200/50">
-            <Wallet className="h-3.5 w-3.5" />
-            {priceDisplay}
-          </span>
-        </div>
-      </div>
-
-      {/* Tags */}
-      {allTags.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Tag className="h-4 w-4 text-slate-400" />
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
-              Tags
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag, i) => (
-              <TagBadge key={`${tag.category}-${tag.code}-${i}`} code={tag.code} category={tag.category} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Left: Description & Summary */}
-        <div className="space-y-6 lg:col-span-2">
-          {/* Summary */}
-          {event.summary && (
-            <div className="card">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-champagne-600">
-                Resume
-              </h2>
-              <p className="leading-relaxed text-slate-600">{event.summary}</p>
-            </div>
-          )}
-
-          {/* Full Description */}
-          {event.description && (
-            <div className="card">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
-                Description
-              </h2>
-              <div className="prose max-w-none text-sm leading-relaxed text-slate-700">
-                {event.description.split("\n").map((paragraph, i) => (
-                  <p key={i} className="mb-2">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Source link */}
-          {event.source_url && (
-            <a
-              href={event.source_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary inline-flex"
+          {/* "Recommande par Palmier" badge if score >= 80 */}
+          {event.interest_score >= 80 && (
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+              className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 shadow-elevated backdrop-blur-md sm:right-6"
             >
-              <ExternalLink className="h-4 w-4" />
-              Voir sur {event.source_name || "la source"}
-            </a>
+              <TreePalm className="h-4 w-4 text-champagne-500" />
+              <span className="text-xs font-semibold text-slate-900">
+                Recommande par Palmier
+              </span>
+            </motion.div>
           )}
         </div>
+      </div>
 
-        {/* Right: Map & Info */}
-        <div className="space-y-4">
-          {/* Map */}
-          {event.latitude && event.longitude && (
-            <div className="card overflow-hidden p-0">
+      {/* Editorial content — centered */}
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        {/* Category inline + title */}
+        <div className="space-y-3 -mt-8 relative">
+          {/* Info pills inline */}
+          <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+            <span className="capitalize">{formattedDate}</span>
+            <span className="text-slate-300">&middot;</span>
+            <span>{formattedTime}{formattedDateEnd ? ` - ${formattedDateEnd}` : ""}</span>
+            {(event.location_name || event.location_city) && (
+              <>
+                <span className="text-slate-300">&middot;</span>
+                <span className="inline-flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5 text-olive-500" />
+                  {event.location_name}
+                  {event.location_name && event.location_city && ", "}
+                  {event.location_city}
+                </span>
+              </>
+            )}
+            <span className="text-slate-300">&middot;</span>
+            <span className="font-medium text-slate-700">{priceDisplay}</span>
+          </div>
+
+          {/* Title */}
+          <h1 className="font-serif text-3xl text-slate-900 sm:text-4xl lg:text-hero">
+            {event.title}
+          </h1>
+        </div>
+
+        {/* CTA prominent */}
+        {event.source_url && (
+          <a
+            href={event.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-champagne-600 to-champagne-500 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-champagne-500/25 transition-all hover:shadow-xl hover:shadow-champagne-500/30 hover:-translate-y-0.5 active:scale-[0.98]"
+          >
+            <ExternalLink className="h-4.5 w-4.5" />
+            Voir sur {event.source_name || "la source"}
+          </a>
+        )}
+
+        {/* Summary */}
+        {event.summary && (
+          <div className="mt-8">
+            <p className="text-lg leading-relaxed text-slate-600">
+              {event.summary}
+            </p>
+          </div>
+        )}
+
+        {/* Full Description */}
+        {event.description && (
+          <div className="mt-6">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+              Description
+            </h2>
+            <div className="prose max-w-none text-sm leading-relaxed text-slate-700">
+              {event.description.split("\n").map((paragraph, i) => (
+                <p key={i} className="mb-2">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Map */}
+        {event.latitude && event.longitude && (
+          <div className="mt-8">
+            <div className="overflow-hidden rounded-2xl border border-white/60 shadow-card">
               <div className="h-56 w-full">
                 <MapView events={[event]} />
               </div>
-              <div className="p-4">
+              <div className="bg-white/60 p-4 backdrop-blur-md">
                 <p className="text-sm font-medium text-slate-900">
                   {event.location_name}
                 </p>
@@ -281,27 +242,44 @@ export default function EventDetailPage() {
                 )}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Quick Info */}
-          <div className="card space-y-0 p-0 overflow-hidden">
-            <div className="bg-gradient-to-r from-slate-50 to-transparent px-4 py-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                Informations
-              </h3>
-            </div>
-            <div className="divide-y divide-black/[0.04] px-4">
-              <InfoRow label="Prix" value={priceDisplay} />
-              <InfoRow label="Ville" value={event.location_city || "N/A"} />
-              <InfoRow label="Source" value={event.source_name || "N/A"} />
-              <InfoRow
-                label="Score"
-                value={`${event.interest_score}/100`}
-              />
-              <InfoRow label="Statut" value={event.status} />
-            </div>
+        {/* Quick Info */}
+        <div className="mt-8 overflow-hidden rounded-2xl border border-white/60 bg-white/60 shadow-card backdrop-blur-md">
+          <div className="bg-gradient-to-r from-slate-50 to-transparent px-4 py-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+              Informations
+            </h3>
+          </div>
+          <div className="divide-y divide-black/[0.04] px-4">
+            <InfoRow label="Prix" value={priceDisplay} />
+            <InfoRow label="Ville" value={event.location_city || "N/A"} />
+            <InfoRow label="Source" value={event.source_name || "N/A"} />
+            <InfoRow
+              label="Score"
+              value={`${event.interest_score}/100`}
+            />
+            <InfoRow label="Statut" value={event.status} />
           </div>
         </div>
+
+        {/* Tags — subtle at bottom */}
+        {allTags.length > 0 && (
+          <div className="mt-8 pb-12">
+            <div className="flex items-center gap-2 mb-3">
+              <Tag className="h-3.5 w-3.5 text-slate-400" />
+              <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                Tags
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {allTags.map((tag, i) => (
+                <TagBadge key={`${tag.category}-${tag.code}-${i}`} code={tag.code} category={tag.category} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -318,30 +296,16 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 
 function DetailSkeleton() {
   return (
-    <div className="space-y-6">
+    <div>
       {/* Hero image skeleton */}
-      <div className="relative -mx-4 -mt-5 sm:-mx-6 lg:-mx-6 lg:-mt-6">
-        <div className="h-56 w-full rounded-b-2xl bg-slate-200/50 shimmer sm:h-72 lg:h-96" />
-      </div>
-      {/* Title */}
-      <div className="space-y-3">
-        <div className="h-10 w-3/4 rounded-2xl bg-slate-200/60 shimmer" />
-        <div className="flex gap-2">
-          <div className="h-8 w-40 rounded-full bg-slate-200/60 shimmer" />
-          <div className="h-8 w-24 rounded-full bg-slate-200/60 shimmer" />
-          <div className="h-8 w-32 rounded-full bg-slate-200/60 shimmer" />
-        </div>
-      </div>
+      <div className="h-[40vh] w-full bg-slate-200/50 shimmer sm:h-[45vh] lg:h-[55vh]" />
       {/* Content */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
-          <div className="h-40 w-full rounded-2xl bg-slate-200/40 shimmer" />
-          <div className="h-60 w-full rounded-2xl bg-slate-200/40 shimmer" />
-        </div>
-        <div className="space-y-4">
-          <div className="h-72 w-full rounded-2xl bg-slate-200/40 shimmer" />
-          <div className="h-48 w-full rounded-2xl bg-slate-200/40 shimmer" />
-        </div>
+      <div className="mx-auto max-w-3xl space-y-4 px-4 py-8 sm:px-6">
+        <div className="h-5 w-60 rounded-lg bg-slate-200/60 shimmer" />
+        <div className="h-12 w-3/4 rounded-2xl bg-slate-200/60 shimmer" />
+        <div className="h-14 w-full rounded-2xl bg-slate-200/60 shimmer" />
+        <div className="h-32 w-full rounded-2xl bg-slate-200/40 shimmer" />
+        <div className="h-56 w-full rounded-2xl bg-slate-200/40 shimmer" />
       </div>
     </div>
   );

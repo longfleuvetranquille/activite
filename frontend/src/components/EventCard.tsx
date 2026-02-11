@@ -2,24 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  MapPin,
-  Calendar,
-  Wallet,
-  Clock,
-  Music,
-  Plane,
-  Trophy,
-  Utensils,
-  Gamepad2,
-  Theater,
-  Mic2,
-  Waves,
-  Mountain,
-  Clapperboard,
-  GraduationCap,
-  Sparkles,
-} from "lucide-react";
+import { MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { motion } from "framer-motion";
@@ -27,34 +10,70 @@ import { motion } from "framer-motion";
 import type { Event } from "@/types";
 import TagBadge from "./TagBadge";
 
-// Map event types to icons and gradient colors for placeholders
-const TYPE_VISUALS: Record<string, { icon: typeof Music; gradient: string; iconColor: string; blobColor: string }> = {
-  party: { icon: Music, gradient: "from-purple-300 to-pink-300", iconColor: "text-purple-700", blobColor: "bg-pink-400/30" },
-  bar_rooftop: { icon: Sparkles, gradient: "from-amber-300 to-orange-300", iconColor: "text-amber-700", blobColor: "bg-orange-400/30" },
-  dj_set: { icon: Music, gradient: "from-violet-300 to-fuchsia-300", iconColor: "text-violet-700", blobColor: "bg-fuchsia-400/30" },
-  concert: { icon: Mic2, gradient: "from-rose-300 to-red-300", iconColor: "text-rose-700", blobColor: "bg-red-400/30" },
-  show: { icon: Theater, gradient: "from-indigo-300 to-purple-300", iconColor: "text-indigo-700", blobColor: "bg-purple-400/30" },
-  conference: { icon: GraduationCap, gradient: "from-sky-300 to-blue-300", iconColor: "text-sky-700", blobColor: "bg-blue-400/30" },
-  sport_match: { icon: Trophy, gradient: "from-emerald-300 to-green-300", iconColor: "text-emerald-700", blobColor: "bg-green-400/30" },
-  motorsport: { icon: Trophy, gradient: "from-red-300 to-orange-300", iconColor: "text-red-700", blobColor: "bg-orange-400/30" },
-  watersport: { icon: Waves, gradient: "from-cyan-300 to-teal-300", iconColor: "text-cyan-700", blobColor: "bg-teal-400/30" },
-  outdoor: { icon: Mountain, gradient: "from-green-300 to-emerald-300", iconColor: "text-green-700", blobColor: "bg-emerald-400/30" },
-  gaming: { icon: Gamepad2, gradient: "from-violet-300 to-indigo-300", iconColor: "text-violet-700", blobColor: "bg-indigo-400/30" },
-  cinema: { icon: Clapperboard, gradient: "from-slate-300 to-gray-400", iconColor: "text-slate-700", blobColor: "bg-gray-400/30" },
-  food: { icon: Utensils, gradient: "from-orange-300 to-amber-300", iconColor: "text-orange-700", blobColor: "bg-amber-400/30" },
-  travel: { icon: Plane, gradient: "from-sky-300 to-cyan-300", iconColor: "text-sky-700", blobColor: "bg-cyan-400/30" },
+// Map event types to emojis for placeholders
+const TYPE_EMOJIS: Record<string, string> = {
+  party: "\uD83C\uDFB6",
+  bar_rooftop: "\uD83C\uDF78",
+  dj_set: "\uD83C\uDFA7",
+  concert: "\uD83C\uDFA4",
+  show: "\uD83C\uDFAD",
+  conference: "\uD83E\uDDE0",
+  sport_match: "\u26BD",
+  motorsport: "\uD83C\uDFCE\uFE0F",
+  watersport: "\uD83C\uDF0A",
+  outdoor: "\uD83C\uDFD5\uFE0F",
+  gaming: "\uD83C\uDFAE",
+  cinema: "\uD83C\uDFAC",
+  food: "\uD83C\uDF7D\uFE0F",
+  travel: "\u2708\uFE0F",
+};
+
+const TYPE_LABELS: Record<string, string> = {
+  party: "Soiree",
+  bar_rooftop: "Rooftop",
+  dj_set: "DJ Set",
+  concert: "Concert",
+  show: "Spectacle",
+  conference: "Conference",
+  sport_match: "Sport",
+  motorsport: "Motorsport",
+  watersport: "Nautique",
+  outdoor: "Outdoor",
+  gaming: "Gaming",
+  cinema: "Cinema",
+  food: "Food",
+  travel: "Voyage",
+};
+
+const TYPE_GRADIENTS: Record<string, string> = {
+  party: "from-purple-400 to-pink-400",
+  bar_rooftop: "from-amber-400 to-orange-400",
+  dj_set: "from-violet-400 to-fuchsia-400",
+  concert: "from-rose-400 to-red-400",
+  show: "from-indigo-400 to-purple-400",
+  conference: "from-sky-400 to-blue-400",
+  sport_match: "from-emerald-400 to-green-400",
+  motorsport: "from-red-400 to-orange-400",
+  watersport: "from-cyan-400 to-teal-400",
+  outdoor: "from-green-400 to-emerald-400",
+  gaming: "from-violet-400 to-indigo-400",
+  cinema: "from-slate-400 to-gray-500",
+  food: "from-orange-400 to-amber-400",
+  travel: "from-sky-400 to-cyan-400",
 };
 
 interface EventCardProps {
   event: Event;
   index?: number;
   compact?: boolean;
+  variant?: "default" | "wide";
 }
 
 export default function EventCard({
   event,
   index = 0,
   compact = false,
+  variant = "default",
 }: EventCardProps) {
   const dateStart = new Date(event.date_start);
   const formattedDate = format(dateStart, "EEE d MMM", { locale: fr });
@@ -69,7 +88,12 @@ export default function EventCard({
           ? `${event.price_min}\u00A0\u20AC`
           : `${event.price_min}-${event.price_max}\u00A0\u20AC`;
 
-  // Collect tags to show (2 on mobile, 4 on desktop)
+  const firstType = event.tags_type[0] || "";
+  const typeLabel = TYPE_LABELS[firstType] || "";
+  const typeEmoji = TYPE_EMOJIS[firstType] || "\uD83D\uDCC5";
+  const typeGradient = TYPE_GRADIENTS[firstType] || "from-champagne-400 to-riviera-400";
+
+  // Collect tags for hover display
   const allTags: { code: string; category: string }[] = [];
   const tagSources: [string[], string][] = [
     [event.tags_type, "type"],
@@ -86,15 +110,71 @@ export default function EventCard({
     }
   }
 
-  // Interest score color
-  const scoreColor =
-    event.interest_score >= 80
-      ? "text-emerald-700 bg-emerald-100/90 ring-emerald-300/50"
-      : event.interest_score >= 60
-        ? "text-champagne-700 bg-champagne-100/90 ring-champagne-300/50"
-        : event.interest_score >= 40
-          ? "text-yellow-700 bg-yellow-100/90 ring-yellow-300/50"
-          : "text-slate-600 bg-slate-100/90 ring-slate-300/50";
+  // Wide variant — featured hero card
+  if (variant === "wide") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
+      >
+        <Link
+          href={`/event/${event.id}`}
+          className="group relative block aspect-[16/9] overflow-hidden rounded-2xl shadow-card transition-all duration-500 hover:shadow-elevated-lg"
+        >
+          {/* Image */}
+          {event.image_url ? (
+            <Image
+              src={event.image_url}
+              alt={event.title}
+              fill
+              className="object-cover transition-transform duration-1000 group-hover:scale-[1.04]"
+              style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
+              sizes="(max-width: 1024px) 100vw, 60vw"
+            />
+          ) : (
+            <WideplaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
+          )}
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          {/* Score on hover */}
+          <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100">
+            <span className="text-xs font-bold text-white">{event.interest_score}</span>
+          </div>
+
+          {/* Featured ring */}
+          {event.is_featured && (
+            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-champagne-400/40" />
+          )}
+
+          {/* Content overlaid at bottom */}
+          <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+            <div className="flex items-center gap-2 text-sm text-white/70">
+              {typeLabel && <span className="text-champagne-300">{typeLabel}</span>}
+              {typeLabel && <span className="text-white/30">|</span>}
+              <span className="capitalize">{formattedDate}</span>
+              <span className="text-white/30">&middot;</span>
+              <span>{formattedTime}</span>
+            </div>
+            <h3 className="mt-1.5 font-serif text-xl leading-snug text-white sm:text-2xl">
+              {event.title}
+            </h3>
+            <div className="mt-2 flex items-center gap-3 text-sm text-white/60">
+              {(event.location_name || event.location_city) && (
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {event.location_name || event.location_city}
+                </span>
+              )}
+              <span className="font-medium text-white/80">{priceDisplay}</span>
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -104,79 +184,49 @@ export default function EventCard({
     >
       <Link
         href={`/event/${event.id}`}
-        className={`group block overflow-hidden rounded-2xl border bg-white/60 p-0 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-elevated-lg ${
+        className={`group block overflow-hidden rounded-2xl border bg-white/60 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-elevated-lg ${
           event.is_featured
-            ? "border-champagne-200/60 bg-gradient-to-br from-white/70 via-champagne-50/30 to-white/60 shadow-card-featured"
+            ? "border-champagne-200/60 ring-2 ring-champagne-400/20"
             : "border-white/60"
         }`}
       >
         {/* Mobile: horizontal layout */}
         <div className="flex sm:hidden">
-          {/* Mobile image */}
-          <div className="relative h-24 w-24 shrink-0 overflow-hidden">
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden">
             {event.image_url ? (
               <Image
                 src={event.image_url}
                 alt={event.title}
                 fill
                 className="object-cover"
-                sizes="96px"
+                sizes="80px"
               />
             ) : (
-              <PlaceholderImage tags_type={event.tags_type} />
+              <PlaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
             )}
-            {/* Score badge */}
-            <div
-              className={`absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-lg ring-1 backdrop-blur-md ${scoreColor}`}
-            >
-              <span className="text-[10px] font-bold">{event.interest_score}</span>
-            </div>
           </div>
-
-          {/* Mobile content */}
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
-            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-riviera-600 transition-colors">
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 p-2.5">
+            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
               {event.title}
             </h3>
             <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="inline-flex items-center gap-1">
-                <Calendar className="h-3 w-3 text-champagne-500" />
-                <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
-              </span>
+              <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
+              <span>&middot;</span>
               <span>{formattedTime}</span>
-              <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-500">
               {(event.location_name || event.location_city) && (
-                <span className="inline-flex items-center gap-1 truncate">
-                  <MapPin className="h-3 w-3 shrink-0 text-olive-500" />
-                  <span className="truncate">
-                    {event.location_name || event.location_city}
-                  </span>
-                </span>
+                <span className="truncate">{event.location_name || event.location_city}</span>
               )}
+              <span className="ml-auto shrink-0 font-semibold text-slate-700">{priceDisplay}</span>
             </div>
-            {allTags.length > 0 && (
-              <div className="flex gap-1">
-                {allTags.slice(0, 2).map((tag, i) => (
-                  <TagBadge
-                    key={`${tag.category}-${tag.code}-${i}`}
-                    code={tag.code}
-                    category={tag.category}
-                    small
-                  />
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Desktop: vertical layout */}
+        {/* Desktop: vertical photo-first layout */}
         <div className="hidden sm:block">
-          {/* Image */}
-          <div
-            className={`relative w-full overflow-hidden ${compact ? "h-28" : "h-40"}`}
-          >
+          {/* Image — aspect 4/3 */}
+          <div className={`relative w-full overflow-hidden ${compact ? "aspect-[3/2]" : "aspect-[4/3]"}`}>
             {event.image_url ? (
               <Image
                 src={event.image_url}
@@ -187,99 +237,17 @@ export default function EventCard({
                 sizes="(max-width: 1024px) 50vw, 33vw"
               />
             ) : (
-              <PlaceholderImage tags_type={event.tags_type} />
+              <PlaceholderImage typeEmoji={typeEmoji} typeGradient={typeGradient} />
             )}
 
-            {/* Dark gradient overlay — intensifies on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-            {/* Score badge */}
-            <div
-              className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl ring-1 backdrop-blur-md transition-transform duration-300 group-hover:scale-110 ${scoreColor}`}
-            >
-              <span className="text-xs font-bold">{event.interest_score}</span>
+            {/* Score — appears on hover */}
+            <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
+              <span className="text-xs font-bold text-white">{event.interest_score}</span>
             </div>
 
-            {/* Featured overlay */}
-            {event.is_featured && (
-              <div className="absolute left-3 top-3 rounded-full bg-champagne-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm shadow-sm">
-                Featured
-              </div>
-            )}
-
-            {/* Info bar that slides up on hover */}
-            <div className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0">
-              <div className="flex items-center justify-between bg-black/50 px-3.5 py-2 text-xs text-white backdrop-blur-md">
-                <span className="inline-flex items-center gap-1.5">
-                  <Clock className="h-3 w-3" />
-                  {formattedTime}
-                </span>
-                {(event.location_name || event.location_city) && (
-                  <span className="inline-flex items-center gap-1.5 truncate">
-                    <MapPin className="h-3 w-3" />
-                    <span className="truncate">
-                      {event.location_name || event.location_city}
-                    </span>
-                  </span>
-                )}
-                <span className="font-semibold">{priceDisplay}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="space-y-2.5 p-3.5 pt-3">
-            {/* Title */}
-            <h3 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
-              {event.title}
-            </h3>
-
-            {/* Summary */}
-            {event.summary && !compact && (
-              <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-500">
-                {event.summary}
-              </p>
-            )}
-
-            {/* Info row */}
-            <div className="flex flex-col gap-2 text-[13px]">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 text-champagne-500" />
-                  <span className="capitalize font-medium text-slate-700">{formattedDate}</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-slate-400" />
-                  <span className="text-slate-500">{formattedTime}</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                {event.location_name ? (
-                  <span className="inline-flex items-center gap-1.5 truncate">
-                    <MapPin className="h-3.5 w-3.5 shrink-0 text-olive-500" />
-                    <span className="truncate text-slate-600">
-                      {event.location_name}
-                      {event.location_city &&
-                        event.location_city !== event.location_name &&
-                        `, ${event.location_city}`}
-                    </span>
-                  </span>
-                ) : event.location_city ? (
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5 text-olive-500" />
-                    <span className="text-slate-600">{event.location_city}</span>
-                  </span>
-                ) : null}
-                <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-semibold text-slate-700">
-                  <Wallet className="h-3.5 w-3.5 text-emerald-500" />
-                  {priceDisplay}
-                </span>
-              </div>
-            </div>
-
-            {/* Tags */}
+            {/* Tags — appear on hover */}
             {allTags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
+              <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-1 bg-gradient-to-t from-black/40 to-transparent px-3 pb-2.5 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {allTags.map((tag, i) => (
                   <TagBadge
                     key={`${tag.category}-${tag.code}-${i}`}
@@ -291,44 +259,74 @@ export default function EventCard({
               </div>
             )}
           </div>
+
+          {/* Content */}
+          <div className="space-y-1.5 p-3.5 pt-3">
+            {/* Category + Date */}
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              {typeLabel && (
+                <>
+                  <span className="font-medium text-champagne-600">{typeLabel}</span>
+                  <span className="text-slate-300">|</span>
+                </>
+              )}
+              <span className="capitalize">{formattedDate}</span>
+            </div>
+
+            {/* Title */}
+            <h3 className="line-clamp-2 font-serif text-base leading-snug text-slate-900 transition-colors group-hover:text-riviera-600">
+              {event.title}
+            </h3>
+
+            {/* Location + Price */}
+            <div className="flex items-center gap-2 text-[13px] text-slate-500">
+              {(event.location_name || event.location_city) && (
+                <span className="inline-flex items-center gap-1 truncate">
+                  <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
+                  <span className="truncate">
+                    {event.location_name || event.location_city}
+                  </span>
+                </span>
+              )}
+              <span className="ml-auto shrink-0 font-semibold text-slate-700">
+                {priceDisplay}
+              </span>
+            </div>
+          </div>
         </div>
       </Link>
     </motion.div>
   );
 }
 
-const DOT_PATTERN = "url(\"data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E\")";
-
-function PlaceholderImage({ tags_type }: { tags_type: string[] }) {
-  const firstType = tags_type[0];
-  const visual = (firstType && TYPE_VISUALS[firstType]) || {
-    icon: Calendar,
-    gradient: "from-champagne-300 to-riviera-300",
-    iconColor: "text-champagne-700",
-    blobColor: "bg-riviera-400/30",
-  };
-  const Icon = visual.icon;
-
+function PlaceholderImage({
+  typeEmoji,
+  typeGradient,
+}: {
+  typeEmoji: string;
+  typeGradient: string;
+}) {
   return (
     <div
-      className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br ${visual.gradient}`}
+      className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br ${typeGradient}`}
     >
-      {/* Dot pattern overlay */}
-      <div
-        className="absolute inset-0"
-        style={{ backgroundImage: DOT_PATTERN, backgroundSize: "20px 20px" }}
-      />
-      {/* Decorative blob */}
-      <div
-        className={`absolute -right-6 -top-6 h-24 w-24 rounded-full ${visual.blobColor} blur-2xl`}
-      />
-      <div
-        className={`absolute -bottom-4 -left-4 h-20 w-20 rounded-full ${visual.blobColor} blur-2xl`}
-      />
-      {/* Icon container */}
-      <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-white/40 backdrop-blur-sm ring-1 ring-white/60 shadow-lg">
-        <Icon className={`h-12 w-12 ${visual.iconColor}`} />
-      </div>
+      <span className="text-7xl opacity-30 select-none">{typeEmoji}</span>
+    </div>
+  );
+}
+
+function WideplaceholderImage({
+  typeEmoji,
+  typeGradient,
+}: {
+  typeEmoji: string;
+  typeGradient: string;
+}) {
+  return (
+    <div
+      className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${typeGradient}`}
+    >
+      <span className="text-8xl opacity-20 select-none">{typeEmoji}</span>
     </div>
   );
 }

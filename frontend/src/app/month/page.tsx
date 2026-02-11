@@ -75,7 +75,7 @@ export default function MonthPage() {
   const dealsCount = events.filter((e) => e.tags_deals.length > 0).length;
 
   return (
-    <div className="space-y-6">
+    <div className="content-container space-y-6 py-5 lg:py-6">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

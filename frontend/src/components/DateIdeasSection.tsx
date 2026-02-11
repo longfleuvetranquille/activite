@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Heart,
   Flower2,
   Church,
   Landmark,
@@ -15,6 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import HorizontalCarousel from "./HorizontalCarousel";
 
 interface DateIdea {
   id: string;
@@ -135,29 +135,20 @@ function DateIdeaCard({
 
   const inner = (
     <div
-      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${idea.gradient} border border-white/60 p-4 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg`}
+      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${idea.gradient} border border-white/60 p-4 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg h-full`}
     >
-      {/* Icon circle */}
       <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
         <Icon className="h-5.5 w-5.5 text-slate-700" />
       </div>
-
-      {/* Title */}
       <h3 className="font-serif text-lg leading-snug text-slate-900">
         {idea.title}
       </h3>
-
-      {/* Subtitle / location */}
       <p className="mt-0.5 text-xs font-medium text-slate-500">
         {idea.subtitle}
       </p>
-
-      {/* Description */}
       <p className="mt-2 text-[13px] leading-relaxed text-slate-600">
         {idea.description}
       </p>
-
-      {/* External link indicator */}
       {idea.url && (
         <div className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg bg-white/50 opacity-0 ring-1 ring-black/[0.04] backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
           <ExternalLink className="h-3.5 w-3.5 text-slate-500" />
@@ -171,13 +162,14 @@ function DateIdeaCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
+      className="w-[280px] sm:w-[320px] shrink-0"
     >
       {idea.url ? (
         <a
           href={idea.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block"
+          className="block h-full"
         >
           {inner}
         </a>
@@ -191,31 +183,23 @@ function DateIdeaCard({
 export default function DateIdeasSection() {
   return (
     <div>
-      {/* Section header */}
       <div className="mb-5">
-        <div className="mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-champagne-500 via-olive-400 to-transparent" />
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm">
-            <Heart className="h-5 w-5 text-rose-400" />
-          </div>
-          <h2 className="font-serif text-xl text-slate-900 sm:text-2xl">
-            Idee de date
-          </h2>
-          <span className="inline-flex items-center rounded-full bg-rose-100/80 px-2.5 py-0.5 text-xs font-semibold text-rose-700 ring-1 ring-rose-200/50">
+        <h2 className="font-serif text-section-title text-slate-900">
+          Idee de date
+          <span className="ml-2 text-[0.6em] font-sans font-normal text-slate-400">
             {DATE_IDEAS.length}
           </span>
-        </div>
-        <p className="mt-1.5 pl-[42px] text-sm text-slate-500">
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
           Les meilleurs spots pour un rendez-vous sur la Cote d&apos;Azur
         </p>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <HorizontalCarousel>
         {DATE_IDEAS.map((idea, i) => (
           <DateIdeaCard key={idea.id} idea={idea} index={i} />
         ))}
-      </div>
+      </HorizontalCarousel>
     </div>
   );
 }

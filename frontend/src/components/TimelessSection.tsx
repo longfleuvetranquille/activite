@@ -13,10 +13,10 @@ import {
   Grip,
   Calendar,
   ExternalLink,
-  Compass,
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import HorizontalCarousel from "./HorizontalCarousel";
 
 interface TimelessActivity {
   id: string;
@@ -25,8 +25,8 @@ interface TimelessActivity {
   description: string;
   location: string;
   icon: LucideIcon;
-  seasonStart: number; // 1-12, 0 = all year
-  seasonEnd: number;   // 1-12, 0 = all year
+  seasonStart: number;
+  seasonEnd: number;
   seasonLabel: string;
   gradient: string;
   url?: string;
@@ -145,7 +145,7 @@ const TIMELESS_ACTIVITIES: TimelessActivity[] = [
     title: "Bloc (Arkose)",
     subtitle: "Nice",
     description:
-      "Salle d'escalade de bloc, ils changent les parcours tout le temps — toujours de nouveaux defis.",
+      "Salle d'escalade de bloc, ils changent les parcours tout le temps \u2014 toujours de nouveaux defis.",
     location: "Nice",
     icon: Grip,
     seasonStart: 0,
@@ -196,8 +196,6 @@ const TIMELESS_ACTIVITIES: TimelessActivity[] = [
 
 function isInSeason(activity: TimelessActivity, month: number): boolean {
   if (activity.seasonStart === 0 && activity.seasonEnd === 0) return true;
-
-  // Handle wrap-around seasons (e.g. Dec-Mar: start=12, end=3)
   if (activity.seasonStart > activity.seasonEnd) {
     return month >= activity.seasonStart || month <= activity.seasonEnd;
   }
@@ -220,35 +218,24 @@ function TimelessCard({
 
   const inner = (
     <div
-      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${activity.gradient} border border-white/60 p-4 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg`}
+      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${activity.gradient} border border-white/60 p-4 shadow-card backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:shadow-elevated-lg h-full`}
     >
-      {/* Icon circle */}
       <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
         <Icon className="h-5.5 w-5.5 text-slate-700" />
       </div>
-
-      {/* Title */}
       <h3 className="font-serif text-lg leading-snug text-slate-900">
         {activity.title}
       </h3>
-
-      {/* Subtitle / location */}
       <p className="mt-0.5 text-xs font-medium text-slate-500">
         {activity.subtitle}
       </p>
-
-      {/* Description */}
       <p className="mt-2 text-[13px] leading-relaxed text-slate-600">
         {activity.description}
       </p>
-
-      {/* Season badge */}
       <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/70 px-2.5 py-1 text-xs font-medium text-slate-600 ring-1 ring-black/[0.04] backdrop-blur-sm">
         <Calendar className="h-3 w-3 text-slate-400" />
         {activity.seasonLabel}
       </div>
-
-      {/* External link indicator */}
       {activity.url && (
         <div className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg bg-white/50 opacity-0 ring-1 ring-black/[0.04] backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
           <ExternalLink className="h-3.5 w-3.5 text-slate-500" />
@@ -262,13 +249,14 @@ function TimelessCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
+      className="w-[280px] sm:w-[320px] shrink-0"
     >
       {activity.url ? (
         <a
           href={activity.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block"
+          className="block h-full"
         >
           {inner}
         </a>
@@ -286,31 +274,23 @@ export default function TimelessSection() {
 
   return (
     <div>
-      {/* Section header — matches SectionHeader style in page.tsx */}
       <div className="mb-5">
-        <div className="mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-champagne-500 via-olive-400 to-transparent" />
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 ring-1 ring-black/[0.04] backdrop-blur-sm">
-            <Compass className="h-5 w-5 text-olive-500" />
-          </div>
-          <h2 className="font-serif text-xl text-slate-900 sm:text-2xl">
-            Intemporelles
-          </h2>
-          <span className="inline-flex items-center rounded-full bg-olive-100/80 px-2.5 py-0.5 text-xs font-semibold text-olive-700 ring-1 ring-olive-200/50">
+        <h2 className="font-serif text-section-title text-slate-900">
+          Intemporelles
+          <span className="ml-2 text-[0.6em] font-sans font-normal text-slate-400">
             {activities.length}
           </span>
-        </div>
-        <p className="mt-1.5 pl-[42px] text-sm text-slate-500">
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
           Activites permanentes et saisonnieres de la Cote d&apos;Azur
         </p>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <HorizontalCarousel>
         {activities.map((activity, i) => (
           <TimelessCard key={activity.id} activity={activity} index={i} />
         ))}
-      </div>
+      </HorizontalCarousel>
     </div>
   );
 }

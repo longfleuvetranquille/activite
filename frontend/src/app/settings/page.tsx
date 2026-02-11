@@ -120,7 +120,7 @@ export default function SettingsPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-8"
+      className="content-container space-y-8 py-5 lg:py-6"
     >
       {/* Header */}
       <div className="flex items-center gap-3">

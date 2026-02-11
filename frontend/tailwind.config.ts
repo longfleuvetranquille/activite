@@ -53,6 +53,10 @@ const config: Config = {
           950: "#0f0d2e",
         },
       },
+      fontSize: {
+        'hero': ['clamp(2.5rem, 6vw, 5rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
+        'section-title': ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.15' }],
+      },
       fontFamily: {
         sans: ["var(--font-body)", "Outfit", "system-ui", "-apple-system", "sans-serif"],
         serif: ["var(--font-serif)", "Instrument Serif", "Georgia", "Times New Roman", "serif"],
