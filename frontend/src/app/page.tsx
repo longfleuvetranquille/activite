@@ -309,10 +309,9 @@ export default function DashboardPage() {
           <DateIdeasSection />
         </div>
 
-        <div id="cafes" className="content-container py-8">
+        <div className="content-container py-8">
           <FoodGuideSection />
         </div>
-        <div id="restaurants" />
 
         <div id="beaches" className="content-container py-8">
           <BeachSection />

@@ -16,6 +16,8 @@ import {
   Heart,
   Coffee,
   UtensilsCrossed,
+  Wine,
+  Music,
   Waves,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -51,11 +53,13 @@ const NAV_PERIOD = [
   { href: "/month", label: "Le mois a venir", icon: CalendarClock },
 ];
 
-const NAV_OBJECTIVES = [
+const NAV_ACTIVITIES = [
   { href: "/#timeless", label: "Intemporelles", icon: Compass },
   { href: "/#dates", label: "Idees de date", icon: Heart },
   { href: "/#cafes", label: "Cafes & brunchs", icon: Coffee },
-  { href: "/#restaurants", label: "Restos & food", icon: UtensilsCrossed },
+  { href: "/#restaurants-date", label: "Restos date", icon: UtensilsCrossed },
+  { href: "/#resto-dansant", label: "Restos dansants", icon: Music },
+  { href: "/#bars", label: "Bars branches", icon: Wine },
   { href: "/#beaches", label: "Plages & criques", icon: Waves },
 ];
 
@@ -297,8 +301,8 @@ function SidebarContent({
         {/* Par periode */}
         <NavGroup label="Par periode" items={NAV_PERIOD} pathname={pathname} onNavigate={onNavigate} />
 
-        {/* Objectifs */}
-        <NavGroup label="Objectifs" items={NAV_OBJECTIVES} pathname={pathname} onNavigate={onNavigate} isAnchor />
+        {/* Type d'activite */}
+        <NavGroup label="Type d'activite" items={NAV_ACTIVITIES} pathname={pathname} onNavigate={onNavigate} isAnchor />
       </nav>
 
       {/* Decorative palm tree — Côte d'Azur silhouette */}

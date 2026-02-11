@@ -4,6 +4,7 @@ import {
   Coffee,
   UtensilsCrossed,
   Music,
+  Wine,
   ExternalLink,
   type LucideIcon,
 } from "lucide-react";
@@ -151,6 +152,15 @@ const FOOD_CATEGORIES: FoodCategory[] = [
         gradient: "from-emerald-50 to-cyan-50",
         url: "https://www.mayabay.mc",
       },
+      {
+        id: "buddha-bar-date",
+        name: "Buddha Bar",
+        subtitle: "Monaco",
+        description:
+          "Restaurant-bar iconique au Port de Monaco. Cuisine asiatique fusion, cocktails et DJ sets dans un decor spectaculaire.",
+        gradient: "from-amber-50 to-red-50",
+        url: "https://www.buddhabar.com/en/monaco/",
+      },
     ],
   },
   {
@@ -177,12 +187,30 @@ const FOOD_CATEGORIES: FoodCategory[] = [
           "Restaurant-club mythique de la Croisette. Cuisine asiatique puis clubbing jusqu\u2019au bout de la nuit.",
         gradient: "from-champagne-100 to-rose-50",
       },
+    ],
+  },
+  {
+    id: "bars",
+    title: "Bars branches",
+    subtitle:
+      "Les bars ou sortir boire un verre et profiter de l\u2019ambiance",
+    icon: Wine,
+    iconColor: "text-indigo-500",
+    spots: [
       {
-        id: "buddha-bar",
+        id: "la-movida",
+        name: "La Movida",
+        subtitle: "Nice",
+        description:
+          "Bar festif au coeur du Vieux-Nice. Cocktails, tapas et ambiance latine jusqu\u2019au bout de la nuit.",
+        gradient: "from-orange-50 to-red-50",
+      },
+      {
+        id: "buddha-bar-bar",
         name: "Buddha Bar",
         subtitle: "Monaco",
         description:
-          "Restaurant-bar iconique au Port de Monaco. Cuisine asiatique fusion, cocktails et DJ sets dans un decor spectaculaire.",
+          "Bar iconique au Port de Monaco. Cocktails signatures et DJ sets dans un decor spectaculaire.",
         gradient: "from-amber-50 to-red-50",
         url: "https://www.buddhabar.com/en/monaco/",
       },
@@ -240,7 +268,7 @@ export default function FoodGuideSection() {
     <div className="space-y-10">
       {FOOD_CATEGORIES.map((category) => {
         return (
-          <div key={category.id}>
+          <div key={category.id} id={category.id}>
             <div className="mb-5">
               <h2 className="font-serif text-section-title text-slate-900">
                 {category.title}
