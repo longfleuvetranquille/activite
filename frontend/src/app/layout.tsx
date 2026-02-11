@@ -274,80 +274,98 @@ function SidebarContent({
         </div>
       </nav>
 
-      {/* Decorative palm tree — filled silhouette */}
-      <div className="flex flex-1 items-end justify-center overflow-hidden px-4 pb-4">
+      {/* Decorative palm tree */}
+      <div className="flex flex-1 items-end justify-center overflow-hidden px-6 pb-6">
         <svg
-          viewBox="0 0 120 280"
-          fill="none"
+          viewBox="0 0 200 400"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-auto w-28 opacity-[0.07]"
+          className="h-auto w-40 opacity-[0.14]"
         >
-          {/* Trunk — gentle S-curve */}
+          {/* Trunk — thick curved body tapering upward */}
           <path
-            d="M58 270 C57 250 54 225 55 200 C56 175 62 150 61 128 C60 115 59 105 59 95"
-            stroke="url(#palm-g)" strokeWidth="8" strokeLinecap="round"
+            d="M102 390 C104 370 108 345 110 320 C112 295 108 270 106 245 C104 220 108 195 107 172 C106 155 104 140 103 125"
+            fill="none" stroke="url(#palm-g)" strokeWidth="14" strokeLinecap="round"
           />
-          {/* Trunk notches */}
-          {[240, 222, 205, 190, 176, 163, 151, 140, 130, 120, 111].map((y, i) => (
+          {/* Trunk bark texture */}
+          {[360, 340, 322, 305, 288, 272, 257, 243, 230, 218, 206, 195, 185, 175, 165, 155, 145, 136].map((y, i) => (
             <path
               key={i}
-              d={`M${54 + (i % 2) * 2} ${y} Q59 ${y - 2} ${64 - (i % 2) * 2} ${y}`}
-              stroke="url(#palm-g)" strokeWidth="1.2" opacity="0.35"
+              d={`M${96 + (i % 2) * 3} ${y} Q${104 + (i % 3)} ${y - 3} ${112 - (i % 2) * 3} ${y}`}
+              fill="none" stroke="url(#palm-g)" strokeWidth="1.5" opacity="0.3"
             />
           ))}
-          {/* Coconut cluster */}
-          <ellipse cx="56" cy="94" rx="4.5" ry="4" fill="url(#palm-g)" opacity="0.5" />
-          <ellipse cx="63" cy="93" rx="4" ry="3.5" fill="url(#palm-g)" opacity="0.5" />
-          <ellipse cx="59" cy="89" rx="3.5" ry="3.5" fill="url(#palm-g)" opacity="0.5" />
-          {/* Fronds — filled leaf shapes */}
-          {/* Left drooping frond */}
+          {/* Coconuts */}
+          <circle cx="98" cy="123" r="6" fill="url(#palm-g)" opacity="0.6" />
+          <circle cx="110" cy="121" r="5.5" fill="url(#palm-g)" opacity="0.6" />
+          <circle cx="104" cy="116" r="5" fill="url(#palm-g)" opacity="0.55" />
+          {/* === FRONDS — big lush filled leaves === */}
+          {/* Far left — drooping low */}
           <path
-            d="M59 90 C48 78 28 68 4 72 C28 64 48 72 59 88Z"
-            fill="url(#palm-g)" opacity="0.85"
+            d="M103 120 C85 108 50 100 8 112
+               C12 106 20 100 30 96
+               C50 88 82 100 103 116Z"
+            fill="url(#palm-g)"
           />
-          {/* Left mid frond */}
+          {/* Left mid — reaching out */}
           <path
-            d="M59 88 C44 68 20 50 0 44 C22 44 46 62 59 85Z"
+            d="M103 118 C80 96 45 72 5 62
+               C12 58 25 56 38 58
+               C62 64 88 90 103 114Z"
+            fill="url(#palm-g)"
+          />
+          {/* Left upper — angled up */}
+          <path
+            d="M103 115 C88 86 62 50 28 22
+               C38 20 48 24 58 32
+               C78 50 96 84 103 112Z"
+            fill="url(#palm-g)"
+          />
+          {/* Far right — drooping low */}
+          <path
+            d="M105 120 C123 108 158 100 200 112
+               C196 106 188 100 178 96
+               C158 88 126 100 105 116Z"
+            fill="url(#palm-g)"
+          />
+          {/* Right mid — reaching out */}
+          <path
+            d="M105 118 C128 96 163 72 203 62
+               C196 58 183 56 170 58
+               C146 64 120 90 105 114Z"
+            fill="url(#palm-g)"
+          />
+          {/* Right upper — angled up */}
+          <path
+            d="M105 115 C120 86 146 50 180 22
+               C170 20 160 24 150 32
+               C130 50 112 84 105 112Z"
+            fill="url(#palm-g)"
+          />
+          {/* Top left frond */}
+          <path
+            d="M103 114 C96 80 82 42 62 6
+               C70 8 78 16 84 28
+               C94 52 100 84 103 110Z"
+            fill="url(#palm-g)"
+          />
+          {/* Top right frond */}
+          <path
+            d="M105 114 C112 80 126 42 146 6
+               C138 8 130 16 124 28
+               C114 52 108 84 105 110Z"
+            fill="url(#palm-g)"
+          />
+          {/* Center top frond */}
+          <path
+            d="M103 112 C102 76 100 40 104 4
+               C108 40 106 76 105 112Z"
             fill="url(#palm-g)" opacity="0.9"
-          />
-          {/* Left upper frond */}
-          <path
-            d="M59 86 C48 62 30 35 10 18 C32 28 50 55 59 82Z"
-            fill="url(#palm-g)" opacity="0.8"
-          />
-          {/* Right drooping frond */}
-          <path
-            d="M61 90 C72 78 92 68 116 72 C92 64 72 72 61 88Z"
-            fill="url(#palm-g)" opacity="0.85"
-          />
-          {/* Right mid frond */}
-          <path
-            d="M61 88 C76 68 100 50 120 44 C98 44 74 62 61 85Z"
-            fill="url(#palm-g)" opacity="0.9"
-          />
-          {/* Right upper frond */}
-          <path
-            d="M61 86 C72 62 90 35 110 18 C88 28 70 55 61 82Z"
-            fill="url(#palm-g)" opacity="0.8"
-          />
-          {/* Top fronds */}
-          <path
-            d="M59 86 C56 60 50 32 42 6 C52 28 58 58 60 84Z"
-            fill="url(#palm-g)" opacity="0.75"
-          />
-          <path
-            d="M61 86 C64 60 70 32 78 6 C68 28 62 58 60 84Z"
-            fill="url(#palm-g)" opacity="0.75"
-          />
-          <path
-            d="M60 85 C59 55 58 28 60 0 C62 28 61 55 60 85Z"
-            fill="url(#palm-g)" opacity="0.7"
           />
           <defs>
-            <linearGradient id="palm-g" x1="60" y1="0" x2="60" y2="280" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#C49A4C" />
-              <stop offset="50%" stopColor="#B8904A" />
-              <stop offset="100%" stopColor="#6B5D3E" />
+            <linearGradient id="palm-g" x1="100" y1="0" x2="100" y2="400" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#D4A84B" />
+              <stop offset="40%" stopColor="#C49A4C" />
+              <stop offset="100%" stopColor="#8B7340" />
             </linearGradient>
           </defs>
         </svg>
