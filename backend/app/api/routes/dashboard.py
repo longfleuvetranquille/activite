@@ -22,15 +22,19 @@ async def get_digest():
         e for e in all_upcoming if e.tags_deals or "deal_detected" in e.tags_meta
     ]
 
-    # Deduplicate flight deals by destination — keep best score per city
-    seen_cities: set[str] = set()
+    # Deduplicate flight deals by destination — keep best score per route.
+    # Flight titles follow "Vol Nice→{destination} ..." so extract destination.
+    import re
+
+    seen_destinations: set[str] = set()
     unique_deals: list = []
     for d in deals:
         if d.source_name == "google_flights":
-            city = d.location_city or d.title
-            if city in seen_cities:
+            m = re.search(r"Nice[→\u2192](\S+)", d.title)
+            dest = m.group(1) if m else d.title
+            if dest in seen_destinations:
                 continue
-            seen_cities.add(city)
+            seen_destinations.add(dest)
         unique_deals.append(d)
 
     return DashboardDigest(
