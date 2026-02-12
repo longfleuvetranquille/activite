@@ -317,52 +317,62 @@ function SidebarContent({
         >
           <defs>
             <linearGradient id="p-trunk" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#D4AA55" />
-              <stop offset="100%" stopColor="#7A5A28" />
+              <stop offset="0%" stopColor="#C49A4C" />
+              <stop offset="100%" stopColor="#8B7435" />
             </linearGradient>
           </defs>
 
-          {/* Ground shadow */}
-          <ellipse cx="100" cy="272" rx="28" ry="5" fill="#329E96" opacity="0.1" />
-
-          {/* Trunk — tapered body */}
+          {/* Trunk */}
           <path
-            d="M94 270 C93 248 92 225 93 200 C94 175 96 150 100 128 L106 128 C103 150 101 175 100 200 C99 225 100 248 101 270 Z"
-            fill="url(#p-trunk)" opacity="0.5"
+            d="M100 275 C99 250 97 220 97 195 C97 170 99 145 102 125 C104 110 106 98 107 90"
+            stroke="url(#p-trunk)" strokeWidth="6" fill="none" strokeLinecap="round" opacity="0.45"
           />
           {/* Trunk rings */}
-          <path d="M94 260 Q97.5 257 101 260" stroke="#3D2510" strokeWidth="2.5" fill="none" opacity="0.28" />
-          <path d="M93.5 248 Q97 245 100.5 248" stroke="#3D2510" strokeWidth="2.5" fill="none" opacity="0.26" />
-          <path d="M93 236 Q96.5 233 100 236" stroke="#3D2510" strokeWidth="2.5" fill="none" opacity="0.24" />
-          <path d="M93 224 Q96.5 221 100 224" stroke="#3D2510" strokeWidth="2.5" fill="none" opacity="0.22" />
-          <path d="M93.5 212 Q97 209 100 212" stroke="#3D2510" strokeWidth="2" fill="none" opacity="0.2" />
-          <path d="M94 200 Q97 197 100 200" stroke="#3D2510" strokeWidth="2" fill="none" opacity="0.18" />
-          <path d="M95 189 Q97.5 186 100 189" stroke="#3D2510" strokeWidth="2" fill="none" opacity="0.16" />
-          <path d="M95.5 178 Q98 175 100 178" stroke="#3D2510" strokeWidth="1.5" fill="none" opacity="0.14" />
-          <path d="M96 168 Q98 165 100 168" stroke="#3D2510" strokeWidth="1.5" fill="none" opacity="0.12" />
-          <path d="M97 158 Q99 155 100.5 158" stroke="#3D2510" strokeWidth="1.5" fill="none" opacity="0.1" />
-          <path d="M98 149 Q99.5 146 101 149" stroke="#3D2510" strokeWidth="1" fill="none" opacity="0.08" />
-          <path d="M99 140 Q100 137 101.5 140" stroke="#3D2510" strokeWidth="1" fill="none" opacity="0.06" />
+          <path d="M98 250 Q100 248 102 250" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.15" />
+          <path d="M97.5 230 Q100 228 102.5 230" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.13" />
+          <path d="M97 210 Q100 208 103 210" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.11" />
+          <path d="M97.5 190 Q100.5 188 103 190" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.09" />
+          <path d="M98 170 Q101 168 103.5 170" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.07" />
 
-          {/* === FRONDS — back layer (dark teal) === */}
-          {/* Left upper */}
-          <path d="M98 124 L73 114 L85 106 L63 94 L75 86 L53 74 L65 66 L45 54 L55 46 L38 36 L45 22 L60 20 L58 32 L72 38 L70 50 L82 58 L80 68 L92 78 L90 88 L102 98 L100 108 Z" fill="#1A8A7E" opacity="0.3" />
-          {/* Right upper */}
-          <path d="M102 124 L127 114 L115 106 L137 94 L125 86 L147 74 L135 66 L155 54 L145 46 L162 36 L155 22 L140 20 L142 32 L128 38 L130 50 L118 58 L120 68 L108 78 L110 88 L98 98 L100 108 Z" fill="#1A8A7E" opacity="0.3" />
-          {/* Center */}
-          <path d="M100 124 L114 108 L102 100 L114 78 L103 70 L114 50 L103 42 L114 24 L105 16 L102 10 L98 16 L86 24 L97 42 L86 50 L98 70 L86 78 L98 100 L86 108 Z" fill="#1E9488" opacity="0.28" />
+          {/* Left drooping frond */}
+          <path d="M107 90 C88 80 55 78 15 100" stroke="#C49A4C" strokeWidth="1.8" fill="none" opacity="0.35" strokeLinecap="round" />
+          <path d="M85 82 L78 74 M72 80 L64 73 M60 80 L50 76 M48 82 L36 80 M36 85 L24 86" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.2" />
+          <path d="M85 85 L80 92 M72 84 L66 91 M60 84 L53 91 M48 86 L40 92 M36 89 L28 95" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.15" />
 
-          {/* === FRONDS — mid layer (medium teal) === */}
-          {/* Left middle */}
-          <path d="M97 126 L85 98 L80 110 L65 88 L60 102 L45 82 L40 96 L25 78 L22 94 L10 82 L5 92 L10 110 L20 108 L25 118 L40 112 L45 120 L60 114 L65 124 L80 118 L85 126 L92 122 Z" fill="#28A89A" opacity="0.38" />
-          {/* Right middle */}
-          <path d="M103 126 L115 98 L120 110 L135 88 L140 102 L155 82 L160 96 L175 78 L178 94 L190 82 L195 92 L190 110 L180 108 L175 118 L160 112 L155 120 L140 114 L135 124 L120 118 L115 126 L108 122 Z" fill="#28A89A" opacity="0.38" />
+          {/* Left mid frond */}
+          <path d="M107 88 C82 68 48 52 8 58" stroke="#C49A4C" strokeWidth="1.6" fill="none" opacity="0.3" strokeLinecap="round" />
+          <path d="M88 72 L82 63 M74 66 L66 58 M62 62 L52 56 M50 60 L38 56 M38 60 L24 58" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.18" />
+          <path d="M88 76 L84 82 M74 72 L69 78 M62 68 L56 74 M50 66 L43 72 M38 66 L30 71" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.13" />
 
-          {/* === FRONDS — front layer (bright teal) === */}
-          {/* Left drooping */}
-          <path d="M97 128 L88 108 L82 116 L70 100 L64 112 L50 98 L44 110 L30 100 L26 114 L12 108 L8 128 L12 148 L24 142 L28 148 L42 138 L46 146 L60 136 L64 142 L78 134 L82 140 L92 135 Z" fill="#2DBAA8" opacity="0.35" />
-          {/* Right drooping */}
-          <path d="M103 128 L112 108 L118 116 L130 100 L136 112 L150 98 L156 110 L170 100 L174 114 L188 108 L192 128 L188 148 L176 142 L172 148 L158 138 L154 146 L140 136 L136 142 L122 134 L118 140 L108 135 Z" fill="#2DBAA8" opacity="0.35" />
+          {/* Left upper frond */}
+          <path d="M107 86 C94 62 76 38 42 18" stroke="#C49A4C" strokeWidth="1.4" fill="none" opacity="0.25" strokeLinecap="round" />
+          <path d="M96 62 L88 54 M86 52 L78 44 M76 42 L66 36 M66 34 L56 30" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.15" />
+          <path d="M96 66 L94 73 M86 58 L82 64 M76 48 L72 54 M66 40 L62 46" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.12" />
+
+          {/* Right drooping frond */}
+          <path d="M107 90 C126 80 155 78 195 100" stroke="#C49A4C" strokeWidth="1.8" fill="none" opacity="0.35" strokeLinecap="round" />
+          <path d="M125 82 L132 74 M138 80 L146 73 M150 80 L160 76 M162 82 L174 80 M174 85 L186 86" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.2" />
+          <path d="M125 85 L130 92 M138 84 L144 91 M150 84 L157 91 M162 86 L170 92 M174 89 L182 95" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.15" />
+
+          {/* Right mid frond */}
+          <path d="M107 88 C132 68 162 52 198 58" stroke="#C49A4C" strokeWidth="1.6" fill="none" opacity="0.3" strokeLinecap="round" />
+          <path d="M122 72 L128 63 M136 66 L144 58 M148 62 L158 56 M160 60 L172 56 M172 60 L186 58" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.18" />
+          <path d="M122 76 L126 82 M136 72 L141 78 M148 68 L154 74 M160 66 L167 72 M172 66 L180 71" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.13" />
+
+          {/* Right upper frond */}
+          <path d="M107 86 C120 62 138 38 168 18" stroke="#C49A4C" strokeWidth="1.4" fill="none" opacity="0.25" strokeLinecap="round" />
+          <path d="M116 62 L124 54 M126 52 L134 44 M136 42 L146 36 M146 34 L156 30" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.15" />
+          <path d="M116 66 L118 73 M126 58 L130 64 M136 48 L140 54 M146 40 L150 46" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.12" />
+
+          {/* Center frond */}
+          <path d="M107 86 C106 62 108 40 112 12" stroke="#C49A4C" strokeWidth="1.2" fill="none" opacity="0.22" strokeLinecap="round" />
+          <path d="M106 65 L100 58 M107 48 L100 42 M108 32 L102 26" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.12" />
+          <path d="M108 65 L114 58 M109 48 L115 42 M110 32 L116 26" stroke="#C49A4C" strokeWidth="0.5" fill="none" opacity="0.12" />
+
+          {/* Coconuts */}
+          <ellipse cx="104" cy="92" rx="3.5" ry="4" fill="#8B7435" opacity="0.3" />
+          <ellipse cx="110" cy="90" rx="3" ry="3.5" fill="#7A6530" opacity="0.25" />
+          <ellipse cx="107" cy="96" rx="2.5" ry="3" fill="#6B5A2E" opacity="0.2" />
         </svg>
       </div>
 
