@@ -12,7 +12,7 @@ import { fr } from "date-fns/locale";
 import Link from "next/link";
 
 import type { DashboardDigest, Event } from "@/types";
-import { getDashboardDigest, getTodayEvents, getWeekendEvents } from "@/lib/api";
+import { getDashboardDigest, getTodayEvents, getWeekEvents, getWeekendEvents } from "@/lib/api";
 import { parseEventDate } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import HeroSection from "@/components/HeroSection";
@@ -27,6 +27,7 @@ import FeaturedRanking from "@/components/FeaturedRanking";
 export default function DashboardPage() {
   const [digest, setDigest] = useState<DashboardDigest | null>(null);
   const [todayEvents, setTodayEvents] = useState<Event[]>([]);
+  const [weekEvents, setWeekEvents] = useState<Event[]>([]);
   const [weekendEvents, setWeekendEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,13 +36,15 @@ export default function DashboardPage() {
     async function load() {
       try {
         setLoading(true);
-        const [digestData, todayData, weekendData] = await Promise.all([
+        const [digestData, todayData, weekData, weekendData] = await Promise.all([
           getDashboardDigest(),
           getTodayEvents().catch(() => [] as Event[]),
+          getWeekEvents().catch(() => [] as Event[]),
           getWeekendEvents().catch(() => [] as Event[]),
         ]);
         setDigest(digestData);
         setTodayEvents(todayData);
+        setWeekEvents(weekData);
         setWeekendEvents(weekendData);
       } catch (err) {
         setError(
@@ -76,11 +79,34 @@ export default function DashboardPage() {
     );
   }
 
-  // Split deals into flight deals and other deals
-  const flightDeals =
+  // Split deals into flight deals (deduplicated by destination) and other deals
+  const rawFlightDeals =
     digest?.deals.filter((e) => e.source_name === "google_flights") ?? [];
+  const seenDestinations = new Set<string>();
+  const flightDeals = rawFlightDeals.filter((e) => {
+    const dest = (e.location_city || e.title.match(/Nice[→\s]+(\S+)/)?.[1] || "").toLowerCase();
+    if (seenDestinations.has(dest)) return false;
+    seenDestinations.add(dest);
+    return true;
+  });
   const otherDeals =
     digest?.deals.filter((e) => e.source_name !== "google_flights") ?? [];
+
+  // Weekend events: max 1 flight, no duplicate destinations
+  const weekendFlightDests = new Set<string>();
+  let weekendFlightCount = 0;
+  const filteredWeekendEvents = weekendEvents.filter((e) => {
+    if (e.source_name === "google_flights") {
+      const dest = (e.location_city || "").toLowerCase();
+      if (weekendFlightCount >= 1 || weekendFlightDests.has(dest)) return false;
+      weekendFlightDests.add(dest);
+      weekendFlightCount++;
+    }
+    return true;
+  });
+
+  // Week events: exclude flights
+  const filteredWeekEvents = weekEvents.filter((e) => e.source_name !== "google_flights");
 
   return (
     <div>
@@ -226,8 +252,8 @@ export default function DashboardPage() {
 
         <div className="editorial-divider content-container" />
 
-        {/* 4. "Ce week-end" — grid */}
-        {weekendEvents.length > 0 && (
+        {/* 4. "Ce week-end" — grid (max 1 flight) */}
+        {filteredWeekendEvents.length > 0 && (
           <motion.section
             id="weekend"
             initial={{ opacity: 0, y: 20 }}
@@ -237,12 +263,35 @@ export default function DashboardPage() {
           >
             <SectionHeader
               title="Ce week-end"
-              count={weekendEvents.length}
+              count={filteredWeekendEvents.length}
               linkHref="/weekend"
               linkLabel="Tout voir"
             />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {weekendEvents.slice(0, 8).map((event, i) => (
+              {filteredWeekendEvents.slice(0, 8).map((event, i) => (
+                <EventCard key={event.id} event={event} index={i} />
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* 4b. "Cette semaine" — grid (no flights) */}
+        {filteredWeekEvents.length > 0 && (
+          <motion.section
+            id="week"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="content-container py-6 sm:py-8"
+          >
+            <SectionHeader
+              title="Cette semaine"
+              count={filteredWeekEvents.length}
+              linkHref="/week"
+              linkLabel="Tout voir"
+            />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredWeekEvents.slice(0, 8).map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
               ))}
             </div>
@@ -304,16 +353,18 @@ export default function DashboardPage() {
           </motion.section>
         )}
 
-        {/* 6. "Les gros events" — top upcoming, diversified */}
+        {/* 6. "Les gros events" — top upcoming, no flights, diversified */}
         {digest && digest.top_upcoming.length > 0 && (() => {
-          // Diversify: cap sport_match to 2 on dashboard
+          // Exclude flights, cap sport_match to 2
           const typeCounts: Record<string, number> = {};
-          const diversified = digest.top_upcoming.filter((e) => {
-            const t = e.tags_type[0] || "_none";
-            typeCounts[t] = (typeCounts[t] || 0) + 1;
-            if (t === "sport_match" && typeCounts[t] > 2) return false;
-            return true;
-          });
+          const diversified = digest.top_upcoming
+            .filter((e) => e.source_name !== "google_flights")
+            .filter((e) => {
+              const t = e.tags_type[0] || "_none";
+              typeCounts[t] = (typeCounts[t] || 0) + 1;
+              if (t === "sport_match" && typeCounts[t] > 2) return false;
+              return true;
+            });
 
           return (
             <motion.section
