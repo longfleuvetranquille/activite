@@ -82,21 +82,6 @@ export default function DashboardPage() {
   // Flight deals come pre-deduplicated (5 unique destinations) from backend
   const flightDeals = digest?.deals ?? [];
 
-  // Weekend events: max 1 flight, no duplicate destinations
-  const weekendFlightDests = new Set<string>();
-  let weekendFlightCount = 0;
-  const filteredWeekendEvents = weekendEvents.filter((e) => {
-    if (e.source_name === "google_flights") {
-      const dest = (e.location_city || "").toLowerCase();
-      if (weekendFlightCount >= 1 || weekendFlightDests.has(dest)) return false;
-      weekendFlightDests.add(dest);
-      weekendFlightCount++;
-    }
-    return true;
-  });
-
-  // Week events: exclude flights
-  const filteredWeekEvents = weekEvents.filter((e) => e.source_name !== "google_flights");
 
   return (
     <div>
@@ -243,7 +228,7 @@ export default function DashboardPage() {
         <div className="editorial-divider content-container" />
 
         {/* 4. "Ce week-end" — grid (max 1 flight) */}
-        {filteredWeekendEvents.length > 0 && (
+        {weekendEvents.length > 0 && (
           <motion.section
             id="weekend"
             initial={{ opacity: 0, y: 20 }}
@@ -253,12 +238,12 @@ export default function DashboardPage() {
           >
             <SectionHeader
               title="Ce week-end"
-              count={filteredWeekendEvents.length}
+              count={weekendEvents.length}
               linkHref="/weekend"
               linkLabel="Tout voir"
             />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredWeekendEvents.slice(0, 8).map((event, i) => (
+              {weekendEvents.slice(0, 8).map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
               ))}
             </div>
@@ -266,7 +251,7 @@ export default function DashboardPage() {
         )}
 
         {/* 4b. "Cette semaine" — grid (no flights) */}
-        {filteredWeekEvents.length > 0 && (
+        {weekEvents.length > 0 && (
           <motion.section
             id="week"
             initial={{ opacity: 0, y: 20 }}
@@ -276,12 +261,12 @@ export default function DashboardPage() {
           >
             <SectionHeader
               title="Cette semaine"
-              count={filteredWeekEvents.length}
+              count={weekEvents.length}
               linkHref="/week"
               linkLabel="Tout voir"
             />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredWeekEvents.slice(0, 8).map((event, i) => (
+              {weekEvents.slice(0, 8).map((event, i) => (
                 <EventCard key={event.id} event={event} index={i} />
               ))}
             </div>

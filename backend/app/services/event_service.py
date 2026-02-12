@@ -90,7 +90,7 @@ async def get_week_events() -> list[EventRead]:
     week_end = (now + timedelta(days=days_until_monday)).strftime("%Y-%m-%d")
     filter_str = (
         f'date_start >= "{today}" && date_start < "{week_end}" '
-        f'&& status = "published"'
+        f'&& status = "published" && source_name != "google_flights"'
     )
     result = await pb_client.list_records(
         "events",
@@ -116,7 +116,7 @@ async def get_weekend_events() -> list[EventRead]:
     monday = (friday + timedelta(days=3)).strftime("%Y-%m-%d")
     filter_str = (
         f'date_start >= "{fri_str}" && date_start < "{monday}" '
-        f'&& status = "published"'
+        f'&& status = "published" && source_name != "google_flights"'
     )
     result = await pb_client.list_records(
         "events",
