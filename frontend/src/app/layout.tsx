@@ -11,7 +11,6 @@ import {
   CalendarClock,
   Menu,
   X,
-  RefreshCw,
   Compass,
   Heart,
   Coffee,
@@ -23,7 +22,6 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
-import { triggerCrawl, getCrawlStatus } from "@/lib/api";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -72,33 +70,6 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [crawling, setCrawling] = useState(false);
-
-  async function handleCrawl() {
-    try {
-      setCrawling(true);
-      await triggerCrawl();
-      await new Promise<void>((resolve, reject) => {
-        const interval = setInterval(async () => {
-          try {
-            const status = await getCrawlStatus();
-            if (!status.is_running) {
-              clearInterval(interval);
-              resolve();
-            }
-          } catch {
-            clearInterval(interval);
-            reject(new Error("Erreur lors du suivi du crawl"));
-          }
-        }, 3000);
-      });
-    } catch {
-      // silently fail — sidebar crawl is a background action
-    } finally {
-      setCrawling(false);
-    }
-  }
-
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
@@ -134,7 +105,7 @@ export default function RootLayout({
         <div className="flex min-h-screen overflow-x-hidden">
           {/* Desktop Sidebar */}
           <aside className="sidebar-dark fixed left-0 top-0 z-40 hidden h-full w-64 flex-col lg:flex">
-            <SidebarContent pathname={pathname} onNavigate={() => {}} onCrawl={handleCrawl} crawling={crawling} />
+            <SidebarContent pathname={pathname} onNavigate={() => {}} />
           </aside>
 
           {/* Mobile Header */}
@@ -182,8 +153,6 @@ export default function RootLayout({
                   <SidebarContent
                     pathname={pathname}
                     onNavigate={() => setSidebarOpen(false)}
-                    onCrawl={handleCrawl}
-                    crawling={crawling}
                   />
                 </motion.aside>
               </>
@@ -274,13 +243,9 @@ function NavGroup({
 function SidebarContent({
   pathname,
   onNavigate,
-  onCrawl,
-  crawling,
 }: {
   pathname: string;
   onNavigate: () => void;
-  onCrawl?: () => void;
-  crawling?: boolean;
 }) {
   return (
     <>
@@ -376,35 +341,6 @@ function SidebarContent({
         </svg>
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-white/[0.06] px-4 py-4">
-        <div className="rounded-xl bg-white/[0.04] px-3 py-2.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="relative h-2 w-2">
-                <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
-                <div className="relative h-2 w-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
-              </div>
-              <p className="text-[11px] font-medium text-white/50">
-                Systeme actif
-              </p>
-            </div>
-            {onCrawl && (
-              <button
-                onClick={onCrawl}
-                disabled={crawling}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-white/30 transition-all hover:bg-white/10 hover:text-white/60 disabled:opacity-50"
-                title={crawling ? "Crawl en cours..." : "Lancer un crawl"}
-              >
-                <RefreshCw className={`h-3.5 w-3.5 ${crawling ? "animate-spin" : ""}`} />
-              </button>
-            )}
-          </div>
-          <p className="mt-1 text-[10px] text-white/25">
-            v0.1.0 &middot; Cannes, France
-          </p>
-        </div>
-      </div>
     </>
   );
 }
