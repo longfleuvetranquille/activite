@@ -272,73 +272,60 @@ function SidebarContent({
         <NavGroup label="Type d'activite" items={NAV_ACTIVITIES} pathname={pathname} onNavigate={onNavigate} isAnchor />
       </nav>
 
-      {/* Decorative palm tree illustration */}
-      <div className="hidden lg:flex flex-1 items-end justify-center overflow-hidden min-h-0 px-4 pb-2">
+      {/* Decorative palm tree — minimal silhouette */}
+      <div className="hidden lg:flex flex-1 items-end justify-center overflow-hidden min-h-0 px-2 pb-1">
         <svg
-          viewBox="0 0 240 340"
+          viewBox="0 0 200 340"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full max-h-72"
+          className="w-full max-h-80"
           preserveAspectRatio="xMidYMax meet"
         >
-          <defs>
-            <linearGradient id="p-trunk" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#C49A4C" />
-              <stop offset="100%" stopColor="#8B7435" />
-            </linearGradient>
-          </defs>
-
-          {/* Trunk — taller, gentle curve */}
+          {/* Trunk — gentle curve with crown bulge */}
           <path
-            d="M120 335 C119 305 117 270 116 240 C115 210 116 180 118 155 C120 135 122 118 124 105"
-            stroke="url(#p-trunk)" strokeWidth="7" fill="none" strokeLinecap="round" opacity="0.5"
+            d="M92 335 Q91 310 90 280 Q89 250 91 220 Q93 190 96 160 Q98 140 101 120 Q103 112 105 108
+               L108 108
+               Q106 112 105 120 Q103 140 102 160 Q100 190 99 220 Q98 250 99 280 Q100 310 99 335 Z"
+            fill="#C49A4C" opacity="0.15"
           />
-          {/* Trunk rings */}
-          <path d="M117 310 Q120 308 123 310" stroke="#C49A4C" strokeWidth="1" fill="none" opacity="0.15" />
-          <path d="M116 280 Q120 278 124 280" stroke="#C49A4C" strokeWidth="1" fill="none" opacity="0.13" />
-          <path d="M115.5 250 Q119 248 123 250" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.11" />
-          <path d="M116 220 Q119.5 218 123 220" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.09" />
-          <path d="M117 190 Q120 188 123.5 190" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.07" />
-          <path d="M118 165 Q121 163 124 165" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.06" />
+          {/* Crown bulge */}
+          <ellipse cx="103" cy="108" rx="10" ry="6" fill="#C49A4C" opacity="0.12" />
 
-          {/* Left drooping frond — large, sweeping */}
-          <path d="M124 105 C100 92 55 88 -5 118" stroke="#C49A4C" strokeWidth="2.4" fill="none" opacity="0.4" strokeLinecap="round" />
-          <path d="M98 94 L88 84 M82 92 L70 83 M66 90 L52 84 M50 92 L34 88 M35 96 L16 96" stroke="#C49A4C" strokeWidth="0.9" fill="none" opacity="0.22" />
-          <path d="M98 98 L92 108 M82 97 L74 107 M66 96 L56 106 M50 98 L40 108 M35 102 L24 112" stroke="#C49A4C" strokeWidth="0.9" fill="none" opacity="0.16" />
+          {/* Left drooping frond */}
+          <path
+            d="M100 105 C75 90 40 82 5 108 C40 78 75 82 100 100 Z"
+            fill="#C49A4C" opacity="0.13"
+          />
+          {/* Left mid frond */}
+          <path
+            d="M102 102 C75 72 35 50 0 55 C35 42 75 60 102 96 Z"
+            fill="#C49A4C" opacity="0.11"
+          />
+          {/* Left upper frond */}
+          <path
+            d="M103 100 C88 65 62 30 25 5 C65 22 90 58 103 94 Z"
+            fill="#C49A4C" opacity="0.09"
+          />
+          {/* Right drooping frond */}
+          <path
+            d="M106 105 C131 90 166 82 200 108 C166 78 131 82 106 100 Z"
+            fill="#C49A4C" opacity="0.13"
+          />
+          {/* Right mid frond */}
+          <path
+            d="M104 102 C131 72 171 50 200 55 C171 42 131 60 104 96 Z"
+            fill="#C49A4C" opacity="0.11"
+          />
+          {/* Right upper frond */}
+          <path
+            d="M103 100 C118 65 144 30 181 5 C141 22 116 58 103 94 Z"
+            fill="#C49A4C" opacity="0.09"
+          />
 
-          {/* Left mid frond — wide reach */}
-          <path d="M124 102 C92 76 48 56 -10 62" stroke="#C49A4C" strokeWidth="2.2" fill="none" opacity="0.35" strokeLinecap="round" />
-          <path d="M96 80 L86 68 M78 72 L66 62 M62 68 L48 60 M48 66 L32 60 M32 66 L14 62" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.2" />
-          <path d="M96 85 L92 94 M78 78 L72 87 M62 74 L54 83 M48 72 L40 81 M32 72 L22 80" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.14" />
-
-          {/* Left upper frond — arching up */}
-          <path d="M124 100 C108 70 84 38 40 10" stroke="#C49A4C" strokeWidth="1.8" fill="none" opacity="0.3" strokeLinecap="round" />
-          <path d="M110 72 L100 60 M96 58 L84 48 M82 46 L68 38 M68 36 L54 28" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.17" />
-          <path d="M110 77 L108 86 M96 65 L92 74 M82 53 L76 62 M68 44 L62 52" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.13" />
-
-          {/* Right drooping frond — large, sweeping */}
-          <path d="M124 105 C148 92 193 88 245 118" stroke="#C49A4C" strokeWidth="2.4" fill="none" opacity="0.4" strokeLinecap="round" />
-          <path d="M146 94 L156 84 M162 92 L174 83 M178 90 L192 84 M194 92 L210 88 M209 96 L228 96" stroke="#C49A4C" strokeWidth="0.9" fill="none" opacity="0.22" />
-          <path d="M146 98 L152 108 M162 97 L170 107 M178 96 L188 106 M194 98 L204 108 M209 102 L220 112" stroke="#C49A4C" strokeWidth="0.9" fill="none" opacity="0.16" />
-
-          {/* Right mid frond — wide reach */}
-          <path d="M124 102 C156 76 200 56 250 62" stroke="#C49A4C" strokeWidth="2.2" fill="none" opacity="0.35" strokeLinecap="round" />
-          <path d="M148 80 L158 68 M166 72 L178 62 M182 68 L196 60 M196 66 L212 60 M212 66 L230 62" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.2" />
-          <path d="M148 85 L152 94 M166 78 L172 87 M182 74 L190 83 M196 72 L204 81 M212 72 L222 80" stroke="#C49A4C" strokeWidth="0.8" fill="none" opacity="0.14" />
-
-          {/* Right upper frond — arching up */}
-          <path d="M124 100 C140 70 164 38 200 10" stroke="#C49A4C" strokeWidth="1.8" fill="none" opacity="0.3" strokeLinecap="round" />
-          <path d="M134 72 L144 60 M148 58 L160 48 M162 46 L176 38 M176 36 L190 28" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.17" />
-          <path d="M134 77 L136 86 M148 65 L152 74 M162 53 L168 62 M176 44 L182 52" stroke="#C49A4C" strokeWidth="0.7" fill="none" opacity="0.13" />
-
-          {/* Center frond — tall */}
-          <path d="M124 100 C123 68 125 38 130 5" stroke="#C49A4C" strokeWidth="1.6" fill="none" opacity="0.28" strokeLinecap="round" />
-          <path d="M123 75 L114 66 M124 55 L115 46 M125 38 L117 30 M126 22 L118 14" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.14" />
-          <path d="M125 75 L134 66 M126 55 L134 46 M127 38 L135 30 M128 22 L136 14" stroke="#C49A4C" strokeWidth="0.6" fill="none" opacity="0.14" />
-
-          {/* Coconuts */}
-          <ellipse cx="120" cy="108" rx="4.5" ry="5" fill="#8B7435" opacity="0.3" />
-          <ellipse cx="128" cy="106" rx="4" ry="4.5" fill="#7A6530" opacity="0.25" />
-          <ellipse cx="123" cy="113" rx="3.5" ry="4" fill="#6B5A2E" opacity="0.2" />
+          {/* Center frond */}
+          <path
+            d="M100 100 C98 60 98 30 103 0 C108 30 108 60 106 100 Z"
+            fill="#C49A4C" opacity="0.09"
+          />
         </svg>
       </div>
 

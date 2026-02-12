@@ -88,7 +88,7 @@ export default function DashboardPage() {
       <HeroSection />
 
       <div className="space-y-0">
-        {/* Nos guides — right under hero */}
+        {/* Nos activités — right under hero */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,7 +96,7 @@ export default function DashboardPage() {
           className="content-container py-4 sm:py-6"
         >
           <SectionHeader
-            title="Nos guides"
+            title="Nos activités"
             subtitle="Selections thematiques de la Cote d'Azur"
           />
           <HorizontalCarousel>
