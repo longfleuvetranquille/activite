@@ -15,34 +15,14 @@ async def get_digest():
     week = await event_service.get_week_events()
     featured = await event_service.get_featured_events()
     best = await event_service.get_best_events(limit=15)
-
-    # Filter deals: events with deal tags (from 3-month window)
-    all_upcoming = await event_service.get_best_events(limit=100)
-    deals = [
-        e for e in all_upcoming if e.tags_deals or "deal_detected" in e.tags_meta
-    ]
-
-    # Deduplicate flight deals by destination — keep best score per route.
-    # Flight titles follow "Vol Nice→{destination} ..." so extract destination.
-    import re
-
-    seen_destinations: set[str] = set()
-    unique_deals: list = []
-    for d in deals:
-        if d.source_name == "google_flights":
-            m = re.search(r"Nice[→\u2192](\S+)", d.title)
-            dest = m.group(1) if m else d.title
-            if dest in seen_destinations:
-                continue
-            seen_destinations.add(dest)
-        unique_deals.append(d)
+    flight_deals = await event_service.get_flight_deals(limit=5)
 
     return DashboardDigest(
         today_count=len(today),
         week_count=len(week),
         featured=featured[:5],
         top_upcoming=best[:15],
-        deals=unique_deals[:5],
+        deals=flight_deals,
     )
 
 

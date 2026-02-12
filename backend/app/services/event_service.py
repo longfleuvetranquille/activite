@@ -194,6 +194,43 @@ async def get_best_events(limit: int = 20) -> list[EventRead]:
     return [_to_event_read(r) for r in result.get("items", [])]
 
 
+async def get_flight_deals(limit: int = 4) -> list[EventRead]:
+    """Get the cheapest flights this month, 1 per destination, excluding Turkey."""
+    import re
+
+    BLOCKED_DESTINATIONS = {"istanbul", "ankara", "antalya", "izmir", "bodrum", "dalaman"}
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    month_end = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
+    filter_str = (
+        f'date_start >= "{today}" && date_start < "{month_end}" '
+        f'&& source_name = "google_flights" && status = "published"'
+    )
+    result = await pb_client.list_records(
+        "events",
+        per_page=200,
+        sort="price_min",
+        filter_str=filter_str,
+    )
+    all_flights = [_to_event_read(r) for r in result.get("items", [])]
+
+    seen_destinations: set[str] = set()
+    unique: list[EventRead] = []
+    for f in all_flights:
+        m = re.search(r"Nice[→\u2192](\S+)", f.title)
+        dest = (m.group(1) if m else f.location_city or f.title).lower().strip()
+        if dest in BLOCKED_DESTINATIONS:
+            continue
+        if dest in seen_destinations:
+            continue
+        seen_destinations.add(dest)
+        unique.append(f)
+        if len(unique) >= limit:
+            break
+
+    return unique
+
+
 async def get_upcoming_events() -> list[EventRead]:
     """Get the best upcoming events over the next 6 months, diversified."""
     today = datetime.now().strftime("%Y-%m-%d")

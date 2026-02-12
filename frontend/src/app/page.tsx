@@ -79,18 +79,8 @@ export default function DashboardPage() {
     );
   }
 
-  // Split deals into flight deals (deduplicated by destination) and other deals
-  const rawFlightDeals =
-    digest?.deals.filter((e) => e.source_name === "google_flights") ?? [];
-  const seenDestinations = new Set<string>();
-  const flightDeals = rawFlightDeals.filter((e) => {
-    const dest = (e.location_city || e.title.match(/Nice[→\s]+(\S+)/)?.[1] || "").toLowerCase();
-    if (seenDestinations.has(dest)) return false;
-    seenDestinations.add(dest);
-    return true;
-  });
-  const otherDeals =
-    digest?.deals.filter((e) => e.source_name !== "google_flights") ?? [];
+  // Flight deals come pre-deduplicated (5 unique destinations) from backend
+  const flightDeals = digest?.deals ?? [];
 
   // Weekend events: max 1 flight, no duplicate destinations
   const weekendFlightDests = new Set<string>();
@@ -330,28 +320,6 @@ export default function DashboardPage() {
           </motion.section>
         )}
 
-        {/* Other deals if any */}
-        {otherDeals.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
-            className="content-container py-6 sm:py-8"
-          >
-            <SectionHeader
-              title="Bons plans"
-              count={otherDeals.length}
-              subtitle="Offres et bons plans detectes"
-            />
-            <HorizontalCarousel>
-              {otherDeals.map((event, i) => (
-                <div key={event.id} className="w-[75vw] sm:w-[260px] shrink-0">
-                  <EventCard event={event} index={i} />
-                </div>
-              ))}
-            </HorizontalCarousel>
-          </motion.section>
-        )}
 
         {/* 6. "Les gros events" — top upcoming, no flights, diversified */}
         {digest && digest.top_upcoming.length > 0 && (() => {
