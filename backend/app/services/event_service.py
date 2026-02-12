@@ -149,6 +149,7 @@ async def get_featured_events() -> list[EventRead]:
     filter_str = (
         f'date_start >= "{today}" && date_start < "{end}" '
         f'&& interest_score >= 70 && status = "published"'
+        f' && source_name != "google_flights"'
     )
     result = await pb_client.list_records(
         "events",
