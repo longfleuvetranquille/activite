@@ -23,7 +23,7 @@ export function parseEventDate(iso: string): Date {
 
 function getApiBase(): string {
   if (typeof window !== "undefined") {
-    return `http://${window.location.hostname}:8000`;
+    return window.location.origin;
   }
   return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 }
