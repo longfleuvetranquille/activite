@@ -1,7 +1,10 @@
 import hashlib
+import logging
 from datetime import datetime, timedelta
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 from app.config import settings
 
@@ -69,6 +72,8 @@ class PocketBaseClient:
             json=data,
             headers=self.headers,
         )
+        if resp.status_code >= 400:
+            logger.error("PB create %s failed %s: %s", collection, resp.status_code, resp.text)
         resp.raise_for_status()
         return resp.json()
 
