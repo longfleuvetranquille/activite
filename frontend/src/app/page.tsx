@@ -144,9 +144,9 @@ export default function DashboardPage() {
             <div className="w-[70vw] sm:w-[240px] lg:w-[260px] shrink-0">
               <CollectionCard
                 emoji={"\uD83D\uDD7A"}
-                title="Restos dansants"
+                title="Restos & Bars dansants"
                 description="Diner et danser dans la meme soiree"
-                count={3}
+                count={5}
                 href="#resto-dansant"
                 gradient="from-fuchsia-50 to-pink-50"
               />

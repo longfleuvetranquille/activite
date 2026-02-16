@@ -166,9 +166,9 @@ const FOOD_CATEGORIES: FoodCategory[] = [
   },
   {
     id: "resto-dansant",
-    title: "Restos dansants",
+    title: "Restos & Bars dansants",
     subtitle:
-      "Restaurant dansant qui se transforme en boite",
+      "Restaurant ou bar dansant qui se transforme en boite",
     icon: Music,
     iconColor: "text-purple-500",
     spots: [
@@ -193,8 +193,24 @@ const FOOD_CATEGORIES: FoodCategory[] = [
         name: "Le Pablo",
         subtitle: "Nice",
         description:
-          "Restaurant festif qui se transforme en dancefloor en fin de soiree. Ambiance latine et cocktails.",
+          "Bar dansant festif qui se transforme en dancefloor en fin de soiree. Ambiance latine et cocktails.",
         gradient: "from-orange-50 to-rose-50",
+      },
+      {
+        id: "la-movida-dansant",
+        name: "La Movida",
+        subtitle: "Nice",
+        description:
+          "Bar festif au coeur du Vieux-Nice. Cocktails, tapas et ambiance latine qui se transforme en dancefloor.",
+        gradient: "from-red-50 to-orange-50",
+      },
+      {
+        id: "wakabar",
+        name: "Wakabar",
+        subtitle: "Nice",
+        description:
+          "Bar dansant anime au coeur de Nice. Cocktails et ambiance festive tous les soirs.",
+        gradient: "from-yellow-50 to-amber-50",
       },
     ],
   },
@@ -225,7 +241,7 @@ const FOOD_CATEGORIES: FoodCategory[] = [
       {
         id: "bibliotech",
         name: "Bibliotech",
-        subtitle: "Cannes",
+        subtitle: "Nice",
         description:
           "Club au concept unique entre bibliotheque et dancefloor. Soirees electro et house.",
         gradient: "from-slate-100 to-purple-50",

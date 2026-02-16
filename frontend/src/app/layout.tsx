@@ -2,8 +2,8 @@
 
 import { Outfit, Instrument_Serif, Bodoni_Moda } from "next/font/google";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
 import {
   TreePalm,
   CalendarRange,
@@ -57,7 +57,7 @@ const NAV_ACTIVITIES = [
   { href: "/#dates", label: "Idees de date", icon: Heart },
   { href: "/#cafes", label: "Cafes & brunchs", icon: Coffee },
   { href: "/#restaurants-date", label: "Restos date", icon: UtensilsCrossed },
-  { href: "/#resto-dansant", label: "Restos dansants", icon: Music },
+  { href: "/#resto-dansant", label: "Restos & Bars dansants", icon: Music },
   { href: "/#clubs", label: "Clubs branches", icon: Sparkles },
   { href: "/#bars", label: "Bars branches", icon: Wine },
   { href: "/#beaches", label: "Plages & criques", icon: Waves },
@@ -185,6 +185,40 @@ function NavGroup({
   onNavigate: () => void;
   isAnchor?: boolean;
 }) {
+  const router = useRouter();
+
+  const handleAnchorClick = useCallback(
+    (e: React.MouseEvent, href: string) => {
+      const hash = href.split("#")[1];
+      if (!hash) return;
+
+      // If already on the home page, just scroll to anchor
+      if (pathname === "/") {
+        e.preventDefault();
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+        onNavigate();
+        return;
+      }
+
+      // If on another page, navigate to / then scroll after load
+      e.preventDefault();
+      onNavigate();
+      router.push("/");
+      // Wait for the page to render, then scroll to anchor
+      const tryScroll = (attempts: number) => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else if (attempts > 0) {
+          setTimeout(() => tryScroll(attempts - 1), 100);
+        }
+      };
+      setTimeout(() => tryScroll(20), 200);
+    },
+    [pathname, router, onNavigate]
+  );
+
   return (
     <div>
       <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white">
@@ -199,7 +233,7 @@ function NavGroup({
             <Link
               key={item.href}
               href={item.href}
-              onClick={onNavigate}
+              onClick={isAnchor ? (e) => handleAnchorClick(e, item.href) : onNavigate}
               className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-300 ${
                 isActive
                   ? "text-white"
