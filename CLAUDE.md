@@ -1,4 +1,4 @@
-# Nice Outside — CLAUDE.md
+# Palmier — CLAUDE.md
 
 > Application web IA qui découvre automatiquement les meilleures activités et événements à Nice et sur la Côte d'Azur, adaptés au profil d'un jeune actif de 25 ans.
 
@@ -8,7 +8,7 @@
 
 **Problème** : Trouver quoi faire à Nice et aux alentours demande de consulter des dizaines de sites différents (Shotgun, Facebook Events, sites locaux…). L'information est éparpillée, non filtrée, et souvent pas adaptée à mes goûts.
 
-**Solution** : Nice Outside est un agrégateur intelligent qui crawl quotidiennement le web, collecte les événements/activités, les enrichit via IA (tags, scoring d'intérêt), et les présente dans un dashboard propre avec notifications Telegram.
+**Solution** : Palmier est un agrégateur intelligent qui crawl quotidiennement le web, collecte les événements/activités, les enrichit via IA (tags, scoring d'intérêt), et les présente dans un dashboard propre avec notifications Telegram.
 
 **Utilisateur cible** : Jeune actif (~25 ans) vivant à Nice, intéressé par les sorties, le sport, les événements culturels et les bons plans voyage.
 
@@ -53,7 +53,7 @@
 ### 2.3 Structure du projet
 
 ```
-nice-outside/
+palmier/
 ├── docker-compose.yml
 ├── .env.example
 ├── CLAUDE.md
@@ -433,7 +433,7 @@ Le tagger IA reçoit les données brutes d'un événement et retourne :
 Format du message quotidien envoyé chaque matin :
 
 ```
-🌞 Nice Outside — Mardi 8 février 2026
+🌞 Palmier — Mardi 8 février 2026
 
 🔥 TOP DU JOUR
 
@@ -456,7 +456,7 @@ Format du message quotidien envoyé chaque matin :
 - 🏎 GP Monaco — 23-25 mai | 🧭 Places dispo
 - ✈️ Vol Nice→Barcelone 29€ A/R (−58%) | ⏱ Expire dans 2j
 
-👉 Dashboard : https://nice-outside.local
+👉 Dashboard : https://palmier.local
 ```
 
 ### 6.3 Détection de bons plans voyage
@@ -520,7 +520,7 @@ PUT    /api/preferences              # Mettre à jour les préférences
 ```env
 # PocketBase
 POCKETBASE_URL=http://localhost:8090
-POCKETBASE_ADMIN_EMAIL=admin@niceoutside.local
+POCKETBASE_ADMIN_EMAIL=admin@palmier.local
 POCKETBASE_ADMIN_PASSWORD=
 
 # Claude API (Anthropic)
@@ -584,7 +584,7 @@ volumes:
 
 - **OS** : Raspberry Pi OS / Ubuntu Server
 - **Reverse proxy** : Caddy (HTTPS automatique via Let's Encrypt)
-- **Accès local** : `https://nice-outside.local`
+- **Accès local** : `https://palmier.local`
 - **Accès externe** (optionnel) : Cloudflare Tunnel ou Tailscale
 - **Monitoring** : Uptime Kuma pour surveiller les services
 - **Backup** : Cron job quotidien backup de `pb_data/`

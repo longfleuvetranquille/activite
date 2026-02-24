@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # PocketBase
     pocketbase_url: str = "http://pocketbase:8090"
-    pocketbase_admin_email: str = "admin@niceoutside.local"
+    pocketbase_admin_email: str = "admin@palmier.local"
     pocketbase_admin_password: str = "changeme"
 
     # Claude API

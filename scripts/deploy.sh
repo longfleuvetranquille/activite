@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────
-# Nice Outside — Deploy / update on production server
+# Palmier — Deploy / update on production server
 #
 # Usage:
 #   ./scripts/deploy.sh          # Pull latest + restart
@@ -18,7 +18,7 @@ if [[ "${1:-}" == "--build" ]]; then
     BUILD_FLAG="--build"
 fi
 
-echo "=== Nice Outside — Deploy ==="
+echo "=== Palmier — Deploy ==="
 echo "Project: $PROJECT_DIR"
 echo ""
 
@@ -44,9 +44,9 @@ HEALTH=$(docker compose -f "$COMPOSE_FILE" exec -T backend curl -sf http://local
 if echo "$HEALTH" | grep -q "ok"; then
     echo ""
     echo "=== Deploy successful ==="
-    echo "Frontend: https://nice-outside.local"
-    echo "API:      https://nice-outside.local/api/health"
-    echo "PB Admin: https://nice-outside.local/pb/_/"
+    echo "Frontend: https://palmiercotedazur.fr"
+    echo "API:      https://palmiercotedazur.fr/api/health"
+    echo "PB Admin: https://palmiercotedazur.fr/pb/_/"
 else
     echo ""
     echo "=== WARNING: Health check failed ==="

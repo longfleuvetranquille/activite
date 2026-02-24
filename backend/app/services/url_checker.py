@@ -19,7 +19,7 @@ async def is_url_alive(url: str) -> bool:
         ) as client:
             # Try HEAD first (faster, no body download)
             resp = await client.head(
-                url, headers={"User-Agent": "NiceOutside/1.0"}
+                url, headers={"User-Agent": "Palmier/1.0"}
             )
             if resp.status_code < 400 or resp.status_code == 429:
                 return True
@@ -27,7 +27,7 @@ async def is_url_alive(url: str) -> bool:
             # Some servers reject HEAD, fallback to GET
             if resp.status_code == 405:
                 resp = await client.get(
-                    url, headers={"User-Agent": "NiceOutside/1.0"}
+                    url, headers={"User-Agent": "Palmier/1.0"}
                 )
                 return resp.status_code < 400
 

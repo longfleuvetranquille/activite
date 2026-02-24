@@ -46,7 +46,7 @@ class OGCNCrawler(BaseCrawler):
                 follow_redirects=True,
                 timeout=30.0,
                 headers={
-                    "User-Agent": "NiceOutside/1.0 (event aggregator)",
+                    "User-Agent": "Palmier/1.0 (event aggregator)",
                     "Accept-Language": "fr-FR,fr;q=0.9",
                 },
             ) as client:

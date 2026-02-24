@@ -1,11 +1,11 @@
-# Nice Outside — Caddy reverse proxy
+# Palmier — Caddy reverse proxy
 #
 # Pour un accès local uniquement, utiliser :
-#   nice-outside.local {
+#   palmier.local {
 # Pour un accès externe avec HTTPS automatique (Let's Encrypt) :
-#   nice-outside.example.com {
+#   palmiercotedazur.fr {
 
-nice-outside.local {
+palmier.local {
 	# Frontend (Next.js)
 	handle {
 		reverse_proxy frontend:3000

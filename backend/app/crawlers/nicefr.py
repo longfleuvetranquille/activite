@@ -43,7 +43,7 @@ class NiceFrCrawler(BaseCrawler):
                             "orderby": "modified",
                             "order": "desc",
                         },
-                        headers={"User-Agent": "NiceOutside/1.0"},
+                        headers={"User-Agent": "Palmier/1.0"},
                     )
 
                     if resp.status_code != 200:

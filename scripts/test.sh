@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────
-# Nice Outside — Run backend tests
+# Palmier — Run backend tests
 #
 # Usage:
 #   ./scripts/test.sh              # Run all tests

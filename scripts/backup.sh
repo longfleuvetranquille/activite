@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────
-# Nice Outside — Daily PocketBase backup
+# Palmier — Daily PocketBase backup
 #
 # Usage:
 #   ./scripts/backup.sh
 #
 # Cron (every day at 3 AM):
-#   0 3 * * * /home/pi/nice-outside/scripts/backup.sh
+#   0 3 * * * /home/pi/palmier/scripts/backup.sh
 # ─────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -21,7 +21,7 @@ KEEP_DAYS=14
 mkdir -p "$BACKUP_DIR"
 
 # Find the PocketBase data volume
-PB_DATA=$(docker volume inspect nice-outside_pb_data --format '{{ .Mountpoint }}' 2>/dev/null || true)
+PB_DATA=$(docker volume inspect palmier_pb_data --format '{{ .Mountpoint }}' 2>/dev/null || true)
 
 if [ -z "$PB_DATA" ]; then
     # Fallback: copy from container
