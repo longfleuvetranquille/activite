@@ -83,6 +83,13 @@ export interface CrawlStatusResponse {
   last_status: string | null;
 }
 
+export type FeedbackRating = "excellent" | "ok" | "bad" | "block_type";
+
+export interface EventFeedback {
+  rating: FeedbackRating;
+  comment: string;
+}
+
 export interface EventFilters {
   city?: string;
   tag_type?: string;

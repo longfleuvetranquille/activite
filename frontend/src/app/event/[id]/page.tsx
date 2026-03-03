@@ -18,6 +18,7 @@ import type { Event } from "@/types";
 import { getEvent, parseEventDate } from "@/lib/api";
 import TagBadge from "@/components/TagBadge";
 import MapView from "@/components/MapView";
+import FeedbackPanel from "@/components/FeedbackPanel";
 import { TYPE_STYLES } from "@/components/EventCard";
 
 const DEFAULT_STYLE = { gradient: "from-champagne-400 to-champagne-600", emoji: "\uD83C\uDF34" };
@@ -201,6 +202,14 @@ export default function EventDetailPage() {
             Voir sur {event.source_name || "la source"}
           </a>
         )}
+
+        {/* Feedback */}
+        <div className="mt-6">
+          <FeedbackPanel
+            event={event}
+            onFeedbackSubmit={(updated) => setEvent(updated)}
+          />
+        </div>
 
         {/* Summary */}
         {event.summary && (

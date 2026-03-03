@@ -116,3 +116,16 @@ class CrawlStatusResponse(BaseModel):
     is_running: bool
     last_run: datetime | None
     last_status: str | None
+
+
+class FeedbackCreate(BaseModel):
+    rating: str  # "excellent" | "ok" | "bad" | "block_type"
+    comment: str = ""
+
+
+class FeedbackResponse(BaseModel):
+    rating: str
+    comment: str
+    score_before: int
+    score_after: int
+    event: EventRead

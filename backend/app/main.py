@@ -6,7 +6,7 @@ from fastapi import FastAPI
 logging.basicConfig(level=logging.INFO)
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import crawl, dashboard, events, preferences, tags
+from app.api.routes import crawl, dashboard, events, feedback, preferences, tags
 from app.config import settings
 from app.scheduler.scheduler import start_scheduler, stop_scheduler
 from app.services.pocketbase import pb_client
@@ -42,6 +42,7 @@ app.include_router(tags.router, prefix="/api/tags", tags=["tags"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(crawl.router, prefix="/api/crawl", tags=["crawl"])
 app.include_router(preferences.router, prefix="/api/preferences", tags=["preferences"])
+app.include_router(feedback.router, prefix="/api", tags=["feedback"])
 
 
 @app.get("/api/health")

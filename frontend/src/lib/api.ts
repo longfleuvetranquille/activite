@@ -2,6 +2,7 @@ import type {
   Event,
   EventListResponse,
   EventFilters,
+  EventFeedback,
   DashboardDigest,
   DashboardStats,
   UserPreferences,
@@ -97,6 +98,22 @@ export async function getFeaturedEvents(): Promise<Event[]> {
 
 export async function getUpcomingEvents(): Promise<Event[]> {
   return fetchAPI<Event[]>("/api/events/upcoming");
+}
+
+// --- Feedback ---
+
+export async function submitFeedback(
+  eventId: string,
+  feedback: EventFeedback
+): Promise<Event> {
+  const res = await fetchAPI<{ event: Event }>(
+    `/api/events/${eventId}/feedback`,
+    {
+      method: "POST",
+      body: JSON.stringify(feedback),
+    }
+  );
+  return res.event;
 }
 
 // --- Dashboard ---
