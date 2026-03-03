@@ -17,6 +17,10 @@ class PocketBaseClient:
 
     async def connect(self):
         self._client = httpx.AsyncClient(base_url=self.base_url, timeout=30)
+        await self._authenticate()
+
+    async def _authenticate(self):
+        """Obtain a fresh superuser token from PocketBase."""
         try:
             resp = await self._client.post(
                 "/api/collections/_superusers/auth-with-password",
@@ -27,9 +31,16 @@ class PocketBaseClient:
             )
             if resp.status_code == 200:
                 self.token = resp.json()["token"]
+                logger.info("PocketBase auth token obtained")
+            else:
+                logger.error("PocketBase auth failed: %s", resp.text)
         except httpx.ConnectError:
-            # PocketBase not ready yet, will retry on first request
-            pass
+            logger.warning("PocketBase not reachable, will retry later")
+
+    async def _ensure_auth(self):
+        """Re-authenticate if token is missing."""
+        if not self.token:
+            await self._authenticate()
 
     @property
     def headers(self) -> dict:
@@ -66,11 +77,24 @@ class PocketBaseClient:
         resp.raise_for_status()
         return resp.json()
 
+    async def _retry_on_403(self, method: str, url: str, **kwargs):
+        """Execute request, re-auth once on 403, then retry."""
+        request_fn = getattr(self._client, method)
+        kwargs["headers"] = self.headers
+        resp = await request_fn(url, **kwargs)
+        if resp.status_code == 403:
+            logger.info("Got 403, refreshing PocketBase token...")
+            self.token = None
+            await self._authenticate()
+            kwargs["headers"] = self.headers
+            resp = await request_fn(url, **kwargs)
+        return resp
+
     async def create_record(self, collection: str, data: dict) -> dict:
-        resp = await self._client.post(
+        resp = await self._retry_on_403(
+            "post",
             f"/api/collections/{collection}/records",
             json=data,
-            headers=self.headers,
         )
         if resp.status_code >= 400:
             logger.error("PB create %s failed %s: %s", collection, resp.status_code, resp.text)
@@ -80,18 +104,18 @@ class PocketBaseClient:
     async def update_record(
         self, collection: str, record_id: str, data: dict
     ) -> dict:
-        resp = await self._client.patch(
+        resp = await self._retry_on_403(
+            "patch",
             f"/api/collections/{collection}/records/{record_id}",
             json=data,
-            headers=self.headers,
         )
         resp.raise_for_status()
         return resp.json()
 
     async def delete_record(self, collection: str, record_id: str) -> bool:
-        resp = await self._client.delete(
+        resp = await self._retry_on_403(
+            "delete",
             f"/api/collections/{collection}/records/{record_id}",
-            headers=self.headers,
         )
         return resp.status_code == 204
 
