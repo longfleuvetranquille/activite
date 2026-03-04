@@ -3,8 +3,9 @@ import re
 from datetime import datetime
 
 from app.crawlers.base import BaseCrawler, CrawledEvent
+from app.ai.feedback_analyzer import analyze_feedbacks
 from app.ai.tagger import tag_event
-from app.ai.scorer import score_event
+from app.ai.scorer import refresh_learned_preferences, score_event
 from app.ai.summarizer import summarize_event
 from app.services.dedup import event_exists, find_similar_event, purge_duplicates
 from app.services.pocketbase import compute_event_hash, pb_client
@@ -70,7 +71,7 @@ def _get_active_crawlers() -> list[BaseCrawler]:
     from app.crawlers.flight_deals import FlightDealsCrawler
     from app.crawlers.ogcn import OGCNCrawler
     from app.crawlers.nikaia import NikaiaCrawler
-    from app.crawlers.google import GoogleSearchCrawler
+    from app.crawlers.eventbrite import EventbriteCrawler
     from app.crawlers.lino_ventura import LinoVenturaCrawler
     from app.crawlers.asmonaco import ASMonacoCrawler
 
@@ -82,13 +83,24 @@ def _get_active_crawlers() -> list[BaseCrawler]:
         ASMonacoCrawler(),
         NikaiaCrawler(),
         LinoVenturaCrawler(),
-        GoogleSearchCrawler(),
+        EventbriteCrawler(),
     ]
 
 
 async def run_crawl_pipeline():
     """Main crawl pipeline: fetch → dedup → enrich → store."""
     logger.info("Starting crawl pipeline")
+
+    # Analyse feedbacks and refresh learned preferences before scoring
+    try:
+        await analyze_feedbacks()
+    except Exception:
+        logger.exception("Feedback analysis failed, continuing with default profile")
+    try:
+        await refresh_learned_preferences()
+    except Exception:
+        logger.exception("Failed to refresh learned preferences cache")
+
     crawlers = _get_active_crawlers()
     total_found = 0
     total_new = 0

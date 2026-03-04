@@ -1,12 +1,15 @@
-import json
 import logging
 
 import anthropic
 
 from app.config import settings
 from app.crawlers.base import CrawledEvent
+from app.services.pocketbase import pb_client
 
 logger = logging.getLogger(__name__)
+
+# Module-level cache for learned preferences (refreshed once per pipeline run)
+_learned_preferences_cache: str | None = None
 
 SCORER_PROMPT = """Tu es un assistant qui évalue l'intérêt d'un événement pour un jeune actif de 25 ans vivant à Nice.
 
@@ -65,7 +68,7 @@ BONUS :
 - Événement exclusif, rare, places limitées : +10
 - Bon rapport qualité/prix ou gratuit : +5
 - Aujourd'hui ou dernière minute : +5
-
+{learned_preferences_block}
 Événement :
 - Titre : {title}
 - Description : {description}
@@ -77,6 +80,23 @@ BONUS :
 Donne un score d'intérêt de 0 à 100 pour cet événement.
 Retourne UNIQUEMENT un nombre entier entre 0 et 100, rien d'autre.
 """
+
+
+async def refresh_learned_preferences() -> None:
+    """Reload learned preferences from PocketBase into module cache."""
+    global _learned_preferences_cache
+    try:
+        result = await pb_client.list_records("user_preferences", per_page=1)
+        items = result.get("items", [])
+        if items:
+            _learned_preferences_cache = items[0].get(
+                "ai_learned_preferences", ""
+            ) or ""
+        else:
+            _learned_preferences_cache = ""
+    except Exception:
+        logger.warning("Could not load learned preferences, using empty")
+        _learned_preferences_cache = ""
 
 
 async def score_event(
@@ -101,6 +121,15 @@ async def score_event(
     else:
         price_info = f"{event.price_min}€ - {event.price_max}€"
 
+    # Build learned preferences injection block
+    learned_block = ""
+    if _learned_preferences_cache:
+        learned_block = (
+            "\n\nAJUSTEMENTS APPRIS DES RETOURS UTILISATEUR :\n"
+            f"{_learned_preferences_cache}\n\n"
+            "Tiens compte de ces ajustements en plus du profil ci-dessus.\n"
+        )
+
     prompt = SCORER_PROMPT.format(
         title=event.title,
         description=event.description or "Non disponible",
@@ -109,6 +138,7 @@ async def score_event(
         location_city=event.location_city or "Nice",
         price_info=price_info,
         tags=", ".join(all_tags) or "aucun",
+        learned_preferences_block=learned_block,
     )
 
     try:
